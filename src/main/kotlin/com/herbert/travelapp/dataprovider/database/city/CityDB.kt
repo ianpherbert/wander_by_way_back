@@ -12,7 +12,7 @@ class CityDB {
 
     var name: String? = null
 
-    var type: String? = null
+    var type: CityTypeDB? = null
 
     var population: Int? = null
 
@@ -29,13 +29,13 @@ class CityDB {
     var trainStations : List<CityStationDB>? = null
 }
 
-enum class CityTypeDB(val value: String){
-    MEGACITY("megacity"),
-    LARGECITY("largecity"),
-    MEDIUMCITY("mediumcity"),
-    SMALLCITY("smallcity"),
-    TOWN("town"),
-    VILLAGE("village")
+enum class CityTypeDB{
+    MEGACITY,
+    LARGECITY,
+    MEDIUMCITY,
+    SMALLCITY,
+    TOWN,
+    VILLAGE
 }
 
 class CityAirportDB{

@@ -16,6 +16,13 @@ repositories {
     mavenCentral()
 }
 
+dependencyManagement {
+    imports {
+        mavenBom("io.mongock:mongock-bom:5.0.34")
+    }
+}
+
+
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -23,6 +30,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.mapstruct:mapstruct:1.5.0.Beta1")
+    implementation("io.mongock:mongodb-springdata-v3-driver")
+    implementation("io.mongock:mongock-springboot")
     kapt("org.mapstruct:mapstruct-processor:1.5.0.Beta1")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }

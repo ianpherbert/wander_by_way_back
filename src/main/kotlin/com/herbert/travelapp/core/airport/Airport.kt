@@ -1,5 +1,6 @@
 package com.herbert.travelapp.core.airport
 
+import com.herbert.travelapp.core.city.City
 import org.springframework.data.annotation.Id
 
 class Airport {
@@ -17,6 +18,8 @@ class Airport {
     var iata: String? = null
 
     var icao: String? = null
+
+    var cities: List<City>? = null
 }
 
 class AirportLocation{

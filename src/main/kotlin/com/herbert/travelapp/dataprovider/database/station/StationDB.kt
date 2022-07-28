@@ -13,7 +13,7 @@ class StationDB {
 
     var apiId: String? = null
 
-    var type: String? = null
+    var type: StationDBType? = null
 
     var name: String? = null
 
@@ -38,4 +38,11 @@ class DBCompanyId{
     var company: String? = null
 
     var companyId: String? = null
+}
+
+enum class StationDBType{
+    TRAIN,
+    BUS,
+    FERRY,
+    OTHER
 }

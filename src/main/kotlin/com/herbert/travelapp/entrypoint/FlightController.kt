@@ -1,5 +1,6 @@
 package com.herbert.travelapp.entrypoint
 
+import com.herbert.travelapp.core.city.CityProvider
 import com.herbert.travelapp.dataprovider.longTransport.CityTravelData
 import com.herbert.travelapp.dataprovider.longTransport.RouteFinder
 import com.herbert.travelapp.dataprovider.database.airport.AirportDB
@@ -17,9 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/flights/routes")
 class FlightController(
     val routeFinder: RouteFinder,
-    val cityDBRepository: StationDBRepository,
-    val airportDBRepository: AirportDBRepository,
-    val stationDBRepository: StationDBRepository
+    val cityProvider: CityProvider
 ) {
 
     @GetMapping("/all")
@@ -42,6 +41,7 @@ class FlightController(
 
     @GetMapping("/test")
     fun testSaveData() : String{
+        cityProvider.findCityById("62d02351a28bff57433701ef")
         return "ok"
     }
 

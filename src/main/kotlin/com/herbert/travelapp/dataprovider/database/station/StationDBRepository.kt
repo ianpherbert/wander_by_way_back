@@ -13,7 +13,9 @@ interface StationDBRepository : MongoRepository<StationDB, String> {
 
 @Component
 class StationDBService(
-
+    val airportDBRepository: AirportDBRepository,
+    val cityDBRepository: CityDBRepository,
+    val stationDBRepository: StationDBRepository
 ) : StationRepository{
 
 }
