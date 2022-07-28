@@ -1,4 +1,4 @@
-package com.herbert.travelapp.core.longTransport
+package com.herbert.travelapp.dataprovider.longTransport
 
 interface RouteFinder {
     fun findAllRoutesFromAirport(airportCode: String, date: String, toDate: String) : CityTravelData?

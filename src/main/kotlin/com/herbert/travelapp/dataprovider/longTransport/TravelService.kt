@@ -1,4 +1,4 @@
-package com.herbert.travelapp.core.longTransport
+package com.herbert.travelapp.dataprovider.longTransport
 
 import com.herbert.travelapp.dataprovider.flight.FlightSearchParams
 import com.herbert.travelapp.dataprovider.flight.FlightSearchResult
@@ -28,9 +28,9 @@ class TravelService(
         }
     }
 
-    private fun mapToCityTravelData(data: List<FlightSearchResultData?>) : CityTravelData{
+    private fun mapToCityTravelData(data: List<FlightSearchResultData?>) : CityTravelData {
         return CityTravelData().apply {
-            this.cityFrom = data!!.first()!!.cityFrom!!
+            this.cityFrom = data.first()!!.cityFrom!!
             this.results = data.size
             this.minStops = data.minOf { it!!.route!!.size }
             this.countries = data.groupBy {

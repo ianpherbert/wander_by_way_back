@@ -1,7 +1,11 @@
 package com.herbert.travelapp.entrypoint
 
-import com.herbert.travelapp.core.longTransport.CityTravelData
-import com.herbert.travelapp.core.longTransport.RouteFinder
+import com.herbert.travelapp.dataprovider.longTransport.CityTravelData
+import com.herbert.travelapp.dataprovider.longTransport.RouteFinder
+import com.herbert.travelapp.dataprovider.database.airport.AirportDB
+import com.herbert.travelapp.dataprovider.database.airport.AirportDBRepository
+import com.herbert.travelapp.dataprovider.database.airport.StationDBRepository
+import com.herbert.travelapp.dataprovider.database.station.StationDB
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import org.springframework.web.bind.annotation.GetMapping
@@ -12,7 +16,10 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/flights/routes")
 class FlightController(
-    val routeFinder: RouteFinder
+    val routeFinder: RouteFinder,
+    val cityDBRepository: StationDBRepository,
+    val airportDBRepository: AirportDBRepository,
+    val stationDBRepository: StationDBRepository
 ) {
 
     @GetMapping("/all")
@@ -31,6 +38,11 @@ class FlightController(
         @RequestParam(name = "fromDate", required = false) fromDate: String?
     ): CityTravelData? {
         return routeFinder.findRoutesBetweenCities(from,to,fromDate ?: formatDate(LocalDate.now()),toDate ?: fromDate ?: formatDate(LocalDate.now().plusDays(1)))
+    }
+
+    @GetMapping("/test")
+    fun testSaveData() : String{
+        return "ok"
     }
 
     private fun formatDate(date: LocalDate): String {

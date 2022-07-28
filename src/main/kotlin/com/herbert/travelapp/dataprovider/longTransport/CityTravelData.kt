@@ -1,4 +1,4 @@
-package com.herbert.travelapp.core.longTransport
+package com.herbert.travelapp.dataprovider.longTransport
 
 import com.herbert.travelapp.dataprovider.flight.FlightSearchParams
 
@@ -18,8 +18,8 @@ class CountryFlights{
 
 class Flight{
     var kiwiId: String = ""
-    var from :Location = Location()
-    var to :Location = Location()
+    var from : Location = Location()
+    var to : Location = Location()
     var distance: Double? = null
     var duration: Double? = null
     var price: Int? = null
