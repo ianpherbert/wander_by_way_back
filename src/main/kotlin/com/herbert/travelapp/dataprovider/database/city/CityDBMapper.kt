@@ -6,6 +6,6 @@ import org.mapstruct.Mapper
 
 @Mapper(componentModel = "spring")
 interface CityDBMapper {
-    @EnumMapping(nameTransformationStrategy = "case", configuration = "UPPERCASE")
+
     fun toCity(cityDB: CityDB) : City
 }

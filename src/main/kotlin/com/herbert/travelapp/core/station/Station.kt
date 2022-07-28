@@ -38,8 +38,8 @@ class CompanyId{
 }
 
 enum class StationType{
-    TRAIN,
-    BUS,
-    FERRY,
-    OTHER
+    train,
+    bus,
+    ferry,
+    other
 }

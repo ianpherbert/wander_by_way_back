@@ -19,7 +19,6 @@ class Airport {
 
     var icao: String? = null
 
-    var cities: List<City>? = null
 }
 
 class AirportLocation{

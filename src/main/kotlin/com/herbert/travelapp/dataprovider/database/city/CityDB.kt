@@ -1,6 +1,7 @@
 package com.herbert.travelapp.dataprovider.database.city
 
 import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
 
 @Document
@@ -30,19 +31,21 @@ class CityDB {
 }
 
 enum class CityTypeDB{
-    MEGACITY,
-    LARGECITY,
-    MEDIUMCITY,
-    SMALLCITY,
-    TOWN,
-    VILLAGE
+    megacity,
+    largecity,
+    mediumcity,
+    smallcity,
+    town,
+    village
 }
 
 class CityAirportDB{
 
     var name : String? = null
 
+    @Id
     var id : String? = null
+
 }
 
 class CityStationDB{
@@ -53,9 +56,9 @@ class CityStationDB{
     var type : String? = null
 }
 
-enum class CityStationTypeDB(val value: String){
-    TRAIN("train"),
-    BUS("bus"),
-    FERRY("ferry"),
-    OTHER("other")
+enum class CityStationTypeDB{
+    train,
+    bus,
+    ferry,
+    other
 }

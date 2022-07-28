@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Transactional
 interface AirportDBRepository : MongoRepository<AirportDB, String> {
+    fun findByName(name: String) : AirportDB?
 }
 
 @Component

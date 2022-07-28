@@ -28,20 +28,17 @@ class City {
 
     var airports : List<Airport>? = null
 
-//    var airportObjects : List<Airport>? = null
-
     var trainStations : List<Station>? = null
 
-//    var stationObjects : List<Station>? = null
 }
 
-enum class CityType(val value: String){
-    MEGACITY("megacity"),
-    LARGECITY("largecity"),
-    MEDIUMCITY("mediumcity"),
-    SMALLCITY("smallcity"),
-    TOWN("town"),
-    VILLAGE("village")
+enum class CityType{
+    megacity,
+    largecity,
+    mediumcity,
+    smallcity,
+    town,
+    village
 }
 
 class CityAirport{
@@ -59,9 +56,9 @@ class CityStation{
     var type : String? = null
 }
 
-enum class CityStationType(val value: String){
-    TRAIN("train"),
-    BUS("bus"),
-    FERRY("ferry"),
-    OTHER("other")
+enum class CityStationType{
+    train,
+    bus,
+    ferry,
+    other
 }

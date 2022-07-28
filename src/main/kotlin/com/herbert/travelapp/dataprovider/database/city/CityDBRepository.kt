@@ -1,7 +1,9 @@
 package com.herbert.travelapp.dataprovider.database.airport
 
+import com.herbert.travelapp.core.airport.Airport
 import com.herbert.travelapp.core.city.City
 import com.herbert.travelapp.core.city.CityRepository
+import com.herbert.travelapp.core.station.Station
 import com.herbert.travelapp.dataprovider.database.city.CityDB
 import com.herbert.travelapp.dataprovider.database.city.CityDBMapper
 import com.herbert.travelapp.dataprovider.database.station.StationDBMapper
@@ -25,6 +27,31 @@ class CityDBService(
     override fun getCityById(id: String): City? {
         return cityDBRepository.findById(id).orElse(null)?.let{
             cityDBMapper.toCity(it)
+        }?.let{
+            it.apply {
+                this.airports = this.airports?.let {
+                    parseAirports(it)
+                }
+                this.trainStations = this.trainStations?.let {
+                    parseStations(it)
+                }
+            }
+        }
+    }
+
+    private fun parseAirports(airports: List<Airport>) : List<Airport>{
+        return airports.map{airport ->
+            airport.name?.let { airportDBRepository.findByName(it) }?.let{
+                airportDBMapper.toAirport(it)
+            } ?: airport
+        }
+    }
+
+    private fun parseStations(stations: List<Station>) : List<Station>{
+        return stations.map {station ->
+            station.name?.let { stationDBRepository.findByName(it) }?.let {
+                stationDBMapper.toStation(it)
+            } ?: station
         }
     }
 
