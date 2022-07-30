@@ -1,0 +1,38 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Mutation {
+    createUser(userInput: UserInput!) : UserOutput!
+}
+
+type Query {
+    SearchCity(query: String!) : [CitySearchOutput]
+}
+
+input UserInput{
+    name: String!,
+    email: String!,
+}
+
+type UserOutput{
+    name: String!,
+    email: String!
+}
+
+type CitySearchOutput{
+    name: String!,
+    population: Int!,
+    country: String!,
+    cityType: CityType!
+}
+
+enum CityType{
+    MEGACITY,
+    LARGECITY,
+    MEDIUMCITY,
+    SMALLCITY,
+    TOWN,
+    VILLAGE
+}

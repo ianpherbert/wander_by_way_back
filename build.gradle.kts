@@ -1,11 +1,16 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+group = "com.herbert.travelapp.api"
+version = "1.0.0-SNAPSHOT"
+description = "management"
+
 plugins {
     id("org.springframework.boot") version "2.7.0"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.6.21"
     kotlin("plugin.spring") version "1.6.21"
     kotlin("kapt") version "1.6.0"
+    id("io.github.kobylynskyi.graphql.codegen") version "5.4.1"
 }
 
 group = "com.herbert"
@@ -24,6 +29,7 @@ dependencyManagement {
 
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-graphql")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
@@ -32,6 +38,7 @@ dependencies {
     implementation("org.mapstruct:mapstruct:1.5.0.Beta1")
     implementation("io.mongock:mongodb-springdata-v3-driver")
     implementation("io.mongock:mongock-springboot")
+    implementation("javax.validation:validation-api:2.0.1.Final")
     kapt("org.mapstruct:mapstruct-processor:1.5.0.Beta1")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
@@ -45,4 +52,22 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.named<io.github.kobylynskyi.graphql.codegen.gradle.GraphQLCodegenGradleTask>("graphqlCodegen") {
+    graphqlSchemaPaths = listOf("$projectDir/src/main/resources/graphql/travel.graphqls")
+    outputDir = File("$buildDir/generated")
+    packageName = "com.herbert.graphql.model"
+}
+
+sourceSets {
+    getByName("main").java.srcDirs("$buildDir/generated")
+}
+
+tasks.withType(JavaCompile::class.java) {
+    dependsOn("graphqlCodegen")
+}
+
+tasks.withType(org.jetbrains.kotlin.gradle.internal.KaptGenerateStubsTask::class.java) {
+    dependsOn("graphqlCodegen")
 }
