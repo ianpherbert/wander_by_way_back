@@ -48,5 +48,3 @@ class RouteStop(
     val local_departure: String?,
     val utc_departure: String?
 )
-
-interface FlightRequestDto

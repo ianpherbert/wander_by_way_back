@@ -37,16 +37,15 @@ class FlightSearchService(
         return callApi<FlightSearchResult>(
             buildUrlWithParams(TequilaURL.SEARCH_FLIGHT, paramMap),
             HttpMethod.GET,
-            null
-        ).let {
+            ).let {
             it?.data?.map {
                 mapToFlight(it)
             } ?: listOf()
         }
     }
 
-    private inline fun <reified T> callApi(url: URI, method: HttpMethod, params: FlightRequestDto?): T? {
-        val request = HttpEntity(params, buildHeaders())
+    private inline fun <reified T> callApi(url: URI, method: HttpMethod): T? {
+        val request = HttpEntity(null, buildHeaders())
         return restTemplate.exchange(url, method, request, Map::class.java).let {
             if (it.statusCode.is2xxSuccessful) {
                 objectMapper.readValue(objectMapper.writeValueAsString(it.body), T::class.java)
