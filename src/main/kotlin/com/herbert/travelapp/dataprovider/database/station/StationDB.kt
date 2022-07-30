@@ -41,8 +41,8 @@ class DBCompanyId{
 }
 
 enum class StationDBType{
-    train,
-    bus,
-    ferry,
-    other
+    TRAIN,
+    BUS,
+    FERRY,
+    OTHER
 }

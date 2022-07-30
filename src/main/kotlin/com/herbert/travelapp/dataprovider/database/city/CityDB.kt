@@ -31,12 +31,12 @@ class CityDB {
 }
 
 enum class CityTypeDB{
-    megacity,
-    largecity,
-    mediumcity,
-    smallcity,
-    town,
-    village
+    MEGACITY,
+    LARGECITY,
+    MEDIUMCITY,
+    SMALLCITY,
+    TOWN,
+    VILLAGE
 }
 
 class CityAirportDB{
@@ -57,8 +57,8 @@ class CityStationDB{
 }
 
 enum class CityStationTypeDB{
-    train,
-    bus,
-    ferry,
-    other
+    TRAIN,
+    BUS,
+    FERRY,
+    OTHER
 }

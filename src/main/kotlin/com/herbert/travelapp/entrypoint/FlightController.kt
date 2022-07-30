@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/flights/routes")
 class FlightController(
     val routeFinder: RouteFinder,
+    val cityProvider: CityProvider
 ) {
 
     @GetMapping("/all")
@@ -36,6 +37,12 @@ class FlightController(
         @RequestParam(name = "fromDate", required = false) fromDate: String?
     ): CityTravelData? {
         return routeFinder.findRoutesBetweenCities(from,to,fromDate ?: formatDate(LocalDate.now()),toDate ?: fromDate ?: formatDate(LocalDate.now().plusDays(1)))
+    }
+
+    @GetMapping("/test")
+    fun testSaveData() : String{
+        cityProvider.findCityById("62d02351a28bff57433701e5")
+        return "ok"
     }
 
     private fun formatDate(date: LocalDate): String {
