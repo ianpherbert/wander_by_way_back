@@ -6,7 +6,6 @@ import org.springframework.boot.runApplication
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories
 
 @SpringBootApplication
-@EnableMongoRepositories
 @EnableMongock
 class TravelAppApplication
 
