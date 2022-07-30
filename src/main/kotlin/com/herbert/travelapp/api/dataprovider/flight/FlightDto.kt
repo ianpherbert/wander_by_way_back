@@ -3,7 +3,7 @@ package com.herbert.travelapp.api.dataprovider.flight
 class FlightSearchResult(
     val currency: String?,
     val all_airlines: List<String>?,
-    val data: List<FlightSearchResultData?>?
+    val data: List<FlightSearchResultData>?
 )
 
 class FlightSearchResultData(
