@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 interface CityDBRepository : MongoRepository<CityDB, String> {
     fun findByName(name: String) : List<CityDB>
+
+    fun findAllByNameContaining(name: String) : List<CityDB>?
 }
 
 @Repository
@@ -29,31 +31,47 @@ class CityDBService(
     override fun getCityById(id: String): City? {
         return cityDBRepository.findById(id).orElse(null)?.let{ cityDB ->
             cityDBMapper.toCity(cityDB).let{ city ->
-                city.apply {
-                    this.airports = this.airports?.let {
-                        parseAirports(it)
-                    }
-                    this.trainStations = this.trainStations?.let {
-                        parseStations(it)
-                    }
+                parseCity(city,cityDB)
+            }
+        }
+    }
+
+    override fun getCitiesByName(name: String): List<City>? {
+         return cityDBRepository.findAllByNameContaining(name)?.map{cityDB ->
+            cityDBMapper.toCity(cityDB).let{
+                parseCity(it, cityDB)
+            }
+        }
+    }
+
+    private fun parseCity(city: City, cityDB: CityDB) : City{
+        return city.apply {
+            this.airports = cityDB.airports?.map { cityAirportDB ->
+                cityAirportDB.airportId?.let {
+                    parseAirport(it)
+                } ?: Airport().apply {
+                    name = cityAirportDB.name
+                }
+            }
+            this.trainStations = cityDB.trainStations?.map { cityStationDB ->
+                cityStationDB.stationId?.let {
+                    parseStation(it)
+                } ?: Station().apply {
+                    name = cityStationDB.name
                 }
             }
         }
     }
 
-    private fun parseAirports(airports: List<Airport>) : List<Airport>{
-        return airports.map{airport ->
-            airport.name?.let { airportDBRepository.findByName(it) }?.let{
-                airportDBMapper.toAirport(it)
-            } ?: airport
+    private fun parseAirport(airportId: String) : Airport? {
+        return airportDBRepository.findById(airportId).orElse(null)?.let {
+            airportDBMapper.toAirport(it)
         }
     }
 
-    private fun parseStations(stations: List<Station>) : List<Station>{
-        return stations.map {station ->
-            station.name?.let { stationDBRepository.findByName(it) }?.let {
-                stationDBMapper.toStation(it)
-            } ?: station
+    private fun parseStation(stationId: String) : Station?{
+        return stationDBRepository.findById(stationId).orElse(null)?.let {
+            stationDBMapper.toStation(it)
         }
     }
 

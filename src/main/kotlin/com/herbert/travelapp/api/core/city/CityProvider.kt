@@ -11,5 +11,5 @@ interface CityProvider {
 
     fun findCitiesByAirportId(airportId: String) : List<City?>
 
-    fun findCitiesByName(name: String) : List<City?>
+    fun findCitiesByName(name: String) : List<City>?
 }

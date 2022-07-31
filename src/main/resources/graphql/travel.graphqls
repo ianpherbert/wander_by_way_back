@@ -8,10 +8,10 @@ type Mutation {
 }
 
 type Query {
-    searchCity(query: String!) : [CitySearchOutput]!
-    searchAirport(query: String!) : [AirportSearchOutput]!
-    searchStation(query: String!) : [StationSearchOutput]!
-    findCity(cityId: String!) : CityOutput
+    searchCity(query: String!) : [CitySearchOutput]
+    searchAirport(query: String!) : [AirportSearchOutput]
+    searchStation(query: String!) : [StationSearchOutput]
+    findCityById(cityId: String!) : CityOutput
     findAirport(airportId: String!) : AirportOutput
     findStation(stationId: String!) : StationOutput
     findAllRoutesFromCity(cityId: String!) : [RouteOutput]!
@@ -31,12 +31,13 @@ type CityOutput{
     longitude: String!
     country: String!
     airports: [AirportOutput]
-    trainstations: [StationOutput]
+    trainStations: [StationOutput]
 }
 
 type StationOutput{
     id: String!
     companyIds: [CompanyIdOutput]
+    name: String!
     apiId: String!
     type: StationType!
     slug: String!
@@ -80,6 +81,7 @@ type CitySearchOutput{
     population: Int!
     country: String!
     cityType: CityType!
+    id: String!
 }
 
 type AirportSearchOutput{
