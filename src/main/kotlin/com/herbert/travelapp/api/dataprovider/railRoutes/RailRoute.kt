@@ -19,7 +19,3 @@ class RailRouteLocation {
 }
 
 
-class RailLocation{
-    var name : String? = null
-    var id : String? = null
-}

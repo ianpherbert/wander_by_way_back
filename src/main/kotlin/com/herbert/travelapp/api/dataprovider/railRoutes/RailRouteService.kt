@@ -1,6 +1,7 @@
 package com.herbert.travelapp.api.dataprovider.railRoutes
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.herbert.travelapp.api.core.route.RailLocation
 import com.herbert.travelapp.api.core.trainRoute.TrainRoute
 import com.herbert.travelapp.api.core.trainRoute.TrainRouteRepository
 import java.net.URI
@@ -20,10 +21,10 @@ class RailRouteService(
     @Value("\${direkt-bahn.SearchUrl}")
     val searchUrl: String
 ) : TrainRouteRepository {
-    override fun findRoutesFromStation(stationId: String): List<TrainRoute>? {
-        return getStation(stationId)?.let { fromStation ->
-            val url = URI("$routeUrl/$stationId")
-            try{
+    override fun findRoutesFromStation(fromStation: RailLocation): List<TrainRoute>? {
+
+            val url = URI("$routeUrl/${fromStation.id}")
+            return try{
                 restTemplate.exchange(url, HttpMethod.GET, HttpEntity(null, null), List::class.java).let {
                     objectMapper.readValue(objectMapper.writeValueAsString(it.body), List::class.java).map {
                         objectMapper.readValue(objectMapper.writeValueAsString(it), RailRoute::class.java).let{response ->
@@ -46,7 +47,7 @@ class RailRouteService(
                 println(ex.message)
                 null
             }
-        }
+
     }
 
     private fun getStation(stationId: String): RailLocation? {

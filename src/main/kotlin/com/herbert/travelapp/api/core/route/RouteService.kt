@@ -15,7 +15,7 @@ class RouteService(
         val city = cityProvider.findCityById(cityId) ?: return listOf()
 
         val trainRoutes = city.trainStations?.map{ station ->
-            station.uicId?.let { trainRouteProvider.getAllRoutesFromStation(it) }?.map {route ->
+            station.uicId?.let { trainRouteProvider.getAllRoutesFromStation(RailLocation(station.name!!, it)) }?.map { route ->
                 val to = RouteCity().apply {
                     name = route.toStationName
                 }
