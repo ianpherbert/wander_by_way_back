@@ -103,6 +103,10 @@ type StationSearchOutput{
 type RouteOutput{
     to: RouteCityOutput!
     from: RouteCityOutput!
+    type: RouteType!
+    durationTotal: Int
+    durationMinutes: Int
+    durationHours: Int
 }
 
 type RouteCityOutput{

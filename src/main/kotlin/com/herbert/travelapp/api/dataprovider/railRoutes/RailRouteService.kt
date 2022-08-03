@@ -23,23 +23,28 @@ class RailRouteService(
     override fun findRoutesFromStation(stationId: String): List<TrainRoute>? {
         return getStation(stationId)?.let { fromStation ->
             val url = URI("$routeUrl/$stationId")
-            restTemplate.exchange(url, HttpMethod.GET, HttpEntity(null, null), List::class.java).let {
-                objectMapper.readValue(objectMapper.writeValueAsString(it.body), List::class.java).map {
-                    objectMapper.readValue(objectMapper.writeValueAsString(it), RailRoute::class.java).let{response ->
-                        TrainRoute().apply {
-                            this.fromStationName = fromStation.name
-                            this.fromStationId = fromStation.id
-                            this.toStationName = response.name
-                            this.toStationId = response.id
-                            this.latitude = response.location?.latitude
-                            this.longitude = response.location?.longitude
-                            this.duration = response.duration
-                            this.durationHours = response.duration?.div(60)
-                            this.durationMinutes = response.duration?.rem(60)
-                        }
+            try{
+                restTemplate.exchange(url, HttpMethod.GET, HttpEntity(null, null), List::class.java).let {
+                    objectMapper.readValue(objectMapper.writeValueAsString(it.body), List::class.java).map {
+                        objectMapper.readValue(objectMapper.writeValueAsString(it), RailRoute::class.java).let{response ->
+                            TrainRoute().apply {
+                                this.fromStationName = fromStation.name
+                                this.fromStationId = fromStation.id
+                                this.toStationName = response.name
+                                this.toStationId = response.id
+                                this.latitude = response.location?.latitude
+                                this.longitude = response.location?.longitude
+                                this.duration = response.duration
+                                this.durationHours = response.duration?.div(60)
+                                this.durationMinutes = response.duration?.rem(60)
+                            }
 
+                        }
                     }
                 }
+            }catch (ex: Exception){
+                println(ex.message)
+                null
             }
         }
     }
