@@ -6,7 +6,7 @@ class Flight{
     var from : FlightLocation? = FlightLocation()
     var to : FlightLocation? = FlightLocation()
     var distance: Double? = null
-    var duration: Double? = null
+    var duration: Int? = null
     var price: Int? = null
     var route: List<FlightStop>? = listOf()
     var localArrival: String? = ""

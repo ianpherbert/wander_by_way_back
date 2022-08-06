@@ -1,5 +1,6 @@
 package com.herbert.travelapp.api.dataprovider.database.station
 
+import com.herbert.travelapp.api.core.station.Station
 import com.herbert.travelapp.api.core.station.StationRepository
 import com.herbert.travelapp.api.dataprovider.database.airport.AirportDBRepository
 import com.herbert.travelapp.api.dataprovider.database.city.CityDBRepository
@@ -14,9 +15,16 @@ interface StationDBRepository : MongoRepository<StationDB, String> {
 
 @Repository
 class StationDBService(
-    val airportDBRepository: AirportDBRepository,
-    val cityDBRepository: CityDBRepository,
-    val stationDBRepository: StationDBRepository
+    val stationDBRepository: StationDBRepository,
+    val stationDBMapper: StationDBMapper,
 ) : StationRepository {
+    override fun updateStation(station: Station): Station {
+        return stationDBMapper.toStationDb(station).let{
+            stationDBRepository.save(it)
+        }.let{
+            println("${station.name} apiId updated")
+            stationDBMapper.toStation(it)
+        }
+    }
 
 }

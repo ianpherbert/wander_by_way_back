@@ -29,5 +29,6 @@ enum class RouteType{
 
 class RailLocation(
     var name : String,
-    var id : String
+    var slug: String,
+    var apiId : String?
 )

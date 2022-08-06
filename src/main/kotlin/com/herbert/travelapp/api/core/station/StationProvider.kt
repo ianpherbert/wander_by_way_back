@@ -8,4 +8,6 @@ interface StationProvider {
     fun findStationsByUICId(uicId: String) : List<Station?>
 
     fun findStationByApiId(apiId: String) : Station?
+
+    fun updateStationApiId(station: Station) : Station
 }

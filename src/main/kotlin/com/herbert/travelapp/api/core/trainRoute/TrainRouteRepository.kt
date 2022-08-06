@@ -1,9 +1,9 @@
 package com.herbert.travelapp.api.core.trainRoute
 
-import com.herbert.travelapp.api.core.route.RailLocation
+import com.herbert.travelapp.api.core.station.Station
 
 interface TrainRouteRepository {
 
-    fun findRoutesFromStation(fromStation: RailLocation) : List<TrainRoute>?
+    fun findRoutesFromStation(fromStation: Station) : List<TrainRoute>?
 
 }

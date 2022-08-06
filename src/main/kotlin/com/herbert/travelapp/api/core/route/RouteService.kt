@@ -15,7 +15,7 @@ class RouteService(
         val city = cityProvider.findCityById(cityId) ?: return listOf()
 
         val trainRoutes = city.trainStations?.map{ station ->
-            station.uicId?.let { trainRouteProvider.getAllRoutesFromStation(RailLocation(station.name!!, it)) }?.map { route ->
+            trainRouteProvider.getAllRoutesFromStation(station)?.map { route ->
                 val to = RouteCity().apply {
                     name = route.toStationName
                 }
@@ -36,19 +36,20 @@ class RouteService(
         val flightRoutes = city.airports?.map { airport ->
                 airport.iata?.let { flightProvider.findAllFlightsFromAirport(it) }?.map { flight ->
                     val to = RouteCity().apply {
-                        name = flight?.to?.name
+                        name = flight.to?.name
+                        country = flight.to?.countryName
                     }
                     val from = RouteCity().apply {
-                        name = flight?.from?.name
+                        name = flight.from?.name
+                        country = flight.from?.countryName
                     }
                     Route().apply {
                         this.to = to
                         this.from = from
                         this.type = RouteType.PLANE
-                        //                Fix this !!!!
-                        this.durationTotal = flight?.duration?.toInt()
-                        this.durationMinutes = flight?.duration?.toInt()
-                        this.durationHours = flight?.duration?.toInt()
+                        this.durationTotal = flight.duration
+                        this.durationMinutes = flight.duration?.rem(60)
+                        this.durationHours = flight.duration?.div(60)
                     }
                 } ?: listOf()
             } ?: listOf()
