@@ -62,8 +62,10 @@ class RailRouteService(
                 this.name = it.get("name").toString()
                 this.type = it.get("type").toString()
             }
-        }?.find{
-            it.name?.lowercase() == station.name?.lowercase()
+        }?.find{result->
+            station.slug!!.split("-").map {
+                result.name!!.lowercase().contains(it)
+            }.toSet().size == 1
         }?.id
     }
 }
