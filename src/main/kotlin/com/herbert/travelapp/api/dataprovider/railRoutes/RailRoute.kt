@@ -18,8 +18,8 @@ class RailRouteLocation {
     var longitude: String? = null
 }
 
-
-class RailLocation{
-    var name : String? = null
-    var id : String? = null
+class RailStopSearchResult{
+    var type: String? = null
+    var id: String? = null
+    var name: String? = null
 }

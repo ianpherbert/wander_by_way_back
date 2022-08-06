@@ -21,7 +21,7 @@ class FlightSearchService(
     @Value("\${tequila.apiKey}")
     val tequilaApiKey: String
 ) : FlightRepository {
-    override fun findFlights(from: String, to: String?, fromDate: String, toDate: String?): List<Flight?> {
+    override fun findFlights(from: String, to: String?, fromDate: String, toDate: String?): List<Flight>? {
         val paramMap = HashMap<String, String>().apply {
             set("fly_from", from)
             to?.let {
@@ -34,13 +34,17 @@ class FlightSearchService(
         }
 
 
-        return callApi<FlightSearchResult>(
-            buildUrlWithParams(TequilaURL.SEARCH_FLIGHT, paramMap),
-            HttpMethod.GET,
+        return try{
+            callApi<FlightSearchResult>(
+                buildUrlWithParams(TequilaURL.SEARCH_FLIGHT, paramMap),
+                HttpMethod.GET,
             ).let {
-            it?.data?.map {
-                mapToFlight(it)
-            } ?: listOf()
+                it?.data?.map {
+                    mapToFlight(it)
+                } ?: listOf()
+            }
+        }catch (ex: Exception){
+            null
         }
     }
 
@@ -73,13 +77,13 @@ class FlightSearchService(
             this.kiwiId = flight.id!!
             this.from = FlightLocation().apply {
                 this.name = flight.cityFrom!!
-                this.airportCode = flight.cityFrom
+                this.airportCode = flight.cityCodeFrom
                 this.countryName = flight.countryFrom?.name
                 this.countryCode = flight.countryFrom?.code
             }
             this.to = FlightLocation().apply {
                 this.name = flight.cityTo!!
-                this.airportCode = flight.cityTo
+                this.airportCode = flight.cityCodeTo
                 this.countryName = flight.countryTo!!.name
                 this.countryCode = flight.countryTo.code
             }
@@ -89,6 +93,7 @@ class FlightSearchService(
             this.localDeparture = flight.local_departure
             this.utcArrival = flight.utc_arrival
             this.utcDeparture = flight.utc_departure
+            this.duration = flight.duration?.get("departure")?.toInt()?.div(60)
             this.route = flight.route?.map { stop ->
                 FlightStop().apply {
                     this.id = stop.id

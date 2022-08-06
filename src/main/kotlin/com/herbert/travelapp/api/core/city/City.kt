@@ -39,21 +39,6 @@ enum class CityType{
     VILLAGE
 }
 
-class CityAirport{
-
-    var name : String? = null
-
-    var id : String? = null
-}
-
-class CityStation{
-    var name : String? = null
-
-    var id : String? = null
-
-    var type : String? = null
-}
-
 enum class CityStationType{
     train,
     bus,

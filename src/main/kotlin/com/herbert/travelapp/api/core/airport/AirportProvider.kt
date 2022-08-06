@@ -4,7 +4,7 @@ interface AirportProvider {
 
     fun findAirportById(id: String) : Airport?
 
-    fun findAirportByName(name: String) : Airport?
+    fun findAirportsByName(name: String) : List<Airport>?
 
     fun findAirportByIATACode(iata: String) : Airport?
 

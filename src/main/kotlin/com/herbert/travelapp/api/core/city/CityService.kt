@@ -10,23 +10,23 @@ class CityService(
         return cityRepository.getCityById(id)
     }
 
+    override fun findCitiesByName(name: String): List<City>? {
+        return cityRepository.searchCitiesByName(name)
+    }
+
     override fun findCityByShareId(shareId: String): City? {
-        TODO("Not yet implemented")
+        return cityRepository.findCityByShareId(shareId)
     }
 
-    override fun findCitiesByAreaId(areaId: String): List<String?> {
-        TODO("Not yet implemented")
+    override fun findCitiesByAreaId(areaId: String): List<String>? {
+        return cityRepository.findCitiesByAreaId(areaId)
     }
 
-    override fun findCitiesByStationId(stationId: String): List<City?> {
-        TODO("Not yet implemented")
+    override fun findCitiesByStationId(stationId: String): List<City>? {
+        return cityRepository.findCitiesByStationId(stationId)
     }
 
-    override fun findCitiesByAirportId(airportId: String): List<City?> {
-        TODO("Not yet implemented")
-    }
-
-    override fun findCitiesByName(name: String): List<City?> {
-        TODO("Not yet implemented")
+    override fun findCitiesByAirportId(airportId: String): List<City>? {
+        return cityRepository.findCitiesByAirportId(airportId)
     }
 }

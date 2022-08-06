@@ -8,31 +8,135 @@ type Mutation {
 }
 
 type Query {
-    SearchCity(query: String!) : [CitySearchOutput]
+    searchCity(query: String!) : [CityOutput]
+    searchAirport(query: String!) : [AirportOutput]
+    searchStation(query: String!) : [StationOutput]
+    findCityById(cityId: String!) : CityOutput
+    findAirportById(airportId: String!) : AirportOutput
+    findStationById(stationId: String!) : StationOutput
+    findAllRoutesFromCity(cityId: String!) : [RouteOutput]!
 }
 
 input UserInput{
-    name: String!,
-    email: String!,
+    name: String!
+    email: String!
+}
+
+type CityOutput{
+    id : String!
+    name: String!
+    type: CityType!
+    population: Int
+    latitude: String!
+    longitude: String!
+    country: String!
+    airports: [AirportOutput]
+    trainStations: [StationOutput]
+}
+
+type StationOutput{
+    id: String!
+    companyIds: [CompanyIdOutput]
+    name: String!
+    apiId: String!
+    type: StationType!
+    slug: String!
+    uicId: String
+    latitude: String!
+    longitude: String!
+    country: String!
+    main: Boolean!
+    airport: Boolean!
+    parentId: String
+}
+
+type CompanyIdOutput{
+    company: String!
+    companyId: String!
+}
+
+type AirportOutput{
+    id: String!
+    location: AirportLocationOutput
+    name: String!
+    latitude: String!
+    longitude: String!
+    iata: String
+    icao: String
+}
+
+type AirportLocationOutput{
+    country: String
+    region: String
+    cities: [String]
 }
 
 type UserOutput{
-    name: String!,
+    name: String!
     email: String!
 }
 
 type CitySearchOutput{
-    name: String!,
-    population: Int!,
-    country: String!,
+    name: String!
+    population: Int!
+    country: String!
     cityType: CityType!
+    id: String!
+}
+
+type AirportSearchOutput{
+    name: String!
+    icao: String
+    iata: String
+    id: String
+    cities: [String]!
+    country: String
+}
+
+type StationSearchOutput{
+    id: String
+    type: StationType
+    name: String
+    country: String
+}
+
+type RouteOutput{
+    to: RouteCityOutput!
+    from: RouteCityOutput!
+    type: RouteType!
+    durationTotal: Int
+    durationMinutes: Int
+    durationHours: Int
+}
+
+type RouteCityOutput{
+    name: String
+    id: String
+    cityType: CityType
+    country: String
 }
 
 enum CityType{
-    MEGACITY,
-    LARGECITY,
-    MEDIUMCITY,
-    SMALLCITY,
-    TOWN,
+    MEGACITY
+    LARGECITY
+    MEDIUMCITY
+    SMALLCITY
+    TOWN
     VILLAGE
+}
+
+enum StationType{
+TRAIN
+BUS
+FERRY
+OTHER
+}
+
+enum RouteType{
+    TRAIN
+    BUS
+    PLANE
+    BOAT
+    CAR
+    OTHER
 }

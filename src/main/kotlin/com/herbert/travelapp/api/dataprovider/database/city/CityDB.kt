@@ -42,15 +42,14 @@ class CityAirportDB{
 
     var name : String? = null
 
-    @Id
-    var id : String? = null
+    var airportId : String? = null
 
 }
 
 class CityStationDB{
     var name : String? = null
 
-    var id : String? = null
+    var stationId : String? = null
 
     var type : String? = null
 }

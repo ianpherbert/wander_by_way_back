@@ -12,16 +12,10 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/test")
 class TestController(
-    val trainRouteProvider: TrainRouteProvider,
     val cityProvider: CityProvider
 ) {
     @GetMapping("/city/{cityId}")
     fun getCity(@PathVariable cityId: String) : City? {
         return cityProvider.findCityById(cityId)
-    }
-
-    @GetMapping("/train/{stationId}")
-    fun getTrainRouteData(@PathVariable stationId: String) : List<TrainRoute>?{
-        return trainRouteProvider.getAllRoutesFromStation(stationId)
     }
 }
