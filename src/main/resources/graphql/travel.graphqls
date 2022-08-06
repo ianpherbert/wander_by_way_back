@@ -8,12 +8,12 @@ type Mutation {
 }
 
 type Query {
-    searchCity(query: String!) : [CitySearchOutput]
-    searchAirport(query: String!) : [AirportSearchOutput]
-    searchStation(query: String!) : [StationSearchOutput]
+    searchCity(query: String!) : [CityOutput]
+    searchAirport(query: String!) : [AirportOutput]
+    searchStation(query: String!) : [StationOutput]
     findCityById(cityId: String!) : CityOutput
-    findAirport(airportId: String!) : AirportOutput
-    findStation(stationId: String!) : StationOutput
+    findAirportById(airportId: String!) : AirportOutput
+    findStationById(stationId: String!) : StationOutput
     findAllRoutesFromCity(cityId: String!) : [RouteOutput]!
 }
 

@@ -1,7 +1,6 @@
 package com.herbert.travelapp.api.entrypoint.graphql.city
 
 import com.herbert.graphql.model.CityOutput
-import com.herbert.graphql.model.CitySearchOutput
 import com.herbert.graphql.model.FindCityByIdQueryResolver
 import com.herbert.graphql.model.SearchCityQueryResolver
 import com.herbert.travelapp.api.core.city.CityProvider
@@ -24,9 +23,9 @@ class CityQuery(
 
 
     @QueryMapping
-    override fun searchCity(@Argument query: String): List<CitySearchOutput>? {
+    override fun searchCity(@Argument query: String): List<CityOutput>? {
         return cityProvider.findCitiesByName(query)?.map{
-            cityMapper.toCitySearchOutput(it)
+            cityMapper.toCityOutput(it)
         }
     }
 }

@@ -14,9 +14,17 @@ import org.springframework.transaction.annotation.Transactional
 
 @Transactional
 interface CityDBRepository : MongoRepository<CityDB, String> {
-    fun findByName(name: String) : List<CityDB>
+    fun findByName(name: String): List<CityDB>
 
-    fun findAllByNameContaining(name: String) : List<CityDB>?
+    fun findAllByNameContaining(name: String): List<CityDB>?
+
+    fun findByShareId(shareId: String): CityDB?
+
+    fun findAllByAreaIdContaining(areaId: String): List<CityDB>?
+
+    fun findAllByTrainStationsContaining(stationId: String): List<CityDB>?
+
+    fun findAllByAirportsContaining(stationId: String): List<CityDB>?
 }
 
 @Repository
@@ -29,22 +37,52 @@ class CityDBService(
     val stationDBMapper: StationDBMapper
 ) : CityRepository {
     override fun getCityById(id: String): City? {
-        return cityDBRepository.findById(id).orElse(null)?.let{ cityDB ->
-            cityDBMapper.toCity(cityDB).let{ city ->
-                parseCity(city,cityDB)
+        return cityDBRepository.findById(id).orElse(null)?.let { cityDB ->
+            cityDBMapper.toCity(cityDB).let { city ->
+                parseCity(city, cityDB)
             }
         }
     }
 
-    override fun getCitiesByName(name: String): List<City>? {
-         return cityDBRepository.findAllByNameContaining(name)?.map{cityDB ->
-            cityDBMapper.toCity(cityDB).let{
+    override fun searchCitiesByName(name: String): List<City>? {
+        return cityDBRepository.findAllByNameContaining(name)?.map { cityDB ->
+            cityDBMapper.toCity(cityDB).let {
                 parseCity(it, cityDB)
             }
         }
     }
 
-    private fun parseCity(city: City, cityDB: CityDB) : City{
+    override fun findCityByShareId(shareId: String): City? {
+        return cityDBRepository.findByShareId(shareId)?.let { cityDB ->
+            cityDBMapper.toCity(cityDB).let {
+                parseCity(it, cityDB)
+            }
+        }
+    }
+
+    override fun findCitiesByAreaId(areaId: String): List<String>? {
+        return cityDBRepository.findAllByAreaIdContaining(areaId)?.map {
+            it.id!!
+        }
+    }
+
+    override fun findCitiesByStationId(stationId: String): List<City>? {
+        return cityDBRepository.findAllByTrainStationsContaining(stationId)?.map { cityDB ->
+            cityDBMapper.toCity(cityDB).let {
+                parseCity(it, cityDB)
+            }
+        }
+    }
+
+    override fun findCitiesByAirportId(airportId: String): List<City>? {
+        return cityDBRepository.findAllByAirportsContaining(airportId)?.map { cityDB ->
+            cityDBMapper.toCity(cityDB).let {
+                parseCity(it, cityDB)
+            }
+        }
+    }
+
+    private fun parseCity(city: City, cityDB: CityDB): City {
         return city.apply {
             this.airports = cityDB.airports?.map { cityAirportDB ->
                 cityAirportDB.airportId?.let {
@@ -63,13 +101,13 @@ class CityDBService(
         }
     }
 
-    private fun parseAirport(airportId: String) : Airport? {
+    private fun parseAirport(airportId: String): Airport? {
         return airportDBRepository.findById(airportId).orElse(null)?.let {
             airportDBMapper.toAirport(it)
         }
     }
 
-    private fun parseStation(stationId: String) : Station?{
+    private fun parseStation(stationId: String): Station? {
         return stationDBRepository.findById(stationId).orElse(null)?.let {
             stationDBMapper.toStation(it)
         }

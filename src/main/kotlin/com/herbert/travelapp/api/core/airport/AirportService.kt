@@ -7,18 +7,18 @@ class AirportService(
     val airportRepository: AirportRepository
 ): AirportProvider {
     override fun findAirportById(id: String): Airport? {
-        TODO("Not yet implemented")
+        return airportRepository.findAirportById(id)
     }
 
-    override fun findAirportByName(name: String): Airport? {
-        TODO("Not yet implemented")
+    override fun findAirportsByName(name: String): List<Airport>? {
+        return airportRepository.findAirportsByName(name)
     }
 
     override fun findAirportByIATACode(iata: String): Airport? {
-        TODO("Not yet implemented")
+        return airportRepository.findAirportByIATACode(iata)
     }
 
     override fun findAirportByICAOCode(icao: String): Airport? {
-        TODO("Not yet implemented")
+        return airportRepository.findAirportByICAOCode(icao)
     }
 }

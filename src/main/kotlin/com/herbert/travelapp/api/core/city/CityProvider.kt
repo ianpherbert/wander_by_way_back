@@ -5,11 +5,11 @@ interface CityProvider {
 
     fun findCityByShareId(shareId: String) : City?
 
-    fun findCitiesByAreaId(areaId: String) : List<String?>
+    fun findCitiesByAreaId(areaId: String) : List<String>?
 
-    fun findCitiesByStationId(stationId: String) : List<City?>
+    fun findCitiesByStationId(stationId: String) : List<City>?
 
-    fun findCitiesByAirportId(airportId: String) : List<City?>
+    fun findCitiesByAirportId(airportId: String) : List<City>?
 
     fun findCitiesByName(name: String) : List<City>?
 }

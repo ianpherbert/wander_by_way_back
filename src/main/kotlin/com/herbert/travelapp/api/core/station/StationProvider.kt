@@ -10,4 +10,8 @@ interface StationProvider {
     fun findStationByApiId(apiId: String) : Station?
 
     fun updateStationApiId(station: Station) : Station
+
+    fun findStationsByName(name: String) : List<Station?>
+
+    fun searchStationsByName(name: String) : List<Station>?
 }

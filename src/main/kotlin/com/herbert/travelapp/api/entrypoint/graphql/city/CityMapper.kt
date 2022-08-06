@@ -10,5 +10,4 @@ import org.mapstruct.ReportingPolicy
 interface CityMapper {
     fun toCityOutput(city: City) : CityOutput
 
-    fun toCitySearchOutput(city: City) : CitySearchOutput
 }

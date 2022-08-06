@@ -22,18 +22,26 @@ class StationService(
         }
     }
     override fun findStationById(id: String): Station? {
-        TODO("Not yet implemented")
+        return stationRepository.findStationById(id)
     }
 
     override fun findStationsByParentId(parentId: String): List<Station?> {
-        TODO("Not yet implemented")
+        return stationRepository.findStationsByParentId(parentId)
     }
 
     override fun findStationsByUICId(uicId: String): List<Station?> {
-        TODO("Not yet implemented")
+        return stationRepository.findStationsByUICId(uicId)
     }
 
     override fun findStationByApiId(apiId: String): Station? {
-        TODO("Not yet implemented")
+        return stationRepository.findStationByApiId(apiId)
+    }
+
+    override fun findStationsByName(name: String) : List<Station?>{
+        return stationRepository.findStationsByName(name)
+    }
+
+    override fun searchStationsByName(name: String): List<Station>? {
+        return stationRepository.searchStationsByName(name)
     }
 }
