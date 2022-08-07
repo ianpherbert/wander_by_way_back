@@ -9,4 +9,6 @@ interface AirportProvider {
     fun findAirportByIATACode(iata: String) : Airport?
 
     fun findAirportByICAOCode(icao: String) : Airport?
+
+    fun findAirportsByIATACode(iataCodes: List<String>) : List<Airport>?
 }

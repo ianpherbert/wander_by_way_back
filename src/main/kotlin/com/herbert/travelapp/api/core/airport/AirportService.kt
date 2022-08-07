@@ -21,4 +21,8 @@ class AirportService(
     override fun findAirportByICAOCode(icao: String): Airport? {
         return airportRepository.findAirportByICAOCode(icao)
     }
+
+    override fun findAirportsByIATACode(iataCodes: List<String>): List<Airport>? {
+        return airportRepository.findAirportsByIACOCode(iataCodes)
+    }
 }

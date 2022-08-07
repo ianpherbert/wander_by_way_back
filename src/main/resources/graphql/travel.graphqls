@@ -15,6 +15,7 @@ type Query {
     findAirportById(airportId: String!) : AirportOutput
     findStationById(stationId: String!) : StationOutput
     findAllRoutesFromCity(cityId: String!) : [RouteOutput]!
+    findAllCitiesByAirportId(airportId: String!) : [CityOutput]
 }
 
 input UserInput{
@@ -101,19 +102,20 @@ type StationSearchOutput{
 }
 
 type RouteOutput{
-    to: RouteCityOutput!
-    from: RouteCityOutput!
+    to: RouteStopOutput!
+    from: RouteStopOutput!
     type: RouteType!
     durationTotal: Int
     durationMinutes: Int
     durationHours: Int
 }
 
-type RouteCityOutput{
+type RouteStopOutput{
     name: String
     id: String
-    cityType: CityType
     country: String
+    latitude: String
+    longitude: String
 }
 
 enum CityType{

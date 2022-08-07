@@ -8,4 +8,6 @@ interface AirportRepository {
     fun findAirportByIATACode(iata: String): Airport?
 
     fun findAirportByICAOCode(icao: String): Airport?
+
+    fun findAirportsByIACOCode(codes: List<String>) : List<Airport>?
 }

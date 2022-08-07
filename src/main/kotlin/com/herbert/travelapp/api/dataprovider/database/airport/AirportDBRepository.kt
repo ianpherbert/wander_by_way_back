@@ -20,6 +20,8 @@ interface AirportDBRepository : MongoRepository<AirportDB, String> {
     fun findByIata(iata: String) : AirportDB?
 
     fun findByIcao(icao: String) : AirportDB?
+
+    fun findAllByIataIn(icaoCodes: List<String>) : List<AirportDB>?
 }
 
 @Repository
@@ -49,6 +51,12 @@ class AirportDBService(
 
     override fun findAirportByICAOCode(icao: String): Airport? {
         return airportDBRepository.findByIcao(icao)?.let {
+            airportDBMapper.toAirport(it)
+        }
+    }
+
+    override fun findAirportsByIACOCode(codes: List<String>): List<Airport>? {
+        return airportDBRepository.findAllByIataIn(codes)?.map{
             airportDBMapper.toAirport(it)
         }
     }

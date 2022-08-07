@@ -24,9 +24,11 @@ interface CityDBRepository : MongoRepository<CityDB, String> {
 
     fun findAllByAreaIdContaining(areaId: String): List<CityDB>?
 
-    fun findAllByTrainStationsContaining(stationId: String): List<CityDB>?
+    fun findAllByTrainStationsStationId(stationId: String): List<CityDB>?
 
-    fun findAllByAirportsContaining(stationId: String): List<CityDB>?
+    fun findAllByAirportsAirportId(stationId: String): List<CityDB>?
+
+
 }
 
 @Repository
@@ -69,7 +71,7 @@ class CityDBService(
     }
 
     override fun findCitiesByStationId(stationId: String): List<City>? {
-        return cityDBRepository.findAllByTrainStationsContaining(stationId)?.map { cityDB ->
+        return cityDBRepository.findAllByTrainStationsStationId(stationId)?.map { cityDB ->
             cityDBMapper.toCity(cityDB).let {
                 parseCity(it, cityDB)
             }
@@ -77,7 +79,7 @@ class CityDBService(
     }
 
     override fun findCitiesByAirportId(airportId: String): List<City>? {
-        return cityDBRepository.findAllByAirportsContaining(airportId)?.map { cityDB ->
+        return cityDBRepository.findAllByAirportsAirportId(airportId)?.map { cityDB ->
             cityDBMapper.toCity(cityDB).let {
                 parseCity(it, cityDB)
             }

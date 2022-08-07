@@ -13,7 +13,7 @@ class TrainRouteService(
 
     override fun getAllRoutesFromStation(fromStation: Station): List<TrainRoute>? {
 
-        val station = if (fromStation.apiId.isNullOrBlank()) {
+        val station = if (fromStation.apiId == null || fromStation.apiId == "null" ) {
             stationProvider.updateStationApiId(fromStation)
         } else fromStation
 

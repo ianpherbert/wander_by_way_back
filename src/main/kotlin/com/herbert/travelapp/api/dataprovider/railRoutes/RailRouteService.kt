@@ -58,14 +58,14 @@ class RailRouteService(
             it as HashMap<String, Any>
         }?.map{
             RailStopSearchResult().apply {
-                this.id = it.get("id").toString()
-                this.name = it.get("name").toString()
-                this.type = it.get("type").toString()
+                this.id = it.get("id")?.toString()
+                this.name = it.get("name")?.toString()
+                this.type = it.get("type")?.toString()
             }
         }?.find{result->
-            station.slug!!.split("-").map {
-                result.name!!.lowercase().contains(it)
-            }.toSet().size == 1
+            station.slug?.split("-")?.map {
+                result.name?.lowercase()?.contains(it)
+            }?.toSet()?.size == 1
         }?.id
     }
 }
