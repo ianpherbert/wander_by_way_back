@@ -4,6 +4,8 @@ import com.herbert.travelapp.api.core.airport.Airport
 import com.herbert.travelapp.api.core.airport.AirportRepository
 import com.herbert.travelapp.api.dataprovider.database.city.CityDBRepository
 import com.herbert.travelapp.api.dataprovider.database.station.StationDBRepository
+import com.herbert.travelapp.api.extensions.toSearchableName
+import com.herbert.travelapp.api.extensions.unaccent
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -12,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 interface AirportDBRepository : MongoRepository<AirportDB, String> {
     fun findAllByName(name: String) : List<AirportDB>?
+
+    fun findAllBySlugContaining(name: String) : List<AirportDB>?
 
     fun findByIata(iata: String) : AirportDB?
 
@@ -32,7 +36,7 @@ class AirportDBService(
     }
 
     override fun findAirportsByName(name: String): List<Airport>? {
-        return airportDBRepository.findAllByName(name)?.map {
+        return airportDBRepository.findAllBySlugContaining(name.toSearchableName())?.map {
             airportDBMapper.toAirport(it)
         }
     }

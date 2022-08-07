@@ -12,6 +12,16 @@ class CityDB {
 
     var name: String? = null
 
+    var slug: String? = null
+
+    var nameEn: String? = null
+
+    var slugEn: String? = null
+
+    var slugFr: String? = null
+
+    var nameFR: String? = null
+
     var type: CityTypeDB? = null
 
     var population: Int? = null
