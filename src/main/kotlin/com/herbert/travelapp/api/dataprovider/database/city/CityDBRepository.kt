@@ -8,6 +8,7 @@ import com.herbert.travelapp.api.dataprovider.database.airport.AirportDBMapper
 import com.herbert.travelapp.api.dataprovider.database.airport.AirportDBRepository
 import com.herbert.travelapp.api.dataprovider.database.station.StationDBMapper
 import com.herbert.travelapp.api.dataprovider.database.station.StationDBRepository
+import com.herbert.travelapp.api.extensions.unaccent
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -16,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional
 interface CityDBRepository : MongoRepository<CityDB, String> {
     fun findByName(name: String): List<CityDB>
 
-    fun findAllByNameContaining(name: String): List<CityDB>?
+    fun findAllBySlugContaining(name: String): List<CityDB>?
 
     fun findByShareId(shareId: String): CityDB?
 
@@ -45,7 +46,7 @@ class CityDBService(
     }
 
     override fun searchCitiesByName(name: String): List<City>? {
-        return cityDBRepository.findAllByNameContaining(name)?.map { cityDB ->
+        return cityDBRepository.findAllBySlugContaining(name.unaccent().replace(" ", "-"))?.map { cityDB ->
             cityDBMapper.toCity(cityDB).let {
                 parseCity(it, cityDB)
             }
