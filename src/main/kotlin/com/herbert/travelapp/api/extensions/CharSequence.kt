@@ -7,3 +7,7 @@ fun CharSequence.unaccent(): String {
     val temp = Normalizer.normalize(this, Normalizer.Form.NFD)
     return REGEX_UNACCENT.replace(temp, "").replace("ł", "l").replace("ę", "e").replace("ñ", "n").replace("ç", "c")
 }
+
+fun CharSequence.toSearchableName(): String{
+    return this.unaccent().replace(" ", "-")
+}

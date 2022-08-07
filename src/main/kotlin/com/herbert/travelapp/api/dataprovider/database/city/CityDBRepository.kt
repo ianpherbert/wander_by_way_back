@@ -8,6 +8,7 @@ import com.herbert.travelapp.api.dataprovider.database.airport.AirportDBMapper
 import com.herbert.travelapp.api.dataprovider.database.airport.AirportDBRepository
 import com.herbert.travelapp.api.dataprovider.database.station.StationDBMapper
 import com.herbert.travelapp.api.dataprovider.database.station.StationDBRepository
+import com.herbert.travelapp.api.extensions.toSearchableName
 import com.herbert.travelapp.api.extensions.unaccent
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
@@ -46,7 +47,7 @@ class CityDBService(
     }
 
     override fun searchCitiesByName(name: String): List<City>? {
-        return cityDBRepository.findAllBySlugContaining(name.unaccent().replace(" ", "-"))?.map { cityDB ->
+        return cityDBRepository.findAllBySlugContaining(name.toSearchableName())?.map { cityDB ->
             cityDBMapper.toCity(cityDB).let {
                 parseCity(it, cityDB)
             }

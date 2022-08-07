@@ -13,6 +13,8 @@ class AirportDB {
 
     var name: String? = null
 
+    var slug: String? = null
+
     var latitude: String? = null
 
     var longitude: String? = null
