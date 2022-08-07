@@ -1,12 +1,13 @@
 package com.herbert.travelapp.api.core.flight
 
+import com.herbert.travelapp.api.core.airport.AirportRepository
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import org.springframework.stereotype.Component
 
 @Component
 class FlightService(
-    val flightRepository: FlightRepository
+    val flightRepository: FlightRepository,
 ) : FlightProvider {
 
     override fun findAllFlightsFromAirport(iataCode: String, fromDate: String, toDate: String): List<Flight>? {
@@ -14,7 +15,7 @@ class FlightService(
     }
 
     override fun findAllFlightsFromAirport(iataCode: String): List<Flight>? {
-        return flightRepository.findFlights(iataCode, null, today(), oneDayFrom())
+        return flightRepository.findFlights(iataCode, null, today(), oneDayFrom()) ?: return null
     }
 
     override fun findFlightsBetweenAirports(
