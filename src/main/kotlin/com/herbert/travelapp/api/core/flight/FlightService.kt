@@ -15,7 +15,7 @@ class FlightService(
     }
 
     override fun findAllFlightsFromAirport(iataCode: String): List<Flight>? {
-        return flightRepository.findFlights(iataCode, null, today(), oneDayFrom()) ?: return null
+        return flightRepository.findFlights(iataCode, null, today(), oneDayFrom())
     }
 
     override fun findFlightsBetweenAirports(

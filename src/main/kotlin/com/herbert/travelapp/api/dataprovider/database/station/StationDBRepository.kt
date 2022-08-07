@@ -36,7 +36,7 @@ class StationDBService(
     }
 
     override fun findStationById(id: String): Station? {
-        return stationDBRepository.findById(id).orElse(null).let{
+        return stationDBRepository.findById(id).orElse(null)?.let{
             stationDBMapper.toStation(it)
         }
     }

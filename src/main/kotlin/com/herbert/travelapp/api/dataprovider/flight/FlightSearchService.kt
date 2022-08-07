@@ -77,13 +77,13 @@ class FlightSearchService(
             this.kiwiId = flight.id!!
             this.from = FlightLocation().apply {
                 this.name = flight.cityFrom!!
-                this.airportCode = flight.cityCodeFrom
+                this.airportCode = flight.route?.first()?.flyFrom
                 this.countryName = flight.countryFrom?.name
                 this.countryCode = flight.countryFrom?.code
             }
             this.to = FlightLocation().apply {
-                this.name = flight.cityTo!!
-                this.airportCode = flight.cityCodeTo
+                this.name = flight.cityTo
+                this.airportCode = flight.route?.last()?.flyTo
                 this.countryName = flight.countryTo!!.name
                 this.countryCode = flight.countryTo.code
             }
