@@ -38,13 +38,13 @@ type StationOutput{
     id: String!
     companyIds: [CompanyIdOutput]
     name: String!
-    apiId: String!
+    apiId: String
     type: StationType!
     slug: String!
     uicId: String
     latitude: String!
     longitude: String!
-    country: String!
+    country: String
     main: Boolean!
     airport: Boolean!
     parentId: String
