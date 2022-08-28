@@ -19,7 +19,8 @@ class RouteService(
 ) : RouteProvider {
     override fun findAllRoutesFromCity(cityId: String): List<Route>? {
         val city = cityProvider.findCityById(cityId) ?: return null
-        val trainRoutes = stationProvider.findAllStationsByIdIn(city.getStationIds()).map{ station ->
+        val connectedCities = cityProvider.findCitiesByAreaId(city.shareId!!)
+        val trainRoutes = stationProvider.findAllStationsByIdIn(connectedCities.flatMap { it.getStationIds() }.distinct()).map{ station ->
             trainRouteProvider.getAllRoutesFromStation(station)?.map { route ->
                 val to = RouteStop().apply {
                     name = route.toStationName
@@ -44,13 +45,13 @@ class RouteService(
             } ?: listOf()
         } ?: listOf()
 
-        val flightRoutes = city.airports?.map { airport ->
-                val flights = airport.iata?.let { flightProvider.findAllFlightsFromAirport(it) }
+        val flightRoutes = connectedCities.flatMap { it.getAirportIATACodes() }.distinct().map { airport ->
+                val flights =  flightProvider.findAllFlightsFromAirport(airport)
 
                 val airports = flights?.map {
                     it.to!!.airportCode!!
                 }?.let{
-                    airportProvider.findAirportsByIATACode(it.plus(airport.iata!!))
+                    airportProvider.findAirportsByIATACode(it.plus(airport))
                 }
 
                 flights?.map { flight ->

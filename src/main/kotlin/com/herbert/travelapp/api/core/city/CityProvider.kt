@@ -7,7 +7,7 @@ interface CityProvider {
 
     fun findCityByShareId(shareId: String) : City?
 
-    fun findCitiesByAreaId(areaId: String) : List<String>?
+    fun findCitiesByAreaId(areaId: String) : List<City>
 
     fun findCitiesByStationId(stationId: String) : List<City>?
 
@@ -16,4 +16,5 @@ interface CityProvider {
     fun findCitiesByName(name: String) : List<City>?
 
     fun updateCityStation(station: Station) : Boolean
+
 }

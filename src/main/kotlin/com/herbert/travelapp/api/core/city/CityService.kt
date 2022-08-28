@@ -32,7 +32,7 @@ class CityService(
         return cityRepository.findCityByShareId(shareId)
     }
 
-    override fun findCitiesByAreaId(areaId: String): List<String>? {
+    override fun findCitiesByAreaId(areaId: String): List<City> {
         return cityRepository.findCitiesByAreaId(areaId)
     }
 

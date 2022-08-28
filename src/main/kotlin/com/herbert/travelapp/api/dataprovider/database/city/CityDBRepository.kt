@@ -58,10 +58,10 @@ class CityDBService(
         }
     }
 
-    override fun findCitiesByAreaId(areaId: String): List<String>? {
+    override fun findCitiesByAreaId(areaId: String): List<City> {
         return cityDBRepository.findAllByAreaIdContaining(areaId)?.map {
-            it.id!!
-        }
+            cityDBMapper.toCity(it)
+        } ?: emptyList()
     }
 
     override fun findCitiesByStationId(stationId: String): List<City>? {
