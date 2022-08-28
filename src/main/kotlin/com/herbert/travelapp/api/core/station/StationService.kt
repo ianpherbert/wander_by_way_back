@@ -1,11 +1,14 @@
 package com.herbert.travelapp.api.core.station
 
+import com.herbert.travelapp.api.core.city.CityProvider
+import com.herbert.travelapp.api.core.city.CityRepository
 import org.springframework.stereotype.Component
 
 @Component
 class StationService(
     val stationRepository: StationRepository,
     val findStationApiId: FindStationApiId,
+    val cityProvider: CityProvider
 ) : StationProvider {
 
     override fun updateStationApiId(station: Station) : Station{
@@ -13,12 +16,16 @@ class StationService(
             station.apply {
                 this.apiId = it
             }.let{
-                stationRepository.updateStation(it)
+                val stationUpdate = stationRepository.updateStation(it)
+                cityProvider.updateCityStation(stationUpdate)
+                stationUpdate
             }
         } ?: station.apply {
             this.apiId = "INVALID"
         }.let{
-            stationRepository.updateStation(it)
+            val stationUpdate = stationRepository.updateStation(it)
+            cityProvider.updateCityStation(stationUpdate)
+            stationUpdate
         }
     }
     override fun findStationById(id: String): Station? {
@@ -44,4 +51,10 @@ class StationService(
     override fun searchStationsByName(name: String): List<Station>? {
         return stationRepository.searchStationsByName(name)
     }
+
+    override fun findAllStationsByIdIn(ids: List<String>): List<Station> {
+        return stationRepository.findAllStationsByIdIn(ids)
+    }
+
+
 }

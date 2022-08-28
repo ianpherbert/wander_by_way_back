@@ -1,5 +1,6 @@
 package com.herbert.travelapp.api.dataprovider.database.airport
 
+import com.herbert.travelapp.api.dataprovider.database.city.CityTypeDB
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
@@ -29,6 +30,23 @@ class AirportDBLocation{
 
     var region: String? = null
 
-    var cities: List<String>? = null
+    var cityList: List<AirportCityDB>? = null
+}
 
+class AirportCityDB{
+    var cityId: String? = null
+
+    var name: String? = null
+
+    var slug: String? = null
+
+    var type: CityTypeDB? = null
+
+    var latitude: String? = null
+
+    var longitude: String? = null
+
+    var country: String? = null
+
+    var shareId: String? = null
 }

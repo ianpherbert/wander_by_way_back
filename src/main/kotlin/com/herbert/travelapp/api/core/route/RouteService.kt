@@ -5,6 +5,8 @@ import com.herbert.travelapp.api.core.city.CityProvider
 import com.herbert.travelapp.api.core.flight.FlightProvider
 import com.herbert.travelapp.api.core.station.StationProvider
 import com.herbert.travelapp.api.core.trainRoute.TrainRouteProvider
+import com.herbert.travelapp.api.utils.DistanceCalculator
+import com.herbert.travelapp.api.utils.Point
 import org.springframework.stereotype.Component
 
 @Component
@@ -17,7 +19,7 @@ class RouteService(
 ) : RouteProvider {
     override fun findAllRoutesFromCity(cityId: String): List<Route>? {
         val city = cityProvider.findCityById(cityId) ?: return null
-        val trainRoutes = city.trainStations?.map{ station ->
+        val trainRoutes = stationProvider.findAllStationsByIdIn(city.getStationIds()).map{ station ->
             trainRouteProvider.getAllRoutesFromStation(station)?.map { route ->
                 val to = RouteStop().apply {
                     name = route.toStationName
@@ -40,7 +42,7 @@ class RouteService(
                     this.durationHours = route.durationHours
                 }
             } ?: listOf()
-        }  ?: listOf()
+        } ?: listOf()
 
         val flightRoutes = city.airports?.map { airport ->
                 val flights = airport.iata?.let { flightProvider.findAllFlightsFromAirport(it) }

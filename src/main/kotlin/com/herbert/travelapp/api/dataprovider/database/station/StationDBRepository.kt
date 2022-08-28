@@ -19,6 +19,8 @@ interface StationDBRepository : MongoRepository<StationDB, String> {
     fun findByApiId(apiId: String) : StationDB?
 
     fun findAllByNameContaining(name: String) : List<StationDB>?
+
+    fun findAllByIdIn(ids: List<String>) : List<StationDB>
 }
 
 @Repository
@@ -69,6 +71,12 @@ class StationDBService(
         return stationDBRepository.findAllByName(name)?.map{
             stationDBMapper.toStation(it)
         } ?: listOf()
+    }
+
+    override fun findAllStationsByIdIn(ids: List<String>): List<Station> {
+        return stationDBRepository.findAllByIdIn(ids).map {
+            stationDBMapper.toStation(it)
+        }
     }
 
 }

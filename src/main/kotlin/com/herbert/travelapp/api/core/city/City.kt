@@ -2,6 +2,7 @@ package com.herbert.travelapp.api.core.city
 
 import com.herbert.travelapp.api.core.airport.Airport
 import com.herbert.travelapp.api.core.station.Station
+import com.herbert.travelapp.api.dataprovider.database.station.StationDBType
 
 
 class City {
@@ -24,10 +25,17 @@ class City {
 
     var shareId: String? = null
 
-    var airports : List<Airport>? = null
+    var airports : List<CityAirport>? = null
 
-    var trainStations : List<Station>? = null
+    var trainStations : List<CityStation>? = null
 
+    fun getStationIds() : List<String>{
+        return this.trainStations?.mapNotNull { it.stationId } ?: listOf()
+    }
+
+    fun getAirportIds() : List<String>{
+        return this.airports?.mapNotNull { it.airportId } ?: listOf()
+    }
 }
 
 enum class CityType{
@@ -44,4 +52,36 @@ enum class CityStationType{
     bus,
     ferry,
     other
+}
+
+class CityAirport{
+    var name : String? = null
+
+    var airportId : String? = null
+
+    var icao: String? = null
+
+    var iata: String? = null
+
+    var latitude: String? = null
+
+    var longitude: String? = null
+}
+
+class CityStation{
+    var name : String? = null
+
+    var stationId : String? = null
+
+    var type : StationDBType? = null
+
+    var latitude: String? = null
+
+    var longitude: String? = null
+
+    var apiId: String? = null
+
+    var main: Boolean? = null
+
+    var airport: Boolean? = null
 }
