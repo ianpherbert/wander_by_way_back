@@ -36,6 +36,18 @@ class City {
     fun getAirportIds() : List<String>{
         return this.airports?.mapNotNull { it.airportId } ?: listOf()
     }
+
+    fun updateStationApiId(station: Station){
+        this.trainStations = this.trainStations?.map {
+            if(it.stationId == station.id){
+                it.apply {
+                    this.apiId = station.apiId
+                }
+            }else{
+                it
+            }
+        }
+    }
 }
 
 enum class CityType{

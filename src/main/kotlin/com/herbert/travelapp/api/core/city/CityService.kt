@@ -17,18 +17,9 @@ class CityService(
 
     override fun updateCityStation(station: Station): Boolean {
         return try{
-            station.id?.let { cityRepository.findCitiesByStationId(it) }?.forEach { city->
-                cityRepository.saveCity(city.apply {
-                    this.trainStations = this.trainStations?.map {
-                        if(it.stationId == station.id){
-                            it.apply {
-                                this.apiId = station.apiId
-                            }
-                        }else{
-                            it
-                        }
-                    }
-                })
+            station.id?.let { cityRepository.findCitiesByStationId(it) }?.forEach { city ->
+                city.updateStationApiId(station)
+                cityRepository.saveCity(city)
             }
             true
         }catch (ex: Exception){
