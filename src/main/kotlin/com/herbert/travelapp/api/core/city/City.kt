@@ -37,6 +37,10 @@ class City {
         return this.airports?.mapNotNull { it.airportId } ?: listOf()
     }
 
+    fun getAirportIATACodes() : List<String>{
+        return this.airports?.mapNotNull { it.iata } ?: listOf()
+    }
+
     fun updateStationApiId(station: Station){
         this.trainStations = this.trainStations?.map {
             if(it.stationId == station.id){

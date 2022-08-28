@@ -7,7 +7,7 @@ interface CityRepository {
 
     fun findCityByShareId(shareId: String): City?
 
-    fun findCitiesByAreaId(areaId: String): List<String>?
+    fun findCitiesByAreaId(areaId: String): List<City>
 
     fun findCitiesByStationId(stationId: String): List<City>?
 
