@@ -42,25 +42,19 @@ class CityDBService(
 ) : CityRepository {
     override fun getCityById(id: String): City? {
         return cityDBRepository.findById(id).orElse(null)?.let { cityDB ->
-            cityDBMapper.toCity(cityDB).let { city ->
-                parseCity(city, cityDB)
-            }
+            cityDBMapper.toCity(cityDB)
         }
     }
 
     override fun searchCitiesByName(name: String): List<City>? {
         return cityDBRepository.findAllBySlugContaining(name.toSearchableName())?.map { cityDB ->
-            cityDBMapper.toCity(cityDB).let {
-                parseCity(it, cityDB)
-            }
+            cityDBMapper.toCity(cityDB)
         }
     }
 
     override fun findCityByShareId(shareId: String): City? {
         return cityDBRepository.findByShareId(shareId)?.let { cityDB ->
-            cityDBMapper.toCity(cityDB).let {
-                parseCity(it, cityDB)
-            }
+            cityDBMapper.toCity(cityDB)
         }
     }
 
@@ -72,38 +66,24 @@ class CityDBService(
 
     override fun findCitiesByStationId(stationId: String): List<City>? {
         return cityDBRepository.findAllByTrainStationsStationId(stationId)?.map { cityDB ->
-            cityDBMapper.toCity(cityDB).let {
-                parseCity(it, cityDB)
-            }
+            cityDBMapper.toCity(cityDB)
         }
     }
 
     override fun findCitiesByAirportId(airportId: String): List<City>? {
         return cityDBRepository.findAllByAirportsAirportId(airportId)?.map { cityDB ->
-            cityDBMapper.toCity(cityDB).let {
-                parseCity(it, cityDB)
-            }
+            cityDBMapper.toCity(cityDB)
         }
     }
 
-    private fun parseCity(city: City, cityDB: CityDB): City {
-        return city.apply {
-            this.airports = cityDB.airports?.map { cityAirportDB ->
-                cityAirportDB.airportId?.let {
-                    parseAirport(it)
-                } ?: Airport().apply {
-                    name = cityAirportDB.name
-                }
-            }
-            this.trainStations = cityDB.trainStations?.map { cityStationDB ->
-                cityStationDB.stationId?.let {
-                    parseStation(it)
-                } ?: Station().apply {
-                    name = cityStationDB.name
-                }
-            }
+    override fun saveCity(city: City): City {
+        return cityDBMapper.toCityDB(city).let {
+            cityDBRepository.save(it)
+        }.let {
+            cityDBMapper.toCity(it)
         }
     }
+
 
     private fun parseAirport(airportId: String): Airport? {
         return airportDBRepository.findById(airportId).orElse(null)?.let {

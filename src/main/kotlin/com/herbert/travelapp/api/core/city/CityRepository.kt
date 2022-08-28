@@ -12,4 +12,6 @@ interface CityRepository {
     fun findCitiesByStationId(stationId: String): List<City>?
 
     fun findCitiesByAirportId(airportId: String): List<City>?
+
+    fun saveCity(city: City) : City
 }

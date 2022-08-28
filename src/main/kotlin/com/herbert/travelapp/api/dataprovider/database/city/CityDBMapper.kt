@@ -8,4 +8,6 @@ import org.mapstruct.ReportingPolicy
 interface CityDBMapper {
 
     fun toCity(cityDB: CityDB) : City
+
+    fun toCityDB(city: City) : CityDB
 }

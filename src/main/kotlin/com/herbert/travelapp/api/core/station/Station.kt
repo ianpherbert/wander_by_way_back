@@ -1,5 +1,7 @@
 package com.herbert.travelapp.api.core.station
 
+import com.herbert.travelapp.api.dataprovider.database.city.CityTypeDB
+
 
 class Station {
 
@@ -28,6 +30,8 @@ class Station {
     var airport: Boolean? = null
 
     var parentId: String? = null
+
+    var cityList: List<StationCity>? = null
 }
 
 class CompanyId{
@@ -41,4 +45,22 @@ enum class StationType{
     BUS,
     FERRY,
     OTHER
+}
+
+class StationCity{
+    var cityId: String? = null
+
+    var name: String? = null
+
+    var slug: String? = null
+
+    var type: CityTypeDB? = null
+
+    var latitude: String? = null
+
+    var longitude: String? = null
+
+    var country: String? = null
+
+    var shareId: String? = null
 }
