@@ -21,31 +21,10 @@ class RouteService(
         val city = cityProvider.findCityById(cityId) ?: return null
         val connectedCities = cityProvider.findCitiesByAreaId(city.shareId!!)
         val trainRoutes = stationProvider.findAllStationsByIdIn(connectedCities.flatMap { it.getStationIds() }.distinct()).map{ station ->
-            trainRouteProvider.getAllRoutesFromStation(station)?.map { route ->
-                val to = RouteStop().apply {
-                    name = route.toStationName
-                    id = route.toStationId
-                    latitude = route.latitude
-                    longitude = route.longitude
-                }
-                val from = RouteStop().apply {
-                    name = route.fromStationName
-                    id = route.fromStationId
-                    latitude = station.latitude
-                    longitude = station.longitude
-                }
-                Route().apply {
-                    this.to = to
-                    this.from = from
-                    this.type = RouteType.TRAIN
-                    this.durationTotal = route.duration
-                    this.durationMinutes = route.durationMinutes
-                    this.durationHours = route.durationHours
-                }
-            } ?: listOf()
-        } ?: listOf()
+            trainRouteProvider.getAllRoutesFromStation(station) ?: listOf()
+        }.flatten()
 
-        val flightRoutes = connectedCities.flatMap { it.getAirportIATACodes() }.distinct().map { airport ->
+        val flightRoutes = connectedCities.flatMap { it.getAirportIATACodes() }.distinct().mapNotNull { airport ->
                 val flights =  flightProvider.findAllFlightsFromAirport(airport)
 
                 val airports = flights?.map {
@@ -55,33 +34,11 @@ class RouteService(
                 }
 
                 flights?.map { flight ->
-                    val fromStop = airports?.find{it.iata == flight.from!!.airportCode}
-
-                    val to = RouteStop().apply {
-                        val toStop = airports?.find{it.iata == flight.to!!.airportCode}
-                        name = flight.to?.name
-                        country = flight.to?.countryName
-                        id = toStop?.id
-                        latitude = toStop?.latitude
-                        longitude = toStop?.longitude
-                    }
-                    val from = RouteStop().apply {
-                        name = flight.from?.name
-                        country = flight.from?.countryName
-                        id = fromStop?.id
-                        latitude = fromStop?.latitude
-                        longitude = fromStop?.longitude
-                    }
-                    Route().apply {
-                        this.to = to
-                        this.from = from
-                        this.type = RouteType.PLANE
-                        this.durationTotal = flight.duration
-                        this.durationMinutes = flight.duration?.rem(60)
-                        this.durationHours = flight.duration?.div(60)
-                    }
+                    val fromStop = airports?.find{it.iata == flight.from!!.airportCode} ?: return null
+                    val toStop = airports.find{it.iata == flight.to!!.airportCode} ?: return null
+                    flight.toRoute(toStop,fromStop)
                 } ?: listOf()
-            } ?: listOf()
-        return listOf(trainRoutes, flightRoutes).flatten().flatten()
+            }.flatten()
+        return listOf(trainRoutes, flightRoutes).flatten()
     }
 }
