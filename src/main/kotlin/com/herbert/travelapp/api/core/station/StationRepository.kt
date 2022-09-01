@@ -16,4 +16,10 @@ interface StationRepository {
     fun searchStationsByName(name: String) : List<Station>?
 
     fun findAllStationsByIdIn(ids: List<String>) : List<Station>
+
+    fun findAllByApiIdIn(apiIds: List<String>) : List<Station>
+
+    fun findAllBySlugContaining(fragment: String) : List<Station>
+
+    fun saveStation(station: Station) : Station
 }

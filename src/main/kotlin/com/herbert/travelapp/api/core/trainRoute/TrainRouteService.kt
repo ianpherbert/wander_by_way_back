@@ -11,9 +11,8 @@ import org.springframework.stereotype.Component
 @Component
 class TrainRouteService(
     val trainRouteRepository: TrainRouteRepository,
-    val stationProvider: StationProvider
+    val stationProvider: StationProvider,
 ) : TrainRouteProvider {
-
     override fun getAllRoutesFromStation(fromStation: Station): List<Route>? {
 
         val station = if (fromStation.apiId == null || fromStation.apiId == "null" ) {
@@ -22,7 +21,9 @@ class TrainRouteService(
 
         if(station.apiId == "INVALID") return null
 
-        return trainRouteRepository.findRoutesFromStation(station)?.map { route ->
+        val routes = trainRouteRepository.findRoutesFromStation(station) ?: return null
+
+        return routes.map { route ->
             val to = RouteStop().apply {
                 name = route.toStationName
                 id = route.toStationId

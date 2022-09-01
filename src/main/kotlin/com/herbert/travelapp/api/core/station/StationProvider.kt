@@ -1,5 +1,7 @@
 package com.herbert.travelapp.api.core.station
 
+import com.herbert.travelapp.api.core.trainRoute.TrainRoute
+
 interface StationProvider {
     fun findStationById(id: String) : Station?
 
@@ -16,4 +18,10 @@ interface StationProvider {
     fun searchStationsByName(name: String) : List<Station>?
 
     fun findAllStationsByIdIn(ids: List<String>) : List<Station>
+
+    fun findAllByApiIdIn(apiIds: List<String>) : List<Station>
+
+    //Our API will find a station by its API ID, but if the id is not in the DB,
+    //this function parses the name by its slug and saves the api Id
+    fun findAndUpdateStationFromApi(route: TrainRoute) : Boolean
 }
