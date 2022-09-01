@@ -21,7 +21,5 @@ interface StationProvider {
 
     fun findAllByApiIdIn(apiIds: List<String>) : List<Station>
 
-    //Our API will find a station by its API ID, but if the id is not in the DB,
-    //this function parses the name by its slug and saves the api Id
-    fun findAndUpdateStationFromApi(route: TrainRoute) : Boolean
+    fun updateNonExistantApiIds(routes: List<TrainRoute>)
 }

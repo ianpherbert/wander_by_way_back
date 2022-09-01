@@ -5,6 +5,7 @@ import com.herbert.travelapp.api.core.trainRoute.TrainRoute
 import com.herbert.travelapp.api.extensions.toSearchableName
 import com.herbert.travelapp.api.utils.DistanceCalculator
 import com.herbert.travelapp.api.utils.Point
+import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
 
 @Component
@@ -64,7 +65,7 @@ class StationService(
         return stationRepository.findAllByApiIdIn(apiIds)
     }
 
-    override fun findAndUpdateStationFromApi(route: TrainRoute): Boolean {
+    private fun findAndUpdateStationFromApi(route: TrainRoute): Boolean {
         val toStationSlug = route.toStationName?.toSearchableName() ?: return false
         var update = false
         stationRepository.findAllBySlugContaining(toStationSlug).forEach { station ->
@@ -96,6 +97,19 @@ class StationService(
         }catch (ex: Exception){
             println(ex.message)
             false
+        }
+    }
+
+    override fun updateNonExistantApiIds(routes: List<TrainRoute>){
+        routes.mapNotNull { it.toStationId }.let {
+            //list of apiIds not attached to a station
+            val stations = findAllByApiIdIn(it).map { it.apiId }
+            //all stations that contain one of the apiIds in the above list
+            //v-- routes whose toStationId is not contained in the list of stations --v
+            routes.filter { !stations.contains(it.toStationId) }.forEach {
+                //find the station by its apiId and update the entry in the DB
+                findAndUpdateStationFromApi(it)
+            }
         }
     }
 
