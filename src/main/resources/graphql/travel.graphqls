@@ -14,7 +14,7 @@ type Query {
     findCityById(cityId: String!) : CityOutput
     findAirportById(airportId: String!) : AirportOutput
     findStationById(stationId: String!) : StationOutput
-    findAllRoutesFromCity(cityId: String!) : [RouteOutput]!
+    findAllRoutesFromCity(cityId: String!) : [RouteSearchOutput]!
     findAllCitiesByAirportId(airportId: String!) : [CityOutput]
 }
 
@@ -101,6 +101,16 @@ type StationSearchOutput{
     country: String
 }
 
+type RouteSearchOutput{
+    destinationId: String!
+    destinationName: String!
+    latitude: String
+    longitude: String
+    routes: [RouteOutput!]!
+    durationAverage: Int
+    lineDistanceAverage: Float
+}
+
 type RouteOutput{
     to: RouteStopOutput!
     from: RouteStopOutput!
@@ -108,6 +118,7 @@ type RouteOutput{
     durationTotal: Int
     durationMinutes: Int
     durationHours: Int
+    lineDistance: Float
 }
 
 type RouteStopOutput{
