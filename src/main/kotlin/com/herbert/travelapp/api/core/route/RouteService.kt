@@ -18,6 +18,7 @@ class RouteService(
     override fun findAllRoutesFromCity(cityId: String): List<Route>? {
         val city = cityProvider.findCityById(cityId) ?: return null
         val connectedCities = cityProvider.findCitiesByAreaId(city.shareId!!)
+        connectedCities
         val trainRoutes =
             stationProvider.findAllStationsByIdIn(connectedCities.flatMap { it.getStationIds() }.distinct())
                 .map { station ->
