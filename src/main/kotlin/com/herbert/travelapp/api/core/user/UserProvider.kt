@@ -12,4 +12,6 @@ interface UserProvider {
     fun verifyEmail(email: String) : Boolean
 
     fun verifyUserName(userName: String) : Boolean
+
+    fun deleteUser(userId: String) : Boolean
 }

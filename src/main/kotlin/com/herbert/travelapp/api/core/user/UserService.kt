@@ -43,4 +43,11 @@ class UserService(
     override fun verifyUserName(userName: String): Boolean {
         return userRepository.verifyUserName(userName)
     }
+
+    override fun deleteUser(userId: String): Boolean {
+        return userRepository.findById(userId)?.let {
+            //verify token has rights to delete
+            userRepository.deleteUser(it)
+        } ?: false
+    }
 }

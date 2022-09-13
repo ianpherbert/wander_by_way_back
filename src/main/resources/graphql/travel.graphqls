@@ -6,6 +6,7 @@ schema {
 type Mutation {
     createUser(userInput: UserInput!) : UserOutput!
     updateUser(userInput: UserInput!) : UserOutput!
+    deleteUser(userId: String!) : Boolean!
 }
 
 type Query {
