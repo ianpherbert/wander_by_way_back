@@ -6,10 +6,12 @@ import org.springframework.stereotype.Component
 @Component
 class EmailService : EmailProvider{
     override fun sendEmailUserCreated(user: User): Boolean {
+        return true
         TODO("Not yet implemented")
     }
 
     override fun sendEmailUserPasswordUpdated(user: User): Boolean {
+        return true
         TODO("Not yet implemented")
     }
 }

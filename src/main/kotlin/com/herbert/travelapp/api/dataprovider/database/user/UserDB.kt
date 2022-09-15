@@ -1,28 +1,37 @@
 package com.herbert.travelapp.api.dataprovider.database.user
 
 import com.herbert.travelapp.api.core.user.UserStatus
+import org.springframework.data.annotation.Id
+import org.springframework.data.mongodb.core.index.Indexed
+import org.springframework.data.mongodb.core.mapping.Document
 
+@Document
 class UserDB {
-    val userName: String? = null
+    @Id
+    var id: String? = null
 
-    val email: String? = null
+    @Indexed(unique = true)
+    var userName: String? = null
 
-    val status: List<UserStatus>? = null
+    @Indexed(unique = true)
+    var email: String? = null
 
-    val firstName: String? = null
+    var status: List<UserStatus>? = null
 
-    val lastName: String? = null
+    var firstName: String? = null
 
-    val phoneNumber: String? = null
+    var lastName: String? = null
 
-    val country: String? = null
+    var phoneNumber: String? = null
 
-    val region: String? = null
+    var country: String? = null
 
-    val security: UserDBSecurity? = null
+    var region: String? = null
+
+    var security: UserDBSecurity? = null
 }
 
 class UserDBSecurity{
-    val securityId: String? = null
+    var securityId: String? = null
 }
 

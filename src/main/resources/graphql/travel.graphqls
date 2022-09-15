@@ -31,7 +31,6 @@ input UserInput{
     country: String!
     region: String
     phoneNumber: String
-    status: [UserStatus]!
 }
 
 enum UserStatus{
@@ -91,8 +90,9 @@ type AirportLocationOutput{
 }
 
 type UserOutput{
-    name: String!
+    userName: String!
     email: String!
+    status: [UserStatus]!
 }
 
 type CitySearchOutput{

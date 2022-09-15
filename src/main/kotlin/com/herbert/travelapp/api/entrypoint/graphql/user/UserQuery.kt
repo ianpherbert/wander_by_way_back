@@ -16,7 +16,7 @@ class UserQuery(
 ) : VerifyEmailQueryResolver, VerifyUserNameQueryResolver, SearchUserQueryResolver {
 
     @QueryMapping
-    override fun searchUser(@Argument email: String?, userName: String?): UserOutput? {
+    override fun searchUser(@Argument email: String?,@Argument userName: String?): UserOutput? {
         val user = if(!email.isNullOrBlank()){
             userProvider.searchUserByEmail(email)
         }else if(!userName.isNullOrBlank()){

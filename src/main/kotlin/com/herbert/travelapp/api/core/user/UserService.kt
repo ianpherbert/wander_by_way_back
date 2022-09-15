@@ -13,6 +13,7 @@ class UserService(
     override fun createUser(user: User): User {
         userRepository.saveUser(user.apply {
             this.security = securityProvider.createUser(user)
+            this.status = listOf(UserStatus.PENDING)
         }).let {
             emailProvider.sendEmailUserCreated(user)
             return it
@@ -20,7 +21,10 @@ class UserService(
     }
 
     override fun updateUser(user: User): User {
+        var userSave = userRepository.findByEmail(user.email) ?: throw Exception("User Not found")
         userRepository.saveUser(user.apply {
+            this.status = userSave.status
+            this.id = userSave.id
             this.security = securityProvider.updateUserPassword(user)
         }).let {
             emailProvider.sendEmailUserPasswordUpdated(user)

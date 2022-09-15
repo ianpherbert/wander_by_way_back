@@ -9,6 +9,7 @@ class User (
     val region: String? = null,
     val phoneNumber: String? = null
 ){
+    var id: String? = null
     lateinit var status: List<UserStatus>
     lateinit var security: UserSecurity
 }
