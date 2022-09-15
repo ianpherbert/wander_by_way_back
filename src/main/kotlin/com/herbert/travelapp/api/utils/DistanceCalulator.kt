@@ -1,27 +1,33 @@
 package com.herbert.travelapp.api.utils
 
+import kotlin.math.acos
 import kotlin.math.cos
 import kotlin.math.sin
 
 class DistanceCalculator(
-    val pointA: Point,
-    val pointB: Point
+    private val pointA: Point,
+    private val pointB: Point
 ) {
     fun distance(unit: Char): Double {
         val theta = pointA.longitude - pointB.longitude
         var dist =
-            Math.sin(deg2rad(pointA.latitude)) * Math.sin(deg2rad(pointB.latitude)) + Math.cos(deg2rad(pointA.latitude)) * Math.cos(deg2rad(pointB.latitude)) * Math.cos(
+            sin(pointA.latitudeRad()) * sin(pointB.latitudeRad()) + cos(pointA.latitudeRad()) * cos(pointB.latitudeRad()) * cos(
                 deg2rad(theta)
-            )
-        dist = Math.acos(dist)
-        dist = rad2deg(dist)
-        dist = dist * 60 * 1.1515
+            ).let {
+                rad2deg(acos(it)) * 60 * 1.1515
+            }
         if (unit == 'K') {
-            dist = dist * 1.609344
+            dist *= 1.609344
         } else if (unit == 'N') {
-            dist = dist * 0.8684
+            dist *= 0.8684
         }
         return dist
+    }
+
+    fun perimeter(point: Point, distance: Int, unit: Char): Perimeter {
+        TODO("Calculate perimeter")
+        //Lines of latitude are 111 km apart
+        /* One degree of longitude is 111.321 km at the equator (0° latitude) and 0 km at the poles (90°) */
     }
 
     private fun deg2rad(deg: Double): Double {
@@ -37,4 +43,15 @@ class DistanceCalculator(
 class Point(
     val latitude: Double,
     val longitude: Double
+) {
+    fun latitudeRad(): Double {
+        return latitude * Math.PI / 180.0
+    }
+}
+
+class Perimeter(
+    val north: Point,
+    val south: Point,
+    val east: Point,
+    val west: Point
 )

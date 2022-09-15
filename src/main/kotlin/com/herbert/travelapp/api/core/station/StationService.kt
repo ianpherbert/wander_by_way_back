@@ -71,8 +71,8 @@ class StationService(
         stationRepository.findAllBySlugContaining(toStationSlug).forEach { station ->
             if (route.latitude != null && station.latitude != null) {
                 val distance = DistanceCalculator(
-                    Point(route.latitude!!.toDouble(), route.longitude!!.toDouble()),
-                    Point(station.latitude!!.toDouble(), station.longitude!!.toDouble())
+                    route.toPoint(),
+                    station.toPoint()
                 ).distance('K')
                 if (distance < 5 ) {
                     update = updateStationApiId(station, route.toStationId)

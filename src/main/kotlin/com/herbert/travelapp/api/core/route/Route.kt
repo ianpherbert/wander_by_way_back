@@ -1,6 +1,7 @@
 package com.herbert.travelapp.api.core.route
 
 import com.herbert.travelapp.api.core.city.CityType
+import com.herbert.travelapp.api.utils.Point
 
 class Route {
     var to: RouteStop? = null
@@ -17,6 +18,12 @@ class RouteStop{
     var latitude: String? = null
     var longitude: String? = null
     var country: String? = null
+    fun toPoint() : Point {
+        return Point(
+            latitude!!.toDouble(),
+            longitude!!.toDouble()
+        )
+    }
 }
 
 enum class RouteType{

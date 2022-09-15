@@ -1,6 +1,7 @@
 package com.herbert.travelapp.api.core.station
 
 import com.herbert.travelapp.api.dataprovider.database.city.CityTypeDB
+import com.herbert.travelapp.api.utils.Point
 
 
 class Station {
@@ -32,6 +33,13 @@ class Station {
     var parentId: String? = null
 
     var cityList: List<StationCity>? = null
+
+    fun toPoint() : Point {
+        return Point(
+            latitude!!.toDouble(),
+            longitude!!.toDouble()
+        )
+    }
 }
 
 class CompanyId{
@@ -63,4 +71,11 @@ class StationCity{
     var country: String? = null
 
     var shareId: String? = null
+
+    fun toPoint() : Point {
+        return Point(
+            latitude!!.toDouble(),
+            longitude!!.toDouble()
+        )
+    }
 }
