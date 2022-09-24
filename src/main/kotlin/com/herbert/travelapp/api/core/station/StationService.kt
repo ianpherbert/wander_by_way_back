@@ -4,8 +4,6 @@ import com.herbert.travelapp.api.core.city.CityProvider
 import com.herbert.travelapp.api.core.trainRoute.TrainRoute
 import com.herbert.travelapp.api.extensions.toSearchableName
 import com.herbert.travelapp.api.utils.DistanceCalculator
-import com.herbert.travelapp.api.utils.Point
-import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
 
 @Component
@@ -74,43 +72,44 @@ class StationService(
                     route.toPoint(),
                     station.toPoint()
                 ).distance('K')
-                if (distance < 5 ) {
-                    update = updateStationApiId(station, route.toStationId)
+                if (distance != null) {
+                    if (distance < 5) {
+                        update = updateStationApiId(station, route.toStationId)
+                    }
                 }
-            } else if(station.slug!!.toSearchableName() == route.toStationName!!.toSearchableName()) {
-                    update = updateStationApiId(station, route.toStationId)
+            } else if (station.slug!!.toSearchableName() == route.toStationName!!.toSearchableName()) {
+                update = updateStationApiId(station, route.toStationId)
             }
         }
         return update
     }
 
-    private fun updateStationApiId(station: Station, apiId: String?) : Boolean{
+    private fun updateStationApiId(station: Station, apiId: String?): Boolean {
         return try {
             station.apply {
                 this.apiId = apiId
             }.let {
                 stationRepository.saveStation(it)
                 cityProvider.updateCityStation(it)
-                println("${station.slug} update with ${apiId} apiId")
+                println("${station.slug} update with $apiId apiId")
             }
             true
-        }catch (ex: Exception){
+        } catch (ex: Exception) {
             println(ex.message)
             false
         }
     }
 
-    override fun updateNonExistantApiIds(routes: List<TrainRoute>){
+    override fun updateNonExistantApiIds(routes: List<TrainRoute>) {
         routes.mapNotNull { it.toStationId }.let {
-            //list of apiIds not attached to a station
+            // list of apiIds not attached to a station
             val stations = findAllByApiIdIn(it).map { it.apiId }
-            //all stations that contain one of the apiIds in the above list
-            //v-- routes whose toStationId is not contained in the list of stations --v
+            // all stations that contain one of the apiIds in the above list
+            // v-- routes whose toStationId is not contained in the list of stations --v
             routes.filter { !stations.contains(it.toStationId) }.forEach {
-                //find the station by its apiId and update the entry in the DB
+                // find the station by its apiId and update the entry in the DB
                 findAndUpdateStationFromApi(it)
             }
         }
     }
-
 }
