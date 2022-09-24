@@ -1,6 +1,7 @@
 package com.herbert.travelapp.api.core.airport
 
 import com.herbert.travelapp.api.dataprovider.database.city.CityTypeDB
+import com.herbert.travelapp.api.utils.Point
 
 
 class Airport {
@@ -18,6 +19,13 @@ class Airport {
     var iata: String? = null
 
     var icao: String? = null
+
+    fun toPoint() : Point{
+        return Point(
+            latitude!!.toDouble(),
+            longitude!!.toDouble()
+        )
+    }
 
 }
 

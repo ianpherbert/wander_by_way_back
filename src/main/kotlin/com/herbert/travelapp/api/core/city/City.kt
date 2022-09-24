@@ -3,6 +3,7 @@ package com.herbert.travelapp.api.core.city
 import com.herbert.travelapp.api.core.airport.Airport
 import com.herbert.travelapp.api.core.station.Station
 import com.herbert.travelapp.api.dataprovider.database.station.StationDBType
+import com.herbert.travelapp.api.utils.Point
 
 
 class City {
@@ -28,6 +29,13 @@ class City {
     var airports : List<CityAirport>? = null
 
     var trainStations : List<CityStation>? = null
+
+    fun toPoint() : Point {
+        return Point(
+            latitude!!.toDouble(),
+            longitude!!.toDouble()
+        )
+    }
 
     fun getStationIds() : List<String>{
         return this.trainStations?.mapNotNull { it.stationId } ?: listOf()

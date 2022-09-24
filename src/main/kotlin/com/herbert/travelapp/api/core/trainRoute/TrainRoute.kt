@@ -1,5 +1,7 @@
 package com.herbert.travelapp.api.core.trainRoute
 
+import com.herbert.travelapp.api.utils.Point
+
 
 class TrainRoute {
     var fromStationName : String? = null
@@ -19,4 +21,11 @@ class TrainRoute {
     var durationHours : Int? = null
 
     var durationMinutes : Int? = null
+
+    fun toPoint() : Point {
+        return Point(
+            latitude!!.toDouble(),
+            longitude!!.toDouble()
+        )
+    }
 }
