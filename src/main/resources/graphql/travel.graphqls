@@ -5,6 +5,8 @@ schema {
 
 type Mutation {
     createUser(userInput: UserInput!) : UserOutput!
+    updateUser(userInput: UserInput!) : UserOutput!
+    deleteUser(userId: String!) : Boolean!
 }
 
 type Query {
@@ -16,11 +18,26 @@ type Query {
     findStationById(stationId: String!) : StationOutput
     findAllRoutesFromCity(cityId: String!) : [RouteOutput]!
     findAllCitiesByAirportId(airportId: String!) : [CityOutput]
+    searchUser(email: String, userName: String) : UserOutput
+    verifyEmail(email: String!) : Boolean
+    verifyUserName(userName: String!) : Boolean
 }
 
 input UserInput{
-    name: String!
+    userName: String!
     email: String!
+    firstName: String!
+    lastName: String!
+    country: String!
+    region: String
+    phoneNumber: String
+}
+
+enum UserStatus{
+    VERIFIED,
+    PENDING,
+    SUSPENDED,
+    ACTIVE
 }
 
 type CityOutput{
@@ -73,8 +90,9 @@ type AirportLocationOutput{
 }
 
 type UserOutput{
-    name: String!
+    userName: String!
     email: String!
+    status: [UserStatus]!
 }
 
 type CitySearchOutput{
