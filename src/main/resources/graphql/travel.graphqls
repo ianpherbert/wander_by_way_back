@@ -16,6 +16,12 @@ type Query {
     findStationById(stationId: String!) : StationOutput
     findAllRoutesFromCity(cityId: String!) : [RouteSearchOutput]!
     findAllCitiesByAirportId(airportId: String!) : [CityOutput]
+    findAllCitiesFromAssociatedTransit(transitSearchInput: TransitSearchInput) : [CityOutput]
+}
+
+input TransitSearchInput{
+    id: String!
+    transitType: TransitType
 }
 
 input UserInput{
@@ -31,8 +37,8 @@ type CityOutput{
     latitude: String!
     longitude: String!
     country: String!
-    airports: [AirportOutput]
-    trainStations: [StationOutput]
+    airports: [CityAirportOutput]
+    trainStations: [CityStationOutput]
 }
 
 type StationOutput{
@@ -51,6 +57,16 @@ type StationOutput{
     parentId: String
 }
 
+type CityStationOutput{
+    name: String!
+    stationId: String!
+    latitude: String!
+    longitude: String!
+    type: StationType!
+    main: Boolean!
+    airport: Boolean!
+}
+
 type CompanyIdOutput{
     company: String!
     companyId: String!
@@ -64,6 +80,15 @@ type AirportOutput{
     longitude: String!
     iata: String
     icao: String
+}
+
+type CityAirportOutput{
+    name: String!
+    airportId: String!
+    icao: String!
+    iata: String
+    latitude: String!
+    longitude: String!
 }
 
 type AirportLocationOutput{
@@ -83,6 +108,8 @@ type CitySearchOutput{
     country: String!
     cityType: CityType!
     id: String!
+    latitude: String!
+    longitude: String!
 }
 
 type AirportSearchOutput{
@@ -139,10 +166,10 @@ enum CityType{
 }
 
 enum StationType{
-TRAIN
-BUS
-FERRY
-OTHER
+    TRAIN
+    BUS
+    FERRY
+    OTHER
 }
 
 enum RouteType{
@@ -151,5 +178,13 @@ enum RouteType{
     PLANE
     BOAT
     CAR
+    OTHER
+}
+
+enum TransitType{
+    TRAIN
+    BUS
+    FERRY
+    AIRPORT
     OTHER
 }

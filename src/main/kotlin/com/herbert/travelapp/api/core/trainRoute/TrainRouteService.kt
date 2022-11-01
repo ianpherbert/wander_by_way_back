@@ -10,13 +10,14 @@ import org.springframework.stereotype.Component
 @Component
 class TrainRouteService(
     val trainRouteRepository: TrainRouteRepository,
-    val stationProvider: StationProvider,
+    val stationProvider: StationProvider
 ) : TrainRouteProvider {
     override fun getAllRoutesFromStation(fromStation: Station): List<Route>? {
-        val station = if (fromStation.apiId == null || fromStation.apiId == "null" ) {
+        val station = if (fromStation.apiId == null || fromStation.apiId == "null") {
             stationProvider.updateStationApiId(fromStation)
+            return null
         } else fromStation
-        if(station.apiId == "INVALID") return null
+        if (station.apiId == "INVALID") return null
         val routes = trainRouteRepository.findRoutesFromStation(station) ?: return null
 
 //        stationProvider.updateNonExistantApiIds(routes)
@@ -45,5 +46,4 @@ class TrainRouteService(
             }
         }
     }
-
 }
