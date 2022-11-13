@@ -21,7 +21,8 @@ type Query {
 
 input TransitSearchInput{
     id: String!
-    transitType: TransitType
+    name: String!
+    transitType: StationType
 }
 
 input UserInput{
@@ -170,6 +171,7 @@ enum StationType{
     BUS
     FERRY
     OTHER
+    AIRPORT
 }
 
 enum RouteType{
@@ -178,13 +180,5 @@ enum RouteType{
     PLANE
     BOAT
     CAR
-    OTHER
-}
-
-enum TransitType{
-    TRAIN
-    BUS
-    FERRY
-    AIRPORT
     OTHER
 }

@@ -36,9 +36,3 @@ enum class RouteType {
     CAR,
     OTHER
 }
-
-class RailLocation(
-    var name: String,
-    var slug: String,
-    var apiId: String?
-)

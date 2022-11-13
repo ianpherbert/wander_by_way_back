@@ -18,31 +18,35 @@ class RouteService(
     override fun findAllRoutesFromCity(cityId: String): List<Route>? {
         val city = cityProvider.findCityById(cityId) ?: return null
         val connectedCities = cityProvider.findCitiesByAreaId(city.shareId!!)
-        connectedCities
-        val trainRoutes =
-            stationProvider.findAllStationsByIdIn(connectedCities.flatMap { it.getStationIds() }.distinct())
-                .map { station ->
-                    trainRouteProvider.getAllRoutesFromStation(station) ?: listOf()
-                }.flatten()
+        val stations = (city.getStationIds() + connectedCities.flatMap { it.getStationIds() }).distinct().let {
+            stationProvider.findAllStationsByIdIn(it)
+        }
+        val trainRoutes = stations.flatMap { station ->
+            if (station.routes.isNotEmpty()) {
+                station.routes
+            } else {
+                trainRouteProvider.getAllRoutesFromStation(station)
+            }
+        }
 
         val flightRoutes = connectedCities.flatMap { it.getAirportIATACodes() }.distinct().mapNotNull { airport ->
-            val flights = flightProvider.findAllFlightsFromAirport(airport)
-
-            val destinationAirports = flights?.map {
-                it.to!!.airportCode!!
-            }.let {
-                airportProvider.findAirportsByIATACode(it!!.plus(airport))
-            }
-
-            flights?.mapNotNull { flight ->
-                val fromStop = destinationAirports?.find { it.iata == flight.from!!.airportCode }
-                val toStop = destinationAirports?.find { it.iata == flight.to!!.airportCode }
-                if(fromStop != null && toStop != null){
-                    flight.toRoute(toStop, fromStop)
-                }else{
-                    null
+            flightProvider.findAllFlightsFromAirport(airport)?.let { flights ->
+                flights.map {
+                    it.to!!.airportCode!!
+                }.let {
+                    airportProvider.findAirportsByIATACode(it.plus(airport))
+                }.let { destinationAirports ->
+                    flights.mapNotNull { flight ->
+                        val fromStop = destinationAirports?.find { it.iata == flight.from!!.airportCode }
+                        val toStop = destinationAirports?.find { it.iata == flight.to!!.airportCode }
+                        if (fromStop != null && toStop != null) {
+                            flight.toRoute(toStop, fromStop)
+                        } else {
+                            null
+                        }
+                    }
                 }
-            }
+            } ?: listOf()
         }.flatten()
         return listOf(trainRoutes, flightRoutes).flatten()
     }

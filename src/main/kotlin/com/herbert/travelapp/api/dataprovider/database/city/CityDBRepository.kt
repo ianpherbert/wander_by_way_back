@@ -1,15 +1,8 @@
 package com.herbert.travelapp.api.dataprovider.database.city
 
-import com.herbert.travelapp.api.core.airport.Airport
 import com.herbert.travelapp.api.core.city.City
 import com.herbert.travelapp.api.core.city.CityRepository
-import com.herbert.travelapp.api.core.station.Station
-import com.herbert.travelapp.api.dataprovider.database.airport.AirportDBMapper
-import com.herbert.travelapp.api.dataprovider.database.airport.AirportDBRepository
-import com.herbert.travelapp.api.dataprovider.database.station.StationDBMapper
-import com.herbert.travelapp.api.dataprovider.database.station.StationDBRepository
 import com.herbert.travelapp.api.extensions.toSearchableName
-import com.herbert.travelapp.api.extensions.unaccent
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -26,19 +19,17 @@ interface CityDBRepository : MongoRepository<CityDB, String> {
 
     fun findAllByTrainStationsStationId(stationId: String): List<CityDB>?
 
+    fun findAllByTrainStationsApiId(stationId: String): List<CityDB>
+
+    fun findAllByTrainStationsName(name: String): List<CityDB>
+
     fun findAllByAirportsAirportId(stationId: String): List<CityDB>?
-
-
 }
 
 @Repository
 class CityDBService(
-    val airportDBRepository: AirportDBRepository,
-    val airportDBMapper: AirportDBMapper,
     val cityDBRepository: CityDBRepository,
-    val cityDBMapper: CityDBMapper,
-    val stationDBRepository: StationDBRepository,
-    val stationDBMapper: StationDBMapper
+    val cityDBMapper: CityDBMapper
 ) : CityRepository {
     override fun getCityById(id: String): City? {
         return cityDBRepository.findById(id).orElse(null)?.let { cityDB ->
@@ -84,17 +75,15 @@ class CityDBService(
         }
     }
 
-
-    private fun parseAirport(airportId: String): Airport? {
-        return airportDBRepository.findById(airportId).orElse(null)?.let {
-            airportDBMapper.toAirport(it)
+    override fun findAllByStationApiId(apiId: String): List<City> {
+        return cityDBRepository.findAllByTrainStationsApiId(apiId).let {
+            cityDBMapper.toCities(it)
         }
     }
 
-    private fun parseStation(stationId: String): Station? {
-        return stationDBRepository.findById(stationId).orElse(null)?.let {
-            stationDBMapper.toStation(it)
+    override fun findAllByStationName(name: String): List<City> {
+        return cityDBRepository.findAllByTrainStationsName(name).let {
+            cityDBMapper.toCities(it)
         }
     }
-
 }

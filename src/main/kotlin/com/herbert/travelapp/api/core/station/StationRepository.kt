@@ -1,7 +1,7 @@
 package com.herbert.travelapp.api.core.station
 
 interface StationRepository {
-    fun updateStation(station: Station) : Station
+    fun updateStation(station: Station): Station
 
     fun findStationById(id: String): Station?
 
@@ -11,15 +11,13 @@ interface StationRepository {
 
     fun findStationByApiId(apiId: String): Station?
 
-    fun findStationsByName(name: String) : List<Station?>
+    fun findStationsByName(name: String): List<Station?>
 
-    fun searchStationsByName(name: String) : List<Station>?
+    fun searchStationsByName(name: String): List<Station>?
 
-    fun findAllStationsByIdIn(ids: List<String>) : List<Station>
+    fun findAllStationsByIdIn(ids: List<String>): List<Station>
 
-    fun findAllByApiIdIn(apiIds: List<String>) : List<Station>
+    fun findAllByApiIdIn(apiIds: List<String>): List<Station>
 
-    fun findAllBySlugContaining(fragment: String) : List<Station>
-
-    fun saveStation(station: Station) : Station
+    fun findAllBySlugContaining(fragment: String): List<Station>
 }

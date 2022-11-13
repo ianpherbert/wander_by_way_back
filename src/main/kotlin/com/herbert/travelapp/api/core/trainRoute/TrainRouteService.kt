@@ -4,26 +4,20 @@ import com.herbert.travelapp.api.core.route.Route
 import com.herbert.travelapp.api.core.route.RouteStop
 import com.herbert.travelapp.api.core.route.RouteType
 import com.herbert.travelapp.api.core.station.Station
-import com.herbert.travelapp.api.core.station.StationProvider
+import com.herbert.travelapp.api.core.station.UpdateStationRoutes
 import org.springframework.stereotype.Component
 
 @Component
 class TrainRouteService(
     val trainRouteRepository: TrainRouteRepository,
-    val stationProvider: StationProvider
+    val updateStationRoutes: UpdateStationRoutes
 ) : TrainRouteProvider {
-    override fun getAllRoutesFromStation(fromStation: Station): List<Route>? {
-        val station = if (fromStation.apiId == null || fromStation.apiId == "null") {
-            stationProvider.updateStationApiId(fromStation)
-            return null
+    override fun getAllRoutesFromStation(fromStation: Station): List<Route> {
+        val station = if (fromStation.apiId == null || fromStation.apiId == "null" || fromStation.apiId == "INVALID") {
+            return listOf()
         } else fromStation
-        if (station.apiId == "INVALID") return null
-        val routes = trainRouteRepository.findRoutesFromStation(station) ?: return null
-
-//        stationProvider.updateNonExistantApiIds(routes)
-//        TODO("Make this call this asynchronous")
-
-        return routes.map { route ->
+        val routes = trainRouteRepository.findRoutesFromStation(station)
+        val trainRoutes = routes.map { route ->
             val to = RouteStop().apply {
                 name = route.toStationName
                 id = route.toStationId
@@ -45,5 +39,7 @@ class TrainRouteService(
                 this.durationHours = route.durationHours
             }
         }
+        updateStationRoutes.updateStationRoutes(station, trainRoutes)
+        return trainRoutes
     }
 }

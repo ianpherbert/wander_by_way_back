@@ -15,19 +15,6 @@ class CityService(
         return cityRepository.searchCitiesByName(name)
     }
 
-    override fun updateCityStation(station: Station): Boolean {
-        return try{
-            station.id?.let { cityRepository.findCitiesByStationId(it) }?.forEach { city ->
-                city.updateStationApiId(station)
-                cityRepository.saveCity(city)
-            }
-            true
-        }catch (ex: Exception){
-            println(ex)
-            false
-        }
-    }
-
     override fun findCityByShareId(shareId: String): City? {
         return cityRepository.findCityByShareId(shareId)
     }
@@ -36,8 +23,13 @@ class CityService(
         return cityRepository.findCitiesByAreaId(areaId)
     }
 
-    override fun findCitiesByStationId(stationId: String): List<City>? {
-        return cityRepository.findCitiesByStationId(stationId)
+    override fun findCitiesByApiId(stationApiId: String, name: String): List<City>? {
+        val byApiId = cityRepository.findAllByStationApiId(stationApiId)
+        return if(byApiId.isEmpty()){
+            cityRepository.findAllByStationName(name)
+        }else{
+            byApiId
+        }
     }
 
     override fun findCitiesByAirportId(airportId: String): List<City>? {
