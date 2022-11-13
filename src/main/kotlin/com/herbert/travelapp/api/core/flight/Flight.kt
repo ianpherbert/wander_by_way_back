@@ -4,6 +4,8 @@ import com.herbert.travelapp.api.core.airport.Airport
 import com.herbert.travelapp.api.core.route.Route
 import com.herbert.travelapp.api.core.route.RouteStop
 import com.herbert.travelapp.api.core.route.RouteType
+import com.herbert.travelapp.api.utils.DistanceCalculator
+import com.herbert.travelapp.api.utils.Point
 
 
 class Flight {

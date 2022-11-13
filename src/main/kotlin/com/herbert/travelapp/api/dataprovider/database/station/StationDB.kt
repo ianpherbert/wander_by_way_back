@@ -1,6 +1,7 @@
 package com.herbert.travelapp.api.dataprovider.database.station
 
 import com.herbert.travelapp.api.dataprovider.database.city.CityTypeDB
+import com.herbert.travelapp.api.dataprovider.database.common.routeDB.RouteDB
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
@@ -34,23 +35,23 @@ class StationDB {
 
     var parentId: String? = null
 
-    var cityList: List<StationCityDB>? = null
+    var routes: List<RouteDB> = listOf()
 }
 
-class DBCompanyId{
+class DBCompanyId {
     var company: String? = null
 
     var companyId: String? = null
 }
 
-enum class StationDBType{
+enum class StationDBType {
     TRAIN,
     BUS,
     FERRY,
     OTHER
 }
 
-class StationCityDB{
+class StationCityDB {
     var cityId: String? = null
 
     var name: String? = null

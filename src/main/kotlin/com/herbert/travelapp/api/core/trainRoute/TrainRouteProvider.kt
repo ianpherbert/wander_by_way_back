@@ -5,6 +5,6 @@ import com.herbert.travelapp.api.core.station.Station
 
 interface TrainRouteProvider {
 
-    fun getAllRoutesFromStation(fromStation: Station) : List<Route>?
+    fun getAllRoutesFromStation(fromStation: Station) : List<Route>
 
 }

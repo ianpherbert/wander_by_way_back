@@ -11,6 +11,7 @@ class DistanceCalculator(
     private val pointB: Point
 ) {
     fun distance(unit: Char): Double {
+        if (pointA == null || pointB == null) return -1.00
         val theta = pointA.longitude - pointB.longitude
         var dist =
             sin(deg2rad(pointA.latitude)) * sin(deg2rad(pointB.latitude)) + cos(deg2rad(pointA.latitude)) * cos(deg2rad(pointB.latitude)) * cos(
