@@ -1,4 +1,4 @@
-package com.herbert.travelapp.api.core.flight
+package com.herbert.travelapp.api.core.route.flight
 
 import com.herbert.travelapp.api.core.airport.Airport
 import com.herbert.travelapp.api.core.route.Route

@@ -1,4 +1,4 @@
-package com.herbert.travelapp.api.core.trainRoute
+package com.herbert.travelapp.api.core.route.trainRoute
 
 import com.herbert.travelapp.api.core.route.Route
 import com.herbert.travelapp.api.core.route.RouteStop

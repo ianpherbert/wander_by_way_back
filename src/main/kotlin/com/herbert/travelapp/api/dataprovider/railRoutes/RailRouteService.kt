@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.herbert.travelapp.api.core.station.FindStationApiId
 import com.herbert.travelapp.api.core.station.Station
-import com.herbert.travelapp.api.core.trainRoute.TrainRoute
-import com.herbert.travelapp.api.core.trainRoute.TrainRouteRepository
+import com.herbert.travelapp.api.core.route.trainRoute.TrainRoute
+import com.herbert.travelapp.api.core.route.trainRoute.TrainRouteRepository
 import com.herbert.travelapp.api.utils.DistanceCalculator
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity

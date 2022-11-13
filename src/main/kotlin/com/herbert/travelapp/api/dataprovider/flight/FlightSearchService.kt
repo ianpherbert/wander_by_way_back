@@ -2,10 +2,10 @@ package com.herbert.travelapp.api.dataprovider.flight
 
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.herbert.travelapp.api.core.flight.Flight
-import com.herbert.travelapp.api.core.flight.FlightLocation
-import com.herbert.travelapp.api.core.flight.FlightRepository
-import com.herbert.travelapp.api.core.flight.FlightStop
+import com.herbert.travelapp.api.core.route.flight.Flight
+import com.herbert.travelapp.api.core.route.flight.FlightLocation
+import com.herbert.travelapp.api.core.route.flight.FlightRepository
+import com.herbert.travelapp.api.core.route.flight.FlightStop
 import java.net.URI
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
