@@ -33,14 +33,14 @@ class CityQuery(
 
     @QueryMapping
     override fun searchCity(@Argument query: String): List<CityOutput>? {
-        return findCitiesByNameUseCase.findCitiesByName(query)?.map {
+        return findCitiesByNameUseCase.findCitiesByName(query).map {
             cityMapper.toCityOutput(it)
         }
     }
 
     @QueryMapping
     override fun findAllCitiesByAirportId(@Argument airportId: String): List<CityOutput>? {
-        return findCitiesByAirportIdUseCase.findCitiesByAirportId(airportId)?.map {
+        return findCitiesByAirportIdUseCase.findCitiesByAirportId(airportId).map {
             cityMapper.toCityOutput(it)
         }
     }
@@ -48,12 +48,15 @@ class CityQuery(
     @QueryMapping
     override fun findAllCitiesFromAssociatedTransit(@Argument transitSearchInput: TransitSearchInput): List<CityOutput> {
         val cities = when (transitSearchInput.transitType) {
-            StationType.TRAIN -> findCitiesByApiIdUseCase.findCitiesByApiId(transitSearchInput.id, transitSearchInput.name)
+            StationType.TRAIN -> findCitiesByApiIdUseCase.findCitiesByApiId(
+                transitSearchInput.id,
+                transitSearchInput.name
+            )
             StationType.AIRPORT -> findCitiesByAirportIdUseCase.findCitiesByAirportId(transitSearchInput.id)
             else -> listOf()
         }
-        return cities?.let {
+        return cities.let {
             cityMapper.toCityOutputs(it)
-        } ?: listOf()
+        }
     }
 }

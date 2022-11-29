@@ -58,7 +58,7 @@ class StationService(
         return stationFindByApiId.findStationByApiId(apiId)
     }
 
-    override fun findStationsByName(name: String): List<Station?> {
+    override fun findStationsByName(name: String): List<Station> {
         return stationFindAllByName.findStationsByName(name)
     }
 

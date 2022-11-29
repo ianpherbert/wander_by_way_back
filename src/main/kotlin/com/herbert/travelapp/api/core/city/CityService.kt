@@ -34,8 +34,8 @@ class CityService(
         return cityGetById.getCityById(id)
     }
 
-    override fun findCitiesByName(name: String): List<City>? {
-        return citySearchByName.searchCitiesByName(name)
+    override fun findCitiesByName(name: String): List<City> {
+        return citySearchByName.searchCitiesByName(name) ?: emptyList()
     }
 
     override fun findCityByShareId(shareId: String): City? {
@@ -46,16 +46,14 @@ class CityService(
         return cityGetByAreaId.findCitiesByAreaId(areaId)
     }
 
-    override fun findCitiesByApiId(stationApiId: String, name: String): List<City>? {
+    override fun findCitiesByApiId(stationApiId: String, name: String): List<City> {
         val byApiId = cityGetAllByStationApiId.findAllByStationApiId(stationApiId)
-        return if (byApiId.isEmpty()) {
+        return byApiId.ifEmpty {
             cityGetAllByStationName.findAllByStationName(name)
-        } else {
-            byApiId
         }
     }
 
-    override fun findCitiesByAirportId(airportId: String): List<City>? {
-        return cityGetByAirportId.findCitiesByAirportId(airportId)
+    override fun findCitiesByAirportId(airportId: String): List<City> {
+        return cityGetByAirportId.findCitiesByAirportId(airportId) ?: emptyList()
     }
 }

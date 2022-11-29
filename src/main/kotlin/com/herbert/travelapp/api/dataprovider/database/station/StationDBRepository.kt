@@ -57,7 +57,7 @@ class StationDBService(
         }
     }
 
-    override fun findStationsByName(name: String): List<Station?> {
+    override fun findStationsByName(name: String): List<Station> {
         return stationDBRepository.findAllByName(name)?.map {
             stationDBMapper.toStation(it)
         } ?: listOf()

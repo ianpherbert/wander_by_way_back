@@ -26,7 +26,7 @@ class StationQuery(
     @QueryMapping
     override fun searchStation(@Argument query: String): List<StationOutput>? {
         return findStationsByNameUseCase.findStationsByName(query).map {
-            stationMapper.toStationOutput(it!!)
+            stationMapper.toStationOutput(it)
         }
     }
 }

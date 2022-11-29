@@ -17,8 +17,8 @@ class RouteService(
     val findAllStationsByIdUseCase: FindAllStationsByIdUseCase,
     val findAirportsByIATACodeUseCase: FindAirportsByIATACodeUseCase
 ) : RouteProvider {
-    override fun findAllRoutesFromCity(cityId: String): List<Route>? {
-        val city = findByCityIdUseCase.findCityById(cityId) ?: return null
+    override fun findAllRoutesFromCity(cityId: String): List<Route> {
+        val city = findByCityIdUseCase.findCityById(cityId) ?: return emptyList()
         val connectedCities = findCitiesByAreaIdUseCase.findCitiesByAreaId(city.shareId!!)
         val stations = (city.getStationIds() + connectedCities.flatMap { it.getStationIds() }).distinct().let {
             findAllStationsByIdUseCase.findAllStationsByIdIn(it)

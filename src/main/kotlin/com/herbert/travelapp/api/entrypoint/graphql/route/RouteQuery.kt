@@ -15,9 +15,9 @@ class RouteQuery(
 
     @QueryMapping
     override fun findAllRoutesFromCity(@Argument cityId: String): List<RouteSearchOutput> {
-        return routeProvider.findAllRoutesFromCity(cityId)?.map {
+        return routeProvider.findAllRoutesFromCity(cityId).map {
             routeMapper.toRouteOutput(it)
-        }?.groupBy { it.to.id }?.map {
+        }.groupBy { it.to.id }.map {
             RouteSearchOutput().apply {
                 this.routes = it.value
                 this.destinationName = it.value.first().to.name
@@ -27,6 +27,6 @@ class RouteQuery(
                 this.durationAverage = it.value.map { it.durationTotal }.average().toInt()
                 this.lineDistanceAverage = it.value.map { it.lineDistance }.average()
             }
-        } ?: emptyList()
+        }
     }
 }

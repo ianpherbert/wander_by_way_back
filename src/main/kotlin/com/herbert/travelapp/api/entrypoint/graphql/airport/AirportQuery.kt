@@ -25,7 +25,7 @@ class AirportQuery(
 
     @QueryMapping
     override fun searchAirport(@Argument query: String): List<AirportOutput>? {
-        return findAirportsByNameUseCase.findAirportsByName(query)?.map {
+        return findAirportsByNameUseCase.findAirportsByName(query).map {
             airportMapper.toAiportOutput(it)
         }
     }
