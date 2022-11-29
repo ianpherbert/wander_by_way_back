@@ -1,16 +1,12 @@
 package com.herbert.travelapp.api.core.station
 
-import com.herbert.travelapp.api.core.city.CityProvider
 import com.herbert.travelapp.api.core.route.Route
-import com.herbert.travelapp.api.core.route.trainRoute.TrainRoute
-import com.herbert.travelapp.api.extensions.toSearchableName
-import com.herbert.travelapp.api.utils.DistanceCalculator
 import org.springframework.stereotype.Component
 
 @Component
 class StationService(
     val stationRepository: StationRepository,
-    val findStationApiId: FindStationApiId,
+    val findStationApiId: FindStationApiId
 ) : StationProvider, UpdateStationRoutes {
 
     override fun updateStationApiId(station: Station): Station {

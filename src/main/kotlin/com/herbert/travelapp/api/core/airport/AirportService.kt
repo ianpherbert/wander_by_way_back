@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component
 @Component
 class AirportService(
     val airportRepository: AirportRepository
-): AirportProvider {
+) : AirportProvider {
     override fun findAirportById(id: String): Airport? {
         return airportRepository.findAirportById(id)
     }

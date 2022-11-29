@@ -1,6 +1,5 @@
 package com.herbert.travelapp.api.core.city
 
-import com.herbert.travelapp.api.core.station.Station
 import org.springframework.stereotype.Component
 
 @Component
@@ -25,9 +24,9 @@ class CityService(
 
     override fun findCitiesByApiId(stationApiId: String, name: String): List<City>? {
         val byApiId = cityRepository.findAllByStationApiId(stationApiId)
-        return if(byApiId.isEmpty()){
+        return if (byApiId.isEmpty()) {
             cityRepository.findAllByStationName(name)
-        }else{
+        } else {
             byApiId
         }
     }

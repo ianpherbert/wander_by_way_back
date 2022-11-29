@@ -9,7 +9,7 @@ interface AirportRepository {
 
     fun findAirportByICAOCode(icao: String): Airport?
 
-    fun findAirportsByIACOCode(codes: List<String>) : List<Airport>?
+    fun findAirportsByIACOCode(codes: List<String>): List<Airport>?
 
-    fun findAllAirportsByIdIn(ids: List<String>) : List<Airport>
+    fun findAllAirportsByIdIn(ids: List<String>): List<Airport>
 }

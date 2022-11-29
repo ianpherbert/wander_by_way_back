@@ -23,7 +23,7 @@ class StationQuery(
 
     @QueryMapping
     override fun searchStation(@Argument query: String): List<StationOutput>? {
-        return stationProvider.searchStationsByName(query)?.map{
+        return stationProvider.searchStationsByName(query)?.map {
             stationMapper.toStationOutput(it)
         }
     }

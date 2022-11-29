@@ -3,8 +3,8 @@ package com.herbert.travelapp.api.core.route
 import com.herbert.travelapp.api.core.airport.AirportProvider
 import com.herbert.travelapp.api.core.city.CityProvider
 import com.herbert.travelapp.api.core.route.flight.FlightProvider
-import com.herbert.travelapp.api.core.station.StationProvider
 import com.herbert.travelapp.api.core.route.trainRoute.TrainRouteProvider
+import com.herbert.travelapp.api.core.station.StationProvider
 import org.springframework.stereotype.Component
 
 @Component
