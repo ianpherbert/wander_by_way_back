@@ -19,19 +19,19 @@ import org.springframework.transaction.annotation.Transactional
 interface CityDBRepository : MongoRepository<CityDB, String> {
     fun findByName(name: String): List<CityDB>
 
-    fun findAllBySlugContaining(name: String): List<CityDB>?
+    fun findAllBySlugContaining(name: String): List<CityDB>
 
     fun findByShareId(shareId: String): CityDB?
 
-    fun findAllByAreaIdContaining(areaId: String): List<CityDB>?
+    fun findAllByAreaIdContaining(areaId: String): List<CityDB>
 
-    fun findAllByTrainStationsStationId(stationId: String): List<CityDB>?
+    fun findAllByTrainStationsStationId(stationId: String): List<CityDB>
 
     fun findAllByTrainStationsApiId(stationId: String): List<CityDB>
 
     fun findAllByTrainStationsName(name: String): List<CityDB>
 
-    fun findAllByAirportsAirportId(stationId: String): List<CityDB>?
+    fun findAllByAirportsAirportId(stationId: String): List<CityDB>
 }
 
 @Repository
@@ -53,8 +53,8 @@ class CityDBService(
         }
     }
 
-    override fun searchCitiesByName(name: String): List<City>? {
-        return cityDBRepository.findAllBySlugContaining(name.toSearchableName())?.map { cityDB ->
+    override fun searchCitiesByName(name: String): List<City> {
+        return cityDBRepository.findAllBySlugContaining(name.toSearchableName()).map { cityDB ->
             cityDBMapper.toCity(cityDB)
         }
     }
@@ -66,19 +66,19 @@ class CityDBService(
     }
 
     override fun findCitiesByAreaId(areaId: String): List<City> {
-        return cityDBRepository.findAllByAreaIdContaining(areaId)?.map {
+        return cityDBRepository.findAllByAreaIdContaining(areaId).map {
             cityDBMapper.toCity(it)
         } ?: emptyList()
     }
 
-    override fun findCitiesByStationId(stationId: String): List<City>? {
-        return cityDBRepository.findAllByTrainStationsStationId(stationId)?.map { cityDB ->
+    override fun findCitiesByStationId(stationId: String): List<City> {
+        return cityDBRepository.findAllByTrainStationsStationId(stationId).map { cityDB ->
             cityDBMapper.toCity(cityDB)
         }
     }
 
-    override fun findCitiesByAirportId(airportId: String): List<City>? {
-        return cityDBRepository.findAllByAirportsAirportId(airportId)?.map { cityDB ->
+    override fun findCitiesByAirportId(airportId: String): List<City> {
+        return cityDBRepository.findAllByAirportsAirportId(airportId).map { cityDB ->
             cityDBMapper.toCity(cityDB)
         }
     }

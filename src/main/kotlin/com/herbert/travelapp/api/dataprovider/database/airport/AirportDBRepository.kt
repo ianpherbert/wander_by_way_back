@@ -15,13 +15,13 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional
 interface AirportDBRepository : MongoRepository<AirportDB, String> {
 
-    fun findAllBySlugContaining(name: String): List<AirportDB>?
+    fun findAllBySlugContaining(name: String): List<AirportDB>
 
     fun findByIata(iata: String): AirportDB?
 
     fun findByIcao(icao: String): AirportDB?
 
-    fun findAllByIataIn(icaoCodes: List<String>): List<AirportDB>?
+    fun findAllByIataIn(icaoCodes: List<String>): List<AirportDB>
 
     fun findAllByIdIn(ids: List<String>): List<AirportDB>
 }
@@ -42,8 +42,8 @@ class AirportDBServiceUseCase(
         }
     }
 
-    override fun findAirportsByName(name: String): List<Airport>? {
-        return airportDBRepository.findAllBySlugContaining(name.toSearchableName())?.map {
+    override fun findAirportsByName(name: String): List<Airport> {
+        return airportDBRepository.findAllBySlugContaining(name.toSearchableName()).map {
             airportDBMapper.toAirport(it)
         }
     }
@@ -60,8 +60,8 @@ class AirportDBServiceUseCase(
         }
     }
 
-    override fun findAirportsByIACOCode(codes: List<String>): List<Airport>? {
-        return airportDBRepository.findAllByIataIn(codes)?.map {
+    override fun findAirportsByIACOCode(codes: List<String>): List<Airport> {
+        return airportDBRepository.findAllByIataIn(codes).map {
             airportDBMapper.toAirport(it)
         }
     }

@@ -33,7 +33,7 @@ class AirportService(
     }
 
     override fun findAirportsByName(name: String): List<Airport> {
-        return airportFindAllByName.findAirportsByName(name) ?: emptyList()
+        return airportFindAllByName.findAirportsByName(name)
     }
 
     override fun findAirportByIATACode(iata: String): Airport? {
@@ -45,7 +45,7 @@ class AirportService(
     }
 
     override fun findAirportsByIATACode(iataCodes: List<String>): List<Airport> {
-        return airportFindAllByIACOCode.findAirportsByIACOCode(iataCodes) ?: emptyList()
+        return airportFindAllByIACOCode.findAirportsByIACOCode(iataCodes)
     }
 
     override fun findAllAirportsByIdIn(ids: List<String>): List<Airport> {

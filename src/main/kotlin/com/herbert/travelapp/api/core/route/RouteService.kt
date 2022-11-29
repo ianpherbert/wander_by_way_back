@@ -32,15 +32,15 @@ class RouteService(
         }
 
         val flightRoutes = connectedCities.flatMap { it.getAirportIATACodes() }.distinct().mapNotNull { airport ->
-            flightProvider.findAllFlightsFromAirport(airport)?.let { flights ->
+            flightProvider.findAllFlightsFromAirport(airport).let { flights ->
                 flights.map {
                     it.to!!.airportCode!!
                 }.let {
                     findAirportsByIATACodeUseCase.findAirportsByIATACode(it.plus(airport))
                 }.let { destinationAirports ->
                     flights.mapNotNull { flight ->
-                        val fromStop = destinationAirports?.find { it.iata == flight.from!!.airportCode }
-                        val toStop = destinationAirports?.find { it.iata == flight.to!!.airportCode }
+                        val fromStop = destinationAirports.find { it.iata == flight.from!!.airportCode }
+                        val toStop = destinationAirports.find { it.iata == flight.to!!.airportCode }
                         if (fromStop != null && toStop != null) {
                             flight.toRoute(toStop, fromStop)
                         } else {

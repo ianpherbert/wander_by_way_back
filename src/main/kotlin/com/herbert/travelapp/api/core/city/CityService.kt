@@ -35,7 +35,7 @@ class CityService(
     }
 
     override fun findCitiesByName(name: String): List<City> {
-        return citySearchByName.searchCitiesByName(name) ?: emptyList()
+        return citySearchByName.searchCitiesByName(name)
     }
 
     override fun findCityByShareId(shareId: String): City? {
@@ -54,6 +54,6 @@ class CityService(
     }
 
     override fun findCitiesByAirportId(airportId: String): List<City> {
-        return cityGetByAirportId.findCitiesByAirportId(airportId) ?: emptyList()
+        return cityGetByAirportId.findCitiesByAirportId(airportId)
     }
 }
