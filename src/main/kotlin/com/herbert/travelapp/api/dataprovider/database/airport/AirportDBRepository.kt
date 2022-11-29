@@ -29,8 +29,6 @@ interface AirportDBRepository : MongoRepository<AirportDB, String> {
 @Repository
 class AirportDBService(
     val airportDBRepository: AirportDBRepository,
-    val cityDBRepository: CityDBRepository,
-    val stationDBRepository: StationDBRepository,
     val airportDBMapper: AirportDBMapper
 ) : AirportRepository {
     override fun findAirportById(id: String): Airport? {

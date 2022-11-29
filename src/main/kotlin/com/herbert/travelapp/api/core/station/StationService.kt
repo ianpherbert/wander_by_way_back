@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component
 class StationService(
     val stationRepository: StationRepository,
     val findStationApiId: FindStationApiId,
-    val cityProvider: CityProvider
 ) : StationProvider, UpdateStationRoutes {
 
     override fun updateStationApiId(station: Station): Station {
