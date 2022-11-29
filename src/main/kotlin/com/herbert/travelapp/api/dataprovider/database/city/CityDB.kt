@@ -7,7 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 @Document
 class CityDB {
     @Id
-    var id : String? = null
+    var id: String? = null
 
     var areaId: List<String>? = null
 
@@ -35,12 +35,12 @@ class CityDB {
 
     var shareId: String? = null
 
-    var airports : List<CityAirportDB>? = null
+    var airports: List<CityAirportDB>? = null
 
-    var trainStations : List<CityStationDB>? = null
+    var trainStations: List<CityStationDB>? = null
 }
 
-enum class CityTypeDB{
+enum class CityTypeDB {
     MEGACITY,
     LARGECITY,
     MEDIUMCITY,
@@ -49,11 +49,11 @@ enum class CityTypeDB{
     VILLAGE
 }
 
-class CityAirportDB{
+class CityAirportDB {
 
-    var name : String? = null
+    var name: String? = null
 
-    var airportId : String? = null
+    var airportId: String? = null
 
     var icao: String? = null
 
@@ -62,15 +62,14 @@ class CityAirportDB{
     var latitude: String? = null
 
     var longitude: String? = null
-
 }
 
-class CityStationDB{
-    var name : String? = null
+class CityStationDB {
+    var name: String? = null
 
-    var stationId : String? = null
+    var stationId: String? = null
 
-    var type : StationDBType? = null
+    var type: StationDBType? = null
 
     var latitude: String? = null
 
@@ -83,7 +82,7 @@ class CityStationDB{
     var airport: Boolean? = null
 }
 
-enum class CityStationTypeDB{
+enum class CityStationTypeDB {
     TRAIN,
     BUS,
     FERRY,

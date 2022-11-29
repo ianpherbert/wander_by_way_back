@@ -4,13 +4,13 @@ import com.herbert.travelapp.api.core.route.Route
 import com.herbert.travelapp.api.core.route.RouteStop
 import com.herbert.travelapp.api.core.route.RouteType
 import com.herbert.travelapp.api.core.station.Station
-import com.herbert.travelapp.api.core.station.UpdateStationRoutes
+import com.herbert.travelapp.api.core.station.useCase.UpdateStationRoutesUseCase
 import org.springframework.stereotype.Component
 
 @Component
 class TrainRouteService(
     val trainRouteRepository: TrainRouteRepository,
-    val updateStationRoutes: UpdateStationRoutes
+    val updateStationRoutesUseCase: UpdateStationRoutesUseCase
 ) : TrainRouteProvider {
     override fun getAllRoutesFromStation(fromStation: Station): List<Route> {
         val station = if (fromStation.apiId == null || fromStation.apiId == "null" || fromStation.apiId == "INVALID") {
@@ -39,7 +39,7 @@ class TrainRouteService(
                 this.durationHours = route.durationHours
             }
         }
-        updateStationRoutes.updateStationRoutes(station, trainRoutes)
+        updateStationRoutesUseCase.updateStationRoutes(station, trainRoutes)
         return trainRoutes
     }
 }

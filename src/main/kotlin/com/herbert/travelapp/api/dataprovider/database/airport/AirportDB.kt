@@ -25,7 +25,7 @@ class AirportDB {
     var icao: String? = null
 }
 
-class AirportDBLocation{
+class AirportDBLocation {
     var country: String? = null
 
     var region: String? = null
@@ -33,7 +33,7 @@ class AirportDBLocation{
     var cityList: List<AirportCityDB>? = null
 }
 
-class AirportCityDB{
+class AirportCityDB {
     var cityId: String? = null
 
     var name: String? = null

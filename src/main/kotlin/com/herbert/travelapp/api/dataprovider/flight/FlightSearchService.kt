@@ -1,18 +1,17 @@
 package com.herbert.travelapp.api.dataprovider.flight
 
-
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.herbert.travelapp.api.core.route.flight.Flight
 import com.herbert.travelapp.api.core.route.flight.FlightLocation
 import com.herbert.travelapp.api.core.route.flight.FlightRepository
 import com.herbert.travelapp.api.core.route.flight.FlightStop
-import java.net.URI
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestTemplate
+import java.net.URI
 
 @Component
 class FlightSearchService(
@@ -33,17 +32,16 @@ class FlightSearchService(
             }
         }
 
-
-        return try{
+        return try {
             callApi<FlightSearchResult>(
                 buildUrlWithParams(TequilaURL.SEARCH_FLIGHT, paramMap),
-                HttpMethod.GET,
+                HttpMethod.GET
             ).let {
                 it?.data?.map {
                     mapToFlight(it)
                 } ?: listOf()
             }
-        }catch (ex: Exception){
+        } catch (ex: Exception) {
             null
         }
     }
@@ -67,7 +65,7 @@ class FlightSearchService(
 
     private fun buildUrlWithParams(url: TequilaURL, params: Map<String, String>): URI {
         val paramString = params.map {
-            "${it.key.toString()}=${it.value.toString()}"
+            "${it.key}=${it.value}"
         }.joinToString("&")
         return URI("${url.value}?$paramString")
     }
@@ -113,5 +111,4 @@ class FlightSearchService(
             }
         }
     }
-
 }

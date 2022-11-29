@@ -5,7 +5,7 @@ import com.herbert.travelapp.api.core.airport.Airport
 import org.mapstruct.Mapper
 import org.mapstruct.ReportingPolicy
 
-@Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE)
-interface AiportMapper {
-    fun toAiportOutput(airport: Airport) : AirportOutput
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+interface AirportMapper {
+    fun toAiportOutput(airport: Airport): AirportOutput
 }

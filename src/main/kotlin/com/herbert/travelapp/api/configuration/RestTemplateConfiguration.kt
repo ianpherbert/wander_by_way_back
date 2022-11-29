@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate
 @EnableAsync
 class RestTemplateConfiguration {
     @Bean
-    fun restTemplate() : RestTemplate{
+    fun restTemplate(): RestTemplate {
         return RestTemplateBuilder().build()
     }
 

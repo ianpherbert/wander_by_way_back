@@ -29,7 +29,7 @@ class FlightSearchResultData(
 
 class CountryResult(
     val code: String,
-    val name: String,
+    val name: String
 )
 
 class RouteStop(

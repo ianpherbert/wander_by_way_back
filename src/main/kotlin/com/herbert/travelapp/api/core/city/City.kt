@@ -1,14 +1,11 @@
 package com.herbert.travelapp.api.core.city
 
-import com.herbert.travelapp.api.core.airport.Airport
-import com.herbert.travelapp.api.core.station.Station
 import com.herbert.travelapp.api.dataprovider.database.station.StationDBType
 import com.herbert.travelapp.api.utils.Point
 
-
 class City {
 
-    var id : String? = null
+    var id: String? = null
 
     var areaId: List<String>? = null
 
@@ -26,32 +23,31 @@ class City {
 
     var shareId: String? = null
 
-    var airports : List<CityAirport>? = null
+    var airports: List<CityAirport>? = null
 
-    var trainStations : List<CityStation>? = null
+    var trainStations: List<CityStation>? = null
 
-    fun toPoint() : Point {
+    fun toPoint(): Point {
         return Point(
             latitude!!.toDouble(),
             longitude!!.toDouble()
         )
     }
 
-    fun getStationIds() : List<String>{
+    fun getStationIds(): List<String> {
         return this.trainStations?.mapNotNull { it.stationId } ?: listOf()
     }
 
-    fun getAirportIds() : List<String>{
+    fun getAirportIds(): List<String> {
         return this.airports?.mapNotNull { it.airportId } ?: listOf()
     }
 
-    fun getAirportIATACodes() : List<String>{
+    fun getAirportIATACodes(): List<String> {
         return this.airports?.mapNotNull { it.iata } ?: listOf()
     }
-
 }
 
-enum class CityType{
+enum class CityType {
     MEGACITY,
     LARGECITY,
     MEDIUMCITY,
@@ -60,17 +56,17 @@ enum class CityType{
     VILLAGE
 }
 
-enum class CityStationType{
+enum class CityStationType {
     train,
     bus,
     ferry,
     other
 }
 
-class CityAirport{
-    var name : String? = null
+class CityAirport {
+    var name: String? = null
 
-    var airportId : String? = null
+    var airportId: String? = null
 
     var icao: String? = null
 
@@ -81,12 +77,12 @@ class CityAirport{
     var longitude: String? = null
 }
 
-class CityStation{
-    var name : String? = null
+class CityStation {
+    var name: String? = null
 
-    var stationId : String? = null
+    var stationId: String? = null
 
-    var type : StationDBType? = null
+    var type: StationDBType? = null
 
     var latitude: String? = null
 

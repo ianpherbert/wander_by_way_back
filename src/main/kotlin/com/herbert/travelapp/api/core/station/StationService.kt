@@ -1,69 +1,77 @@
 package com.herbert.travelapp.api.core.station
 
-import com.herbert.travelapp.api.core.city.CityProvider
 import com.herbert.travelapp.api.core.route.Route
-import com.herbert.travelapp.api.core.route.trainRoute.TrainRoute
-import com.herbert.travelapp.api.extensions.toSearchableName
-import com.herbert.travelapp.api.utils.DistanceCalculator
+import com.herbert.travelapp.api.core.station.connector.RouteStationApiIdFind
+import com.herbert.travelapp.api.core.station.connector.StationFindAllByApiIdIn
+import com.herbert.travelapp.api.core.station.connector.StationFindAllByIdIn
+import com.herbert.travelapp.api.core.station.connector.StationFindAllByName
+import com.herbert.travelapp.api.core.station.connector.StationFindByApiId
+import com.herbert.travelapp.api.core.station.connector.StationFindById
+import com.herbert.travelapp.api.core.station.connector.StationUpdate
+import com.herbert.travelapp.api.core.station.useCase.FindAllByApiIdUseCase
+import com.herbert.travelapp.api.core.station.useCase.FindAllStationsByIdUseCase
+import com.herbert.travelapp.api.core.station.useCase.FindStationByIdUseCase
+import com.herbert.travelapp.api.core.station.useCase.FindStationsByApiIdUseCase
+import com.herbert.travelapp.api.core.station.useCase.FindStationsByNameUseCase
+import com.herbert.travelapp.api.core.station.useCase.UpdateStationApiIdUseCase
+import com.herbert.travelapp.api.core.station.useCase.UpdateStationRoutesUseCase
 import org.springframework.stereotype.Component
 
 @Component
 class StationService(
-    val stationRepository: StationRepository,
-    val findStationApiId: FindStationApiId,
-    val cityProvider: CityProvider
-) : StationProvider, UpdateStationRoutes {
+    val stationUpdate: StationUpdate,
+    val stationFindById: StationFindById,
+    val stationFindByApiId: StationFindByApiId,
+    val stationFindAllByIdIn: StationFindAllByIdIn,
+    val stationFindAllByName: StationFindAllByName,
+    val stationFindAllByApiIdIn: StationFindAllByApiIdIn,
+    val routeStationApiIdFind: RouteStationApiIdFind
+) : FindAllByApiIdUseCase,
+    FindAllStationsByIdUseCase,
+    FindStationsByNameUseCase,
+    FindStationsByApiIdUseCase,
+    FindStationByIdUseCase,
+    UpdateStationApiIdUseCase,
+    UpdateStationRoutesUseCase {
 
     override fun updateStationApiId(station: Station): Station {
-        return findStationApiId.findStationId(station)?.let {
+        return routeStationApiIdFind.findStationId(station)?.let {
             station.apply {
                 this.apiId = it
             }.let {
-                val stationUpdate = stationRepository.updateStation(it)
+                val stationUpdate = stationUpdate.updateStation(it)
                 stationUpdate
             }
         } ?: station.apply {
             this.apiId = "INVALID"
         }.let {
-            val stationUpdate = stationRepository.updateStation(it)
+            val stationUpdate = stationUpdate.updateStation(it)
             stationUpdate
         }
     }
 
     override fun findStationById(id: String): Station? {
-        return stationRepository.findStationById(id)
-    }
-
-    override fun findStationsByParentId(parentId: String): List<Station?> {
-        return stationRepository.findStationsByParentId(parentId)
-    }
-
-    override fun findStationsByUICId(uicId: String): List<Station?> {
-        return stationRepository.findStationsByUICId(uicId)
+        return stationFindById.findStationById(id)
     }
 
     override fun findStationByApiId(apiId: String): Station? {
-        return stationRepository.findStationByApiId(apiId)
+        return stationFindByApiId.findStationByApiId(apiId)
     }
 
-    override fun findStationsByName(name: String): List<Station?> {
-        return stationRepository.findStationsByName(name)
-    }
-
-    override fun searchStationsByName(name: String): List<Station>? {
-        return stationRepository.searchStationsByName(name)
+    override fun findStationsByName(name: String): List<Station> {
+        return stationFindAllByName.findStationsByName(name)
     }
 
     override fun findAllStationsByIdIn(ids: List<String>): List<Station> {
-        return stationRepository.findAllStationsByIdIn(ids)
+        return stationFindAllByIdIn.findAllStationsByIdIn(ids)
     }
 
     override fun findAllByApiIdIn(apiIds: List<String>): List<Station> {
-        return stationRepository.findAllByApiIdIn(apiIds)
+        return stationFindAllByApiIdIn.findAllByApiIdIn(apiIds)
     }
 
     override fun updateStationRoutes(station: Station, routes: List<Route>): Station {
-        return stationRepository.updateStation(
+        return stationUpdate.updateStation(
             station.apply {
                 this.routes = routes
             }
