@@ -1,7 +1,15 @@
 package com.herbert.travelapp.api.dataprovider.database.city
 
 import com.herbert.travelapp.api.core.city.City
-import com.herbert.travelapp.api.core.city.CityRepository
+import com.herbert.travelapp.api.core.city.connector.CityGetAllByStationApiId
+import com.herbert.travelapp.api.core.city.connector.CityGetAllByStationName
+import com.herbert.travelapp.api.core.city.connector.CityGetByAirportId
+import com.herbert.travelapp.api.core.city.connector.CityGetByAreaId
+import com.herbert.travelapp.api.core.city.connector.CityGetById
+import com.herbert.travelapp.api.core.city.connector.CityGetByShareId
+import com.herbert.travelapp.api.core.city.connector.CityGetByStationId
+import com.herbert.travelapp.api.core.city.connector.CitySave
+import com.herbert.travelapp.api.core.city.connector.CitySearchByName
 import com.herbert.travelapp.api.extensions.toSearchableName
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
@@ -30,7 +38,15 @@ interface CityDBRepository : MongoRepository<CityDB, String> {
 class CityDBService(
     val cityDBRepository: CityDBRepository,
     val cityDBMapper: CityDBMapper
-) : CityRepository {
+) : CityGetById,
+    CitySearchByName,
+    CityGetByShareId,
+    CityGetByAreaId,
+    CityGetByStationId,
+    CityGetAllByStationName,
+    CityGetAllByStationApiId,
+    CityGetByAirportId,
+    CitySave {
     override fun getCityById(id: String): City? {
         return cityDBRepository.findById(id).orElse(null)?.let { cityDB ->
             cityDBMapper.toCity(cityDB)

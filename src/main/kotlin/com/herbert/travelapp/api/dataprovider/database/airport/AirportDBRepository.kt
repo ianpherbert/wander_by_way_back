@@ -1,7 +1,12 @@
 package com.herbert.travelapp.api.dataprovider.database.airport
 
 import com.herbert.travelapp.api.core.airport.Airport
-import com.herbert.travelapp.api.core.airport.AirportRepository
+import com.herbert.travelapp.api.core.airport.connector.AirportFindAllByIACOCode
+import com.herbert.travelapp.api.core.airport.connector.AirportFindAllById
+import com.herbert.travelapp.api.core.airport.connector.AirportFindAllByName
+import com.herbert.travelapp.api.core.airport.connector.AirportFindByIATACode
+import com.herbert.travelapp.api.core.airport.connector.AirportFindByICAOCode
+import com.herbert.travelapp.api.core.airport.connector.AirportFindByIdUseCase
 import com.herbert.travelapp.api.extensions.toSearchableName
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
@@ -9,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional
 
 @Transactional
 interface AirportDBRepository : MongoRepository<AirportDB, String> {
-    fun findAllByName(name: String): List<AirportDB>?
 
     fun findAllBySlugContaining(name: String): List<AirportDB>?
 
@@ -23,10 +27,15 @@ interface AirportDBRepository : MongoRepository<AirportDB, String> {
 }
 
 @Repository
-class AirportDBService(
+class AirportDBServiceUseCase(
     val airportDBRepository: AirportDBRepository,
     val airportDBMapper: AirportDBMapper
-) : AirportRepository {
+) : AirportFindAllById,
+    AirportFindAllByName,
+    AirportFindAllByIACOCode,
+    AirportFindByIATACode,
+    AirportFindByICAOCode,
+    AirportFindByIdUseCase {
     override fun findAirportById(id: String): Airport? {
         return airportDBRepository.findById(id).orElse(null)?.let {
             airportDBMapper.toAirport(it)

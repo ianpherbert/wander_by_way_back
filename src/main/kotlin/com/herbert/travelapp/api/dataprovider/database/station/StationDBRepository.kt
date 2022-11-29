@@ -1,7 +1,13 @@
 package com.herbert.travelapp.api.dataprovider.database.station
 
 import com.herbert.travelapp.api.core.station.Station
-import com.herbert.travelapp.api.core.station.StationRepository
+import com.herbert.travelapp.api.core.station.connector.StationFindAllByApiIdIn
+import com.herbert.travelapp.api.core.station.connector.StationFindAllByIdIn
+import com.herbert.travelapp.api.core.station.connector.StationFindAllByName
+import com.herbert.travelapp.api.core.station.connector.StationFindAllBySlugContaining
+import com.herbert.travelapp.api.core.station.connector.StationFindByApiId
+import com.herbert.travelapp.api.core.station.connector.StationFindById
+import com.herbert.travelapp.api.core.station.connector.StationUpdate
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -10,13 +16,7 @@ import org.springframework.transaction.annotation.Transactional
 interface StationDBRepository : MongoRepository<StationDB, String> {
     fun findAllByName(name: String): List<StationDB>?
 
-    fun findAllByParentId(parentId: String): List<StationDB>?
-
-    fun findAllByUicId(uicId: String): List<StationDB>?
-
     fun findByApiId(apiId: String): StationDB?
-
-    fun findAllByNameContaining(name: String): List<StationDB>?
 
     fun findAllByIdIn(ids: List<String>): List<StationDB>
 
@@ -29,7 +29,13 @@ interface StationDBRepository : MongoRepository<StationDB, String> {
 class StationDBService(
     val stationDBRepository: StationDBRepository,
     val stationDBMapper: StationDBMapper
-) : StationRepository {
+) : StationFindAllByApiIdIn,
+    StationFindAllByIdIn,
+    StationFindAllByName,
+    StationFindAllBySlugContaining,
+    StationFindByApiId,
+    StationFindById,
+    StationUpdate {
     override fun updateStation(station: Station): Station {
         return stationDBMapper.toStationDb(station).let {
             stationDBRepository.save(it)
@@ -45,18 +51,6 @@ class StationDBService(
         }
     }
 
-    override fun findStationsByParentId(parentId: String): List<Station?> {
-        return stationDBRepository.findAllByParentId(parentId)?.map {
-            stationDBMapper.toStation(it)
-        } ?: listOf()
-    }
-
-    override fun findStationsByUICId(uicId: String): List<Station?> {
-        return stationDBRepository.findAllByUicId(uicId)?.map {
-            stationDBMapper.toStation(it)
-        } ?: listOf()
-    }
-
     override fun findStationByApiId(apiId: String): Station? {
         return stationDBRepository.findByApiId(apiId)?.let {
             stationDBMapper.toStation(it)
@@ -68,13 +62,6 @@ class StationDBService(
             stationDBMapper.toStation(it)
         } ?: listOf()
     }
-
-    override fun searchStationsByName(name: String): List<Station>? {
-        return stationDBRepository.findAllByName(name)?.map {
-            stationDBMapper.toStation(it)
-        } ?: listOf()
-    }
-
     override fun findAllStationsByIdIn(ids: List<String>): List<Station> {
         return stationDBRepository.findAllByIdIn(ids).map {
             stationDBMapper.toStation(it)
