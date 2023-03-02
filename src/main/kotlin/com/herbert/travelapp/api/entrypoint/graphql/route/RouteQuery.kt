@@ -2,20 +2,20 @@ package com.herbert.travelapp.api.entrypoint.graphql.route
 
 import com.herbert.graphql.model.FindAllRoutesFromCityQueryResolver
 import com.herbert.graphql.model.RouteSearchOutput
-import com.herbert.travelapp.api.core.route.RouteProvider
+import com.herbert.travelapp.api.core.route.FindAllRoutesFromCityUseCase
 import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.QueryMapping
 import org.springframework.stereotype.Controller
 
 @Controller
 class RouteQuery(
-    val routeProvider: RouteProvider,
+    val findAllRoutesFromCityUseCase: FindAllRoutesFromCityUseCase,
     val routeMapper: RouteMapper
 ) : FindAllRoutesFromCityQueryResolver {
 
     @QueryMapping
     override fun findAllRoutesFromCity(@Argument cityId: String): List<RouteSearchOutput> {
-        return routeProvider.findAllRoutesFromCity(cityId).map {
+        return findAllRoutesFromCityUseCase.findAllRoutesFromCity(cityId).map {
             routeMapper.toRouteOutput(it)
         }.groupBy { it.to.id }.map {
             RouteSearchOutput().apply {
