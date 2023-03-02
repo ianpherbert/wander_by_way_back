@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional
 interface StationDBRepository : MongoRepository<StationDB, String> {
     fun findAllByName(name: String): List<StationDB>
 
-    fun findByApiId(apiId: String): StationDB?
+    fun findFirstByApiId(apiId: String): StationDB?
 
     fun findAllByIdIn(ids: List<String>): List<StationDB>
 
@@ -52,7 +52,7 @@ class StationDBService(
     }
 
     override fun findStationByApiId(apiId: String): Station? {
-        return stationDBRepository.findByApiId(apiId)?.let {
+        return stationDBRepository.findFirstByApiId(apiId)?.let {
             stationDBMapper.toStation(it)
         }
     }
