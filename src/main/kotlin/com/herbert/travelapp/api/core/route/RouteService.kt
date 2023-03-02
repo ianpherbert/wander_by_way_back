@@ -24,14 +24,12 @@ class RouteService(
             findAllStationsByIdUseCase.findAllStationsByIdIn(it)
         }
         val trainRoutes = stations.flatMap { station ->
-            if (station.routes.isNotEmpty()) {
-                station.routes
-            } else {
+            station.routes.ifEmpty {
                 trainRouteProvider.getAllRoutesFromStation(station)
             }
         }
 
-        val flightRoutes = connectedCities.flatMap { it.getAirportIATACodes() }.distinct().mapNotNull { airport ->
+        val flightRoutes = connectedCities.flatMap { it.getAirportIATACodes() }.distinct().map { airport ->
             flightProvider.findAllFlightsFromAirport(airport).let { flights ->
                 flights.map {
                     it.to!!.airportCode!!
@@ -48,7 +46,7 @@ class RouteService(
                         }
                     }
                 }
-            } ?: listOf()
+            }
         }.flatten()
         return listOf(trainRoutes, flightRoutes).flatten()
     }
