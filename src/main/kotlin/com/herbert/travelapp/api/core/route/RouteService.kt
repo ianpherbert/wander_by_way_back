@@ -54,10 +54,30 @@ class RouteService(
                 }
             }.flatten()
             listOf(trainRoutes, flightRoutes).flatten()
-        } else {
+        } else if (routeSearchItem.type == PointType.STATION) {
             findStationsByApiIdUseCase.findStationByApiId(routeSearchItem.id)?.let { station ->
                 getAllRoutesFromStationUseCase.getAllRoutesFromStation(station)
-            } ?: findRoutesFromAPIIdUseCase.getAllRoutesFromAPIId(routeSearchItem.id) ?: listOf()
+            } ?: findRoutesFromAPIIdUseCase.getAllRoutesFromAPIId(routeSearchItem.id)
+        } else if (routeSearchItem.type == PointType.AIRPORT) {
+            flightProvider.findAllFlightsFromAirport(routeSearchItem.id).let { flights ->
+                flights.map {
+                    it.to!!.airportCode!!
+                }.let {
+                    findAirportsByIATACodeUseCase.findAirportsByIATACode(it.plus(routeSearchItem.id))
+                }.let { destinationAirports ->
+                    flights.mapNotNull { flight ->
+                        val fromStop = destinationAirports.find { it.iata == flight.from!!.airportCode }
+                        val toStop = destinationAirports.find { it.iata == flight.to!!.airportCode }
+                        if (fromStop != null && toStop != null) {
+                            flight.toRoute(toStop, fromStop)
+                        } else {
+                            null
+                        }
+                    }
+                }
+            }
+        } else {
+            listOf()
         }
     }
 }
