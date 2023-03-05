@@ -1,8 +1,8 @@
 package com.herbert.travelapp.api.core.route
 
-class PointSearchItem(
+class RouteSearchItem(
     val id: String,
-    val pointType: PointType
+    val type: PointType
 )
 
 enum class PointType {
