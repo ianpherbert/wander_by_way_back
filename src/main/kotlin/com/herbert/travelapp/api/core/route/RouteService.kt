@@ -18,10 +18,10 @@ class RouteService(
     val findAllStationsByIdUseCase: FindAllStationsByIdUseCase,
     val findStationsByApiIdUseCase: FindStationsByApiIdUseCase,
     val findAirportsByIATACodeUseCase: FindAirportsByIATACodeUseCase
-) : FindAllRoutesFromCityUseCase {
-    override fun findAllRoutesFromCity(cityId: String): List<Route> {
-        return if (cityId.length == 24) {
-            val city = findByCityIdUseCase.findCityById(cityId) ?: return emptyList()
+) : FindAllRoutesFromPoint {
+    override fun findAllRoutes(pointSearchItem: PointSearchItem): List<Route> {
+        return if (pointSearchItem.pointType === PointType.CITY) {
+            val city = findByCityIdUseCase.findCityById(pointSearchItem.id) ?: return emptyList()
             val connectedCities = findCitiesByAreaIdUseCase.findCitiesByAreaId(city.shareId!!)
             val stations = (city.getStationIds() + connectedCities.flatMap { it.getStationIds() }).distinct().let {
                 findAllStationsByIdUseCase.findAllStationsByIdIn(it)
@@ -53,7 +53,7 @@ class RouteService(
             }.flatten()
             listOf(trainRoutes, flightRoutes).flatten()
         } else {
-            findStationsByApiIdUseCase.findStationByApiId(cityId)?.let { station ->
+            findStationsByApiIdUseCase.findStationByApiId(pointSearchItem.id)?.let { station ->
                 trainRouteProvider.getAllRoutesFromStation(station)
             } ?: listOf()
         }

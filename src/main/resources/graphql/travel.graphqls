@@ -14,9 +14,14 @@ type Query {
     findCityById(cityId: String!) : CityOutput
     findAirportById(airportId: String!) : AirportOutput
     findStationById(stationId: String!) : StationOutput
-    findAllRoutesFromCity(cityId: String!) : [RouteSearchOutput]!
+    findAllRoutes(searchInput: RouteSearchInput!) : [RouteSearchOutput]!
     findAllCitiesByAirportId(airportId: String!) : [CityOutput]
     findAllCitiesFromAssociatedTransit(transitSearchInput: TransitSearchInput) : [CityOutput]
+}
+
+input RouteSearchInput{
+    id: String!
+    type: PointType!
 }
 
 input TransitSearchInput{
@@ -172,6 +177,15 @@ enum StationType{
     FERRY
     OTHER
     AIRPORT
+}
+
+enum PointType{
+    CITY
+    AIRPORT
+    PORT
+    STATION
+    OTHER
+    POINT
 }
 
 enum RouteType{
