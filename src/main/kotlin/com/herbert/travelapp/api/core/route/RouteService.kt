@@ -4,20 +4,22 @@ import com.herbert.travelapp.api.core.airport.useCase.FindAirportsByIATACodeUseC
 import com.herbert.travelapp.api.core.city.useCase.FindByCityIdUseCase
 import com.herbert.travelapp.api.core.city.useCase.FindCitiesByAreaIdUseCase
 import com.herbert.travelapp.api.core.route.flight.FlightProvider
-import com.herbert.travelapp.api.core.route.trainRoute.TrainRouteProvider
+import com.herbert.travelapp.api.core.route.trainRoute.useCase.GetAllRoutesFromAPIIdUseCase
+import com.herbert.travelapp.api.core.route.trainRoute.useCase.GetAllRoutesFromStationUseCase
 import com.herbert.travelapp.api.core.station.useCase.FindAllStationsByIdUseCase
 import com.herbert.travelapp.api.core.station.useCase.FindStationsByApiIdUseCase
 import org.springframework.stereotype.Component
 
 @Component
 class RouteService(
-    val trainRouteProvider: TrainRouteProvider,
+    val getAllRoutesFromStationUseCase: GetAllRoutesFromStationUseCase,
     val flightProvider: FlightProvider,
     val findByCityIdUseCase: FindByCityIdUseCase,
     val findCitiesByAreaIdUseCase: FindCitiesByAreaIdUseCase,
     val findAllStationsByIdUseCase: FindAllStationsByIdUseCase,
     val findStationsByApiIdUseCase: FindStationsByApiIdUseCase,
-    val findAirportsByIATACodeUseCase: FindAirportsByIATACodeUseCase
+    val findAirportsByIATACodeUseCase: FindAirportsByIATACodeUseCase,
+    val findRoutesFromAPIIdUseCase: GetAllRoutesFromAPIIdUseCase
 ) : FindAllRoutesFromPoint {
     override fun findAllRoutes(routeSearchItem: RouteSearchItem): List<Route> {
         return if (routeSearchItem.type === PointType.CITY) {
@@ -28,7 +30,7 @@ class RouteService(
             }
             val trainRoutes = stations.flatMap { station ->
                 station.routes.ifEmpty {
-                    trainRouteProvider.getAllRoutesFromStation(station)
+                    getAllRoutesFromStationUseCase.getAllRoutesFromStation(station)
                 }
             }
 
@@ -54,8 +56,8 @@ class RouteService(
             listOf(trainRoutes, flightRoutes).flatten()
         } else {
             findStationsByApiIdUseCase.findStationByApiId(routeSearchItem.id)?.let { station ->
-                trainRouteProvider.getAllRoutesFromStation(station)
-            } ?: listOf()
+                getAllRoutesFromStationUseCase.getAllRoutesFromStation(station)
+            } ?: findRoutesFromAPIIdUseCase.getAllRoutesFromAPIId(routeSearchItem.id) ?: listOf()
         }
     }
 }
