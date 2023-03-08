@@ -1,6 +1,5 @@
 package com.herbert.travelapp.api.dataprovider.database.station
 
-import com.herbert.travelapp.api.dataprovider.database.city.CityTypeDB
 import com.herbert.travelapp.api.dataprovider.database.common.routeDB.RouteDB
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
@@ -28,8 +27,6 @@ class StationDB {
     var longitude: Double? = null
 
     var country: String? = null
-
-    var main: Boolean? = null
 
     var airport: Boolean? = null
 

@@ -46,8 +46,8 @@ class CityService(
         return cityGetByAreaId.findCitiesByAreaId(areaId)
     }
 
-    override fun findCitiesByApiId(stationApiId: String, name: String): List<City> {
-        val byApiId = cityGetAllByStationApiId.findAllByStationApiId(stationApiId)
+    override fun findCitiesByApiId(stationId: String, name: String): List<City> {
+        val byApiId = cityGetAllByStationApiId.findAllByStationApiId(stationId)
         return byApiId.ifEmpty {
             cityGetAllByStationName.findAllByStationName(name)
         }

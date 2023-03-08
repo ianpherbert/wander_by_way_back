@@ -3,8 +3,8 @@ package com.herbert.travelapp.api.changelogs
 import com.herbert.travelapp.api.dataprovider.database.airport.AirportDB
 import com.herbert.travelapp.api.dataprovider.database.city.CityDB
 import com.herbert.travelapp.api.dataprovider.database.city.CityStationDB
+import com.herbert.travelapp.api.dataprovider.database.city.CityStationTypeDB
 import com.herbert.travelapp.api.dataprovider.database.station.StationDB
-import com.herbert.travelapp.api.dataprovider.database.station.StationDBType
 import com.herbert.travelapp.api.extensions.toSearchableName
 import com.herbert.travelapp.api.utils.Perimeter
 import com.herbert.travelapp.api.utils.Point
@@ -136,12 +136,10 @@ class MatchDBChangelog(
                     val cityStation = CityStationDB().apply {
                         this.name = station.name
                         this.stationId = station.id
-                        this.type = StationDBType.TRAIN
+                        this.type = CityStationTypeDB.TRAIN
                         this.latitude = station.latitude
                         this.longitude = station.longitude
                         this.apiId = station.apiId
-                        this.main = false
-                        this.airport = false
                     }
                     this.trainStations = this.trainStations?.plus(cityStation)
                 }.let {
