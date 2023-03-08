@@ -27,9 +27,9 @@ class CityDB {
 
     var population: Int? = null
 
-    var latitude: String? = null
+    var latitude: Double? = null
 
-    var longitude: String? = null
+    var longitude: Double? = null
 
     var country: String? = null
 
@@ -71,9 +71,9 @@ class CityStationDB {
 
     var type: StationDBType? = null
 
-    var latitude: String? = null
+    var latitude: Double? = null
 
-    var longitude: String? = null
+    var longitude: Double? = null
 
     var apiId: String? = null
 

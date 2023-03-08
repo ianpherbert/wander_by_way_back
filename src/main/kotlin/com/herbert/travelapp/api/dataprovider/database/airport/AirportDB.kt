@@ -16,37 +16,19 @@ class AirportDB {
 
     var slug: String? = null
 
-    var latitude: String? = null
+    var latitude: Double? = null
 
-    var longitude: String? = null
+    var longitude: Double? = null
 
     var iata: String? = null
 
     var icao: String? = null
+
+    var matchCheck: Boolean = false
 }
 
 class AirportDBLocation {
     var country: String? = null
 
     var region: String? = null
-
-    var cityList: List<AirportCityDB>? = null
-}
-
-class AirportCityDB {
-    var cityId: String? = null
-
-    var name: String? = null
-
-    var slug: String? = null
-
-    var type: CityTypeDB? = null
-
-    var latitude: String? = null
-
-    var longitude: String? = null
-
-    var country: String? = null
-
-    var shareId: String? = null
 }

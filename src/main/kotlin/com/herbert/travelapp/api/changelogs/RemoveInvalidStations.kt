@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 
-@ChangeUnit(id = "removeInvalidStations_01", order = "001", runAlways = true)
+@ChangeUnit(id = "removeInvalidStations_01", order = "001", runAlways = true, author = "Ian Patrick Herbert")
 class RemoveInvalidStations(
     val mongoTemplate: MongoTemplate
 ) {

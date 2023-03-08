@@ -32,7 +32,6 @@ class AirportLocation {
 
     var region: String? = null
 
-    var cityList: List<AirportCity>? = null
 }
 
 class AirportCity {

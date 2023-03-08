@@ -23,9 +23,9 @@ class StationDB {
 
     var uicId: String? = null
 
-    var latitude: String? = null
+    var latitude: Double? = null
 
-    var longitude: String? = null
+    var longitude: Double? = null
 
     var country: String? = null
 
@@ -33,9 +33,11 @@ class StationDB {
 
     var airport: Boolean? = null
 
-    var parentId: String? = null
+    var airportId: String? = null
 
     var routes: List<RouteDB> = listOf()
+
+    var matchCheck: Boolean = false
 }
 
 class DBCompanyId {
@@ -49,22 +51,4 @@ enum class StationDBType {
     BUS,
     FERRY,
     OTHER
-}
-
-class StationCityDB {
-    var cityId: String? = null
-
-    var name: String? = null
-
-    var slug: String? = null
-
-    var type: CityTypeDB? = null
-
-    var latitude: String? = null
-
-    var longitude: String? = null
-
-    var country: String? = null
-
-    var shareId: String? = null
 }
