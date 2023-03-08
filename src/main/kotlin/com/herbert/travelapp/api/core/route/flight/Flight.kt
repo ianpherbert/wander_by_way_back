@@ -23,15 +23,15 @@ class Flight {
             name = to?.name
             country = to?.countryName
             id = toStop.id
-            latitude = toStop.latitude
-            longitude = toStop.longitude
+            latitude = toStop.latitude.toString()
+            longitude = toStop.longitude.toString()
         }
         val from = RouteStop().apply {
             name = from?.name
             country = from?.countryName
             id = fromStop.id
-            latitude = fromStop.latitude
-            longitude = fromStop.longitude
+            latitude = fromStop.latitude.toString()
+            longitude = fromStop.longitude.toString()
         }
         return Route().apply {
             this.to = to

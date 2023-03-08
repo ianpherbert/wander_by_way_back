@@ -24,7 +24,7 @@ class RouteService(
     override fun findAllRoutes(routeSearchItem: RouteSearchItem): List<Route> {
         return if (routeSearchItem.type === PointType.CITY) {
             val city = findByCityIdUseCase.findCityById(routeSearchItem.id) ?: return emptyList()
-            val connectedCities = findCitiesByAreaIdUseCase.findCitiesByAreaId(city.shareId!!)
+            val connectedCities = findCitiesByAreaIdUseCase.findCitiesByAreaId(city.shareId)
             val stations = (city.getStationIds() + connectedCities.flatMap { it.getStationIds() }).distinct().let {
                 findAllStationsByIdUseCase.findAllStationsByIdIn(it)
             }

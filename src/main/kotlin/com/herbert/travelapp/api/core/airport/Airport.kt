@@ -3,51 +3,30 @@ package com.herbert.travelapp.api.core.airport
 import com.herbert.travelapp.api.dataprovider.database.city.CityTypeDB
 import com.herbert.travelapp.api.utils.Point
 
-class Airport {
+class Airport(
+    var id: String,
 
-    var id: String? = null
+    var location: AirportLocation,
 
-    var location: AirportLocation? = null
+    var name: String,
 
-    var name: String? = null
+    var latitude: Double,
 
-    var latitude: String? = null
+    var longitude: Double,
 
-    var longitude: String? = null
+    var iata: String,
 
-    var iata: String? = null
-
-    var icao: String? = null
-
+    var icao: String
+) {
     fun toPoint(): Point {
         return Point(
-            latitude!!.toDouble(),
-            longitude!!.toDouble()
+            latitude,
+            longitude
         )
     }
 }
 
-class AirportLocation {
-    var country: String? = null
-
-    var region: String? = null
-
-}
-
-class AirportCity {
-    var cityId: String? = null
-
-    var name: String? = null
-
-    var slug: String? = null
-
-    var type: CityTypeDB? = null
-
-    var latitude: String? = null
-
-    var longitude: String? = null
-
-    var country: String? = null
-
-    var shareId: String? = null
-}
+class AirportLocation(
+    var country: String,
+    var region: String
+)
