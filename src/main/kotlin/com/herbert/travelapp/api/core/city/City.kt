@@ -1,6 +1,5 @@
 package com.herbert.travelapp.api.core.city
 
-import com.herbert.travelapp.api.dataprovider.database.station.StationDBType
 import com.herbert.travelapp.api.utils.Point
 
 class City(
@@ -82,11 +81,11 @@ class CityStation(
 
     var stationId: String,
 
-    var type: StationDBType,
+    var type: CityStationType,
 
     var latitude: String,
 
     var longitude: String,
 
-    var apiId: String
+    var apiId: String? = null
 )

@@ -42,25 +42,26 @@ class TrainRouteService(
     private fun mapRoutes(station: Station): List<Route> {
         val routes = trainRouteRepository.findRoutesFromStation(station)
         return routes.map { route ->
-            val to = RouteStop().apply {
-                name = route.toStationName
-                id = route.toStationId
-                latitude = route.latitude
-                longitude = route.longitude
-            }
-            val from = RouteStop().apply {
-                name = route.fromStationName
-                id = route.fromStationId
-                latitude = station.latitude.toString()
-                longitude = station.longitude.toString()
-            }
-            Route().apply {
-                this.to = to
+            val to = RouteStop(
+                name = route.toStationName ?: "",
+                id = route.toStationId ?: "",
+                latitude = route.latitude ?: 0.00,
+                longitude = route.longitude ?: 0.00
+            )
+            val from = RouteStop(
+                name = route.fromStationName ?: "",
+                id = route.fromStationId ?: "",
+                latitude = station.latitude ?: 0.00,
+                longitude = station.longitude ?: 0.00
+            )
+            Route(
+                to = to,
+                type = RouteType.TRAIN,
+                durationTotal = route.duration ?: 0,
+                durationMinutes = route.durationMinutes ?: 0,
+                durationHours = route.durationHours ?: 0
+            ).apply {
                 this.from = from
-                this.type = RouteType.TRAIN
-                this.durationTotal = route.duration
-                this.durationMinutes = route.durationMinutes
-                this.durationHours = route.durationHours
             }
         }
     }

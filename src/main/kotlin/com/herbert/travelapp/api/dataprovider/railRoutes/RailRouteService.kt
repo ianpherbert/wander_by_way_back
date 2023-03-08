@@ -38,8 +38,8 @@ class RailRouteService(
                             this.fromStationId = fromStation.apiId
                             this.toStationName = response.name
                             this.toStationId = response.id
-                            this.latitude = response.location?.latitude
-                            this.longitude = response.location?.longitude
+                            this.latitude = response.location?.latitude?.toDouble()
+                            this.longitude = response.location?.longitude?.toDouble()
                             this.duration = response.duration
                             this.durationHours = response.duration?.div(60)
                             this.durationMinutes = response.duration?.rem(60)

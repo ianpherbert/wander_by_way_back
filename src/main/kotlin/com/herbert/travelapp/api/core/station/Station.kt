@@ -14,11 +14,9 @@ class Station(
 
     var slug: String,
 
-    var latitude: Double,
+    var latitude: Double ? = null,
 
-    var longitude: Double,
-
-
+    var longitude: Double? = null,
 
     var airport: Boolean = false,
 
@@ -42,20 +40,19 @@ class Station(
 
     fun toPoint(): Point {
         return Point(
-            latitude,
-            longitude
+            latitude ?: 0.00,
+            longitude ?: 0.00
         )
     }
 
     private fun toRouteStop(): RouteStop {
-        val station = this
-        return RouteStop().apply {
-            this.name = station.name
-            this.id = station.id
-            this.latitude = station.latitude.toString()
-            this.longitude = station.longitude.toString()
-            this.country = station.country
-        }
+        return RouteStop(
+            name = this.name,
+            id = this.id ?: "",
+            latitude = this.latitude ?: 0.00,
+            longitude = this.longitude ?: 0.00,
+            country = this.country
+        )
     }
 
     companion object {
@@ -89,27 +86,3 @@ enum class StationType {
     OTHER
 }
 
-class StationCity {
-    var cityId: String? = null
-
-    var name: String? = null
-
-    var slug: String? = null
-
-    var type: CityTypeDB? = null
-
-    var latitude: String? = null
-
-    var longitude: String? = null
-
-    var country: String? = null
-
-    var shareId: String? = null
-
-    fun toPoint(): Point {
-        return Point(
-            latitude!!.toDouble(),
-            longitude!!.toDouble()
-        )
-    }
-}
