@@ -30,10 +30,10 @@ class TrainRouteService(
     }
 
     override fun getAllRoutesFromAPIId(apiId: String): List<Route> {
-        val station = routeFindStationInformation.findStationInformation(apiId) ?: Station().apply { this.apiId = apiId }
+        val station = routeFindStationInformation.findStationInformation(apiId) ?: Station.dummyStation(apiId)
         val trainRoutes = mapRoutes(station)
         // Add new station to database
-        if (!station.name.isNullOrBlank()) {
+        if (station.id !== "dummy") {
             updateStationRoutesUseCase.updateStationRoutes(station, trainRoutes)
         }
         return trainRoutes
@@ -51,8 +51,8 @@ class TrainRouteService(
             val from = RouteStop().apply {
                 name = route.fromStationName
                 id = route.fromStationId
-                latitude = station.latitude
-                longitude = station.longitude
+                latitude = station.latitude.toString()
+                longitude = station.longitude.toString()
             }
             Route().apply {
                 this.to = to

@@ -26,7 +26,7 @@ class RailRouteService(
     val routeUrl: String,
     @Value("\${direkt-bahn.SearchUrl}")
     val searchUrl: String
-) : TrainRouteRepository, RouteStationApiIdFind, RouteFindStationInformation{
+) : TrainRouteRepository, RouteStationApiIdFind, RouteFindStationInformation {
     override fun findRoutesFromStation(fromStation: Station): List<TrainRoute> {
         val url = URI("$routeUrl/${fromStation.apiId}")
         return try {
@@ -61,7 +61,7 @@ class RailRouteService(
             objectMapper.readValue(objectMapper.writeValueAsString(it), RailStopSearchResult::class.java)
         }
 
-        return resultList?.filter { it.name?.toSearchableName() == station.name?.toSearchableName() }?.takeIf { it.isNotEmpty() }.let {
+        return resultList?.filter { it.name?.toSearchableName() == station.name.toSearchableName() }?.takeIf { it.isNotEmpty() }.let {
             if (it?.size == 1) {
                 it.first()
             } else {
@@ -80,21 +80,27 @@ class RailRouteService(
 
     override fun findStationInformation(apiId: String): Station? {
         objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-        val url = URI("$searchUrl?query=${apiId}")
+        val url = URI("$searchUrl?query=$apiId")
         val request = HttpEntity(null, HttpHeaders())
         val result = restTemplate.exchange(url, HttpMethod.GET, request, List::class.java).body?.map {
             objectMapper.readValue(objectMapper.writeValueAsString(it), RailStopSearchResult::class.java)
         }?.first()
-        return result?.let{
-            Station().apply {
-                name = it.name
-                slug = it.name?.toSearchableName()
-                this.apiId = it.id
-                type = StationType.TRAIN
-                latitude = it.location?.latitude.toString()
-                longitude = it.location?.longitude.toString()
-            }
+
+        if (result?.name.isNullOrBlank() ||
+            result?.location?.latitude == null ||
+            result.location?.longitude == null
+        ) return null
+
+        return result.let {
+            Station(
+                name = it.name!!,
+                slug = it.name!!.toSearchableName(),
+                apiId = it.id,
+                type = StationType.TRAIN,
+                latitude = it.location?.latitude!!.toDouble(),
+                longitude = it.location?.longitude!!.toDouble()
+
+            )
         }
     }
-
 }

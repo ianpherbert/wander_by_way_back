@@ -5,34 +5,34 @@ import com.herbert.travelapp.api.core.route.RouteStop
 import com.herbert.travelapp.api.dataprovider.database.city.CityTypeDB
 import com.herbert.travelapp.api.utils.Point
 
-class Station {
+class Station(
 
-    var id: String? = null
 
-    var companyIds: List<CompanyId>? = null
+    var type: StationType,
 
-    var apiId: String? = null
+    var name: String,
 
-    var type: StationType? = null
+    var slug: String,
 
-    var name: String? = null
+    var latitude: Double,
 
-    var slug: String? = null
+    var longitude: Double,
 
-    var uicId: String? = null
 
-    var latitude: String? = null
 
-    var longitude: String? = null
+    var airport: Boolean = false,
 
+    var airportId: String? = null,
+
+    var apiId: String? = null,
+
+    var uicId: String? = null,
+
+    var companyIds: List<CompanyId>? = listOf()
+) {
     var country: String? = null
 
-    var main: Boolean? = null
-
-    var airport: Boolean? = null
-
-    var parentId: String? = null
-
+    var id: String? = null
     var routes: List<Route> = listOf()
         get() = field.map { route ->
             route.apply {
@@ -42,8 +42,8 @@ class Station {
 
     fun toPoint(): Point {
         return Point(
-            latitude!!.toDouble(),
-            longitude!!.toDouble()
+            latitude,
+            longitude
         )
     }
 
@@ -52,9 +52,26 @@ class Station {
         return RouteStop().apply {
             this.name = station.name
             this.id = station.id
-            this.latitude = station.latitude
-            this.longitude = station.longitude
+            this.latitude = station.latitude.toString()
+            this.longitude = station.longitude.toString()
             this.country = station.country
+        }
+    }
+
+    companion object {
+        fun dummyStation(apiId: String): Station {
+            return Station(
+                StationType.TRAIN,
+                "dummy",
+                "dummy",
+                0.00,
+                0.00,
+                false,
+                "dummy",
+                "dummy",
+                apiId,
+                listOf()
+            )
         }
     }
 }
