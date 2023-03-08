@@ -5,7 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.herbert.travelapp.api.core.route.trainRoute.TrainRoute
 import com.herbert.travelapp.api.core.route.trainRoute.TrainRouteRepository
 import com.herbert.travelapp.api.core.station.Station
+import com.herbert.travelapp.api.core.station.StationType
+import com.herbert.travelapp.api.core.station.connector.RouteFindStationInformation
 import com.herbert.travelapp.api.core.station.connector.RouteStationApiIdFind
+import com.herbert.travelapp.api.extensions.toSearchableName
 import com.herbert.travelapp.api.utils.DistanceCalculator
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
@@ -23,7 +26,7 @@ class RailRouteService(
     val routeUrl: String,
     @Value("\${direkt-bahn.SearchUrl}")
     val searchUrl: String
-) : TrainRouteRepository, RouteStationApiIdFind {
+) : TrainRouteRepository, RouteStationApiIdFind, RouteFindStationInformation{
     override fun findRoutesFromStation(fromStation: Station): List<TrainRoute> {
         val url = URI("$routeUrl/${fromStation.apiId}")
         return try {
@@ -54,12 +57,44 @@ class RailRouteService(
         objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
         val url = URI("$searchUrl?query=${station.slug}")
         val request = HttpEntity(null, HttpHeaders())
-        return restTemplate.exchange(url, HttpMethod.GET, request, List::class.java).body?.map {
+        val resultList = restTemplate.exchange(url, HttpMethod.GET, request, List::class.java).body?.map {
             objectMapper.readValue(objectMapper.writeValueAsString(it), RailStopSearchResult::class.java)
-        }?.find { result ->
+        }
+
+        return resultList?.filter { it.name?.toSearchableName() == station.name?.toSearchableName() }?.takeIf { it.isNotEmpty() }.let {
+            if (it?.size == 1) {
+                it.first()
+            } else {
+                it?.find { result ->
+                    DistanceCalculator(station.toPoint(), result.toPoint()).distance('K').let {
+                        it > 0 && it < 5
+                    }
+                }
+            }
+        }?.id ?: resultList?.find { result ->
             DistanceCalculator(station.toPoint(), result.toPoint()).distance('K').let {
                 it > 0 && it < 5
             }
         }?.id
     }
+
+    override fun findStationInformation(apiId: String): Station? {
+        objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
+        val url = URI("$searchUrl?query=${apiId}")
+        val request = HttpEntity(null, HttpHeaders())
+        val result = restTemplate.exchange(url, HttpMethod.GET, request, List::class.java).body?.map {
+            objectMapper.readValue(objectMapper.writeValueAsString(it), RailStopSearchResult::class.java)
+        }?.first()
+        return result?.let{
+            Station().apply {
+                name = it.name
+                slug = it.name?.toSearchableName()
+                this.apiId = it.id
+                type = StationType.TRAIN
+                latitude = it.location?.latitude.toString()
+                longitude = it.location?.longitude.toString()
+            }
+        }
+    }
+
 }

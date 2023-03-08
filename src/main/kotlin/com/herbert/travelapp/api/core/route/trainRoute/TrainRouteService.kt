@@ -3,21 +3,45 @@ package com.herbert.travelapp.api.core.route.trainRoute
 import com.herbert.travelapp.api.core.route.Route
 import com.herbert.travelapp.api.core.route.RouteStop
 import com.herbert.travelapp.api.core.route.RouteType
+import com.herbert.travelapp.api.core.route.trainRoute.useCase.GetAllRoutesFromAPIIdUseCase
+import com.herbert.travelapp.api.core.route.trainRoute.useCase.GetAllRoutesFromStationUseCase
 import com.herbert.travelapp.api.core.station.Station
+import com.herbert.travelapp.api.core.station.connector.RouteFindStationInformation
+import com.herbert.travelapp.api.core.station.useCase.UpdateStationApiIdUseCase
 import com.herbert.travelapp.api.core.station.useCase.UpdateStationRoutesUseCase
 import org.springframework.stereotype.Component
 
 @Component
 class TrainRouteService(
     val trainRouteRepository: TrainRouteRepository,
-    val updateStationRoutesUseCase: UpdateStationRoutesUseCase
-) : TrainRouteProvider {
+    val updateStationRoutesUseCase: UpdateStationRoutesUseCase,
+    val updateStationApiIdUseCase: UpdateStationApiIdUseCase,
+    val routeFindStationInformation: RouteFindStationInformation
+) : GetAllRoutesFromStationUseCase, GetAllRoutesFromAPIIdUseCase {
     override fun getAllRoutesFromStation(fromStation: Station): List<Route> {
-        val station = if (fromStation.apiId == null || fromStation.apiId == "null" || fromStation.apiId == "INVALID") {
+        val station = if (fromStation.apiId == "INVALID") {
             return listOf()
+        } else if (!fromStation.apiId.isNullOrBlank()) {
+            updateStationApiIdUseCase.updateStationApiId(fromStation)
         } else fromStation
+        val trainRoutes = mapRoutes(station)
+        updateStationRoutesUseCase.updateStationRoutes(station, trainRoutes)
+        return trainRoutes
+    }
+
+    override fun getAllRoutesFromAPIId(apiId: String): List<Route> {
+        val station = routeFindStationInformation.findStationInformation(apiId) ?: Station().apply { this.apiId = apiId }
+        val trainRoutes = mapRoutes(station)
+        // Add new station to database
+        if (!station.name.isNullOrBlank()) {
+            updateStationRoutesUseCase.updateStationRoutes(station, trainRoutes)
+        }
+        return trainRoutes
+    }
+    
+    private fun mapRoutes(station: Station): List<Route> {
         val routes = trainRouteRepository.findRoutesFromStation(station)
-        val trainRoutes = routes.map { route ->
+        return routes.map { route ->
             val to = RouteStop().apply {
                 name = route.toStationName
                 id = route.toStationId
@@ -39,7 +63,5 @@ class TrainRouteService(
                 this.durationHours = route.durationHours
             }
         }
-        updateStationRoutesUseCase.updateStationRoutes(station, trainRoutes)
-        return trainRoutes
     }
 }

@@ -33,8 +33,12 @@ class CityQuery(
 
     @QueryMapping
     override fun searchCity(@Argument query: String): List<CityOutput>? {
-        return findCitiesByNameUseCase.findCitiesByName(query).map {
-            cityMapper.toCityOutput(it)
+        return if (query == "") {
+            emptyList()
+        } else {
+            findCitiesByNameUseCase.findCitiesByName(query).map {
+                cityMapper.toCityOutput(it)
+            }
         }
     }
 
