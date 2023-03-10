@@ -20,7 +20,7 @@ class FlightSearchService(
     @Value("\${tequila.apiKey}")
     val tequilaApiKey: String
 ) : FlightRepository {
-    override fun findFlights(from: String, to: String?, fromDate: String, toDate: String?): List<Flight>? {
+    override fun findEuropeanFlights(from: String, to: String?, fromDate: String, toDate: String?): List<Flight>? {
         val paramMap = HashMap<String, String>().apply {
             set("fly_from", from)
             to?.let {
@@ -36,10 +36,10 @@ class FlightSearchService(
             callApi<FlightSearchResult>(
                 buildUrlWithParams(TequilaURL.SEARCH_FLIGHT, paramMap),
                 HttpMethod.GET
-            ).let {
-                it?.data?.map {
+            )?.let {
+                it.filterEuropeanFlights().map {
                     mapToFlight(it)
-                } ?: listOf()
+                }
             }
         } catch (ex: Exception) {
             null

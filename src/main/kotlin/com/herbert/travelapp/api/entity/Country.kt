@@ -1,4 +1,4 @@
-package com.herbert.travelapp.api.core.entity
+package com.herbert.travelapp.api.entity
 
 enum class Country {
     AUSTRIA,
