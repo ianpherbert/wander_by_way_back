@@ -60,7 +60,7 @@ class StationDBService(
     override fun findStationsByName(name: String): List<Station> {
         return stationDBRepository.findAllByName(name).map {
             stationDBMapper.toStation(it)
-        } ?: listOf()
+        }
     }
     override fun findAllStationsByIdIn(ids: List<String>): List<Station> {
         return stationDBRepository.findAllByIdIn(ids).map {

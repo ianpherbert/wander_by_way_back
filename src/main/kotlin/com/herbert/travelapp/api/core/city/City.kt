@@ -1,49 +1,48 @@
 package com.herbert.travelapp.api.core.city
 
-import com.herbert.travelapp.api.dataprovider.database.station.StationDBType
 import com.herbert.travelapp.api.utils.Point
 
-class City {
+class City(
+    var name: String,
 
-    var id: String? = null
+    var type: CityType,
 
-    var areaId: List<String>? = null
+    var population: Int,
 
-    var name: String? = null
+    var latitude: Double,
 
-    var type: CityType? = null
+    var longitude: Double,
 
-    var population: Int? = null
+    var country: String,
 
-    var latitude: String? = null
+    var shareId: String,
 
-    var longitude: String? = null
+    var id: String,
 
-    var country: String? = null
+    var areaId: List<String> = listOf(),
 
-    var shareId: String? = null
+    var airports: List<CityAirport> = listOf(),
 
-    var airports: List<CityAirport>? = null
-
-    var trainStations: List<CityStation>? = null
+    var trainStations: List<CityStation> = listOf()
+) {
 
     fun toPoint(): Point {
         return Point(
-            latitude!!.toDouble(),
-            longitude!!.toDouble()
+            latitude,
+            longitude
         )
     }
 
     fun getStationIds(): List<String> {
-        return this.trainStations?.mapNotNull { it.stationId } ?: listOf()
+        return this.trainStations.map { it.stationId }
     }
 
     fun getAirportIds(): List<String> {
-        return this.airports?.mapNotNull { it.airportId } ?: listOf()
+        return this.airports.map { it.airportId }
     }
 
     fun getAirportIATACodes(): List<String> {
-        return this.airports?.mapNotNull { it.iata } ?: listOf()
+        return this.airports.map { it.iata }
     }
 }
 
@@ -57,40 +56,36 @@ enum class CityType {
 }
 
 enum class CityStationType {
-    train,
-    bus,
-    ferry,
-    other
+    TRAIN,
+    BUS,
+    FERRY,
+    OTHER
 }
 
-class CityAirport {
-    var name: String? = null
+class CityAirport(
+    var name: String,
 
-    var airportId: String? = null
+    var airportId: String,
 
-    var icao: String? = null
+    var icao: String,
 
-    var iata: String? = null
+    var iata: String,
 
-    var latitude: String? = null
+    var latitude: String,
 
-    var longitude: String? = null
-}
+    var longitude: String
+)
 
-class CityStation {
-    var name: String? = null
+class CityStation(
+    var name: String,
 
-    var stationId: String? = null
+    var stationId: String,
 
-    var type: StationDBType? = null
+    var type: CityStationType,
 
-    var latitude: String? = null
+    var latitude: String,
 
-    var longitude: String? = null
+    var longitude: String,
 
     var apiId: String? = null
-
-    var main: Boolean? = null
-
-    var airport: Boolean? = null
-}
+)

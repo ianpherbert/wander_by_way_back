@@ -10,11 +10,11 @@ class FlightService(
 ) : FlightProvider {
 
     override fun findAllFlightsFromAirport(iataCode: String, fromDate: String, toDate: String): List<Flight> {
-        return flightRepository.findFlights(iataCode, null, fromDate, toDate) ?: emptyList()
+        return flightRepository.findEuropeanFlights(iataCode, null, fromDate, toDate) ?: emptyList()
     }
 
     override fun findAllFlightsFromAirport(iataCode: String): List<Flight> {
-        return flightRepository.findFlights(iataCode, null, today(), oneDayFrom()) ?: emptyList()
+        return flightRepository.findEuropeanFlights(iataCode, null, today(), oneDayFrom()) ?: emptyList()
     }
 
     override fun findFlightsBetweenAirports(
@@ -23,7 +23,7 @@ class FlightService(
         fromDate: String,
         toDate: String
     ): List<Flight> {
-        return flightRepository.findFlights(fromAirportCode, toAirportCode, fromDate, toDate) ?: emptyList()
+        return flightRepository.findEuropeanFlights(fromAirportCode, toAirportCode, fromDate, toDate) ?: emptyList()
     }
 
     private fun today(): String {

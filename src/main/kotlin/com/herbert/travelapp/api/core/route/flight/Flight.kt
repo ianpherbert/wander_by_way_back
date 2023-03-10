@@ -19,27 +19,28 @@ class Flight {
     var utcDeparture: String? = ""
 
     fun toRoute(toStop: Airport, fromStop: Airport): Route {
-        val to = RouteStop().apply {
-            name = to?.name
-            country = to?.countryName
-            id = toStop.id
-            latitude = toStop.latitude
+        val to = RouteStop(
+            name = to?.name ?: "",
+            country = to?.countryName  ?: "",
+            id = toStop.id,
+            latitude = toStop.latitude,
             longitude = toStop.longitude
-        }
-        val from = RouteStop().apply {
-            name = from?.name
-            country = from?.countryName
-            id = fromStop.id
-            latitude = fromStop.latitude
+        )
+        val from = RouteStop(
+            name = from?.name  ?: "",
+            country = from?.countryName ?: "",
+            id = fromStop.id,
+            latitude = fromStop.latitude,
             longitude = fromStop.longitude
-        }
-        return Route().apply {
-            this.to = to
+        )
+        return Route(
+            to = to,
+            type = RouteType.PLANE,
+            durationTotal = duration ?: 0,
+            durationMinutes = duration?.rem(60) ?: 0,
+            durationHours = duration?.div(60) ?: 0
+        ).apply {
             this.from = from
-            this.type = RouteType.PLANE
-            this.durationTotal = duration
-            this.durationMinutes = duration?.rem(60)
-            this.durationHours = duration?.div(60)
         }
     }
 }

@@ -11,9 +11,9 @@ class TrainRoute {
 
     var toStationId: String? = null
 
-    var latitude: String? = null
+    var latitude: Double? = null
 
-    var longitude: String? = null
+    var longitude: Double? = null
 
     var duration: Int? = null
 
@@ -23,8 +23,8 @@ class TrainRoute {
 
     fun toPoint(): Point {
         return Point(
-            latitude!!.toDouble(),
-            longitude!!.toDouble()
+            latitude!!,
+            longitude!!
         )
     }
 }

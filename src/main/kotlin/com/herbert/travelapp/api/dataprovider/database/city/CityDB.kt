@@ -1,6 +1,5 @@
 package com.herbert.travelapp.api.dataprovider.database.city
 
-import com.herbert.travelapp.api.dataprovider.database.station.StationDBType
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
@@ -27,9 +26,9 @@ class CityDB {
 
     var population: Int? = null
 
-    var latitude: String? = null
+    var latitude: Double? = null
 
-    var longitude: String? = null
+    var longitude: Double? = null
 
     var country: String? = null
 
@@ -59,9 +58,9 @@ class CityAirportDB {
 
     var iata: String? = null
 
-    var latitude: String? = null
+    var latitude: Double? = null
 
-    var longitude: String? = null
+    var longitude: Double? = null
 }
 
 class CityStationDB {
@@ -69,17 +68,14 @@ class CityStationDB {
 
     var stationId: String? = null
 
-    var type: StationDBType? = null
+    var type: CityStationTypeDB? = null
 
-    var latitude: String? = null
+    var latitude: Double? = null
 
-    var longitude: String? = null
+    var longitude: Double? = null
 
     var apiId: String? = null
 
-    var main: Boolean? = null
-
-    var airport: Boolean? = null
 }
 
 enum class CityStationTypeDB {

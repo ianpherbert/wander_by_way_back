@@ -40,6 +40,7 @@ dependencies {
     implementation("io.mongock:mongock-springboot")
     implementation("javax.validation:validation-api:2.0.1.Final")
     kapt("org.mapstruct:mapstruct-processor:1.5.0.Beta1")
+    implementation("com.byteowls:jopencage:1.4.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 

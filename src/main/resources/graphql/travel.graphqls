@@ -39,12 +39,12 @@ type CityOutput{
     id : String!
     name: String!
     type: CityType!
-    population: Int
+    population: Int!
     latitude: String!
     longitude: String!
     country: String!
-    airports: [CityAirportOutput]
-    trainStations: [CityStationOutput]
+    airports: [CityAirportOutput]!
+    trainStations: [CityStationOutput]!
 }
 
 type StationOutput{
@@ -69,8 +69,6 @@ type CityStationOutput{
     latitude: String!
     longitude: String!
     type: StationType!
-    main: Boolean!
-    airport: Boolean!
 }
 
 type CompanyIdOutput{

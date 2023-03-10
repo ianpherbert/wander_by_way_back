@@ -5,34 +5,32 @@ import com.herbert.travelapp.api.core.route.RouteStop
 import com.herbert.travelapp.api.dataprovider.database.city.CityTypeDB
 import com.herbert.travelapp.api.utils.Point
 
-class Station {
+class Station(
 
-    var id: String? = null
 
-    var companyIds: List<CompanyId>? = null
+    var type: StationType,
 
-    var apiId: String? = null
+    var name: String,
 
-    var type: StationType? = null
+    var slug: String,
 
-    var name: String? = null
+    var latitude: Double ? = null,
 
-    var slug: String? = null
+    var longitude: Double? = null,
 
-    var uicId: String? = null
+    var airport: Boolean = false,
 
-    var latitude: String? = null
+    var airportId: String? = null,
 
-    var longitude: String? = null
+    var apiId: String? = null,
 
+    var uicId: String? = null,
+
+    var companyIds: List<CompanyId>? = listOf()
+) {
     var country: String? = null
 
-    var main: Boolean? = null
-
-    var airport: Boolean? = null
-
-    var parentId: String? = null
-
+    var id: String? = null
     var routes: List<Route> = listOf()
         get() = field.map { route ->
             route.apply {
@@ -42,19 +40,35 @@ class Station {
 
     fun toPoint(): Point {
         return Point(
-            latitude!!.toDouble(),
-            longitude!!.toDouble()
+            latitude ?: 0.00,
+            longitude ?: 0.00
         )
     }
 
     private fun toRouteStop(): RouteStop {
-        val station = this
-        return RouteStop().apply {
-            this.name = station.name
-            this.id = station.id
-            this.latitude = station.latitude
-            this.longitude = station.longitude
-            this.country = station.country
+        return RouteStop(
+            name = this.name,
+            id = this.id ?: "",
+            latitude = this.latitude ?: 0.00,
+            longitude = this.longitude ?: 0.00,
+            country = this.country
+        )
+    }
+
+    companion object {
+        fun dummyStation(apiId: String): Station {
+            return Station(
+                StationType.TRAIN,
+                "dummy",
+                "dummy",
+                0.00,
+                0.00,
+                false,
+                "dummy",
+                "dummy",
+                apiId,
+                listOf()
+            )
         }
     }
 }
@@ -72,27 +86,3 @@ enum class StationType {
     OTHER
 }
 
-class StationCity {
-    var cityId: String? = null
-
-    var name: String? = null
-
-    var slug: String? = null
-
-    var type: CityTypeDB? = null
-
-    var latitude: String? = null
-
-    var longitude: String? = null
-
-    var country: String? = null
-
-    var shareId: String? = null
-
-    fun toPoint(): Point {
-        return Point(
-            latitude!!.toDouble(),
-            longitude!!.toDouble()
-        )
-    }
-}
