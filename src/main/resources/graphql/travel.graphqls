@@ -18,10 +18,17 @@ type Query {
     findAllCitiesByAirportId(airportId: String!) : [CityOutput]
     findAllCitiesFromAssociatedTransit(transitSearchInput: TransitSearchInput) : [CityOutput]
 }
+input RouteSearchFilterInput{
+    flight: Boolean!
+    train: Boolean!
+    bus: Boolean!
+    ferry: Boolean!
+}
 
 input RouteSearchInput{
     id: String!
     type: PointType!
+    filters: RouteSearchFilterInput!
 }
 
 input TransitSearchInput{
