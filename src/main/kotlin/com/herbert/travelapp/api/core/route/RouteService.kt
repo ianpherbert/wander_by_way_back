@@ -27,8 +27,16 @@ class RouteService(
         return if (routeSearchItem.type === PointType.CITY) {
             val city = findByCityIdUseCase.findCityById(routeSearchItem.id) ?: return emptyList()
             val connectedCities = findCitiesByAreaIdUseCase.findCitiesByAreaId(city.shareId)
-            val trainRoutes = getTrainRoutes(city, connectedCities)
-            val flightRoutes = getFlightRoutes(connectedCities)
+            val trainRoutes = if (routeSearchItem.filters.train) {
+                getTrainRoutes(city, connectedCities)
+            } else {
+                emptyList()
+            }
+            val flightRoutes = if (routeSearchItem.filters.flight) {
+                getFlightRoutes(connectedCities)
+            } else {
+                emptyList()
+            }
             listOf(trainRoutes, flightRoutes).flatten()
         } else if (routeSearchItem.type == PointType.STATION) {
             findStationsByApiIdUseCase.findStationByApiId(routeSearchItem.id)?.let { station ->
