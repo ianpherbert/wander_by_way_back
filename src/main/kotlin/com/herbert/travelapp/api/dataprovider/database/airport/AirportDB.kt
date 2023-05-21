@@ -1,5 +1,6 @@
 package com.herbert.travelapp.api.dataprovider.database.airport
 
+import com.herbert.travelapp.api.dataprovider.database.common.routeDB.RouteDB
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
@@ -22,6 +23,8 @@ class AirportDB {
     var iata: String? = null
 
     var icao: String? = null
+
+    var routes: List<RouteDB> = listOf()
 }
 
 class AirportDBLocation {

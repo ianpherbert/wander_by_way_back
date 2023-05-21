@@ -1,12 +1,8 @@
 package com.herbert.travelapp.api.dataprovider.database.airport
 
 import com.herbert.travelapp.api.core.airport.Airport
-import com.herbert.travelapp.api.core.airport.connector.AirportFindAllByIACOCode
-import com.herbert.travelapp.api.core.airport.connector.AirportFindAllById
-import com.herbert.travelapp.api.core.airport.connector.AirportFindAllByName
-import com.herbert.travelapp.api.core.airport.connector.AirportFindByIATACode
-import com.herbert.travelapp.api.core.airport.connector.AirportFindByICAOCode
-import com.herbert.travelapp.api.core.airport.connector.AirportFindByIdUseCase
+import com.herbert.travelapp.api.core.airport.connector.*
+import com.herbert.travelapp.api.core.route.Route
 import com.herbert.travelapp.api.extensions.toSearchableName
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
@@ -35,7 +31,9 @@ class AirportDBServiceUseCase(
     AirportFindAllByIACOCode,
     AirportFindByIATACode,
     AirportFindByICAOCode,
-    AirportFindByIdUseCase {
+    AirportFindByIdUseCase,
+    AirportUpdateRoutes
+{
     override fun findAirportById(id: String): Airport? {
         return airportDBRepository.findById(id).orElse(null)?.let {
             airportDBMapper.toAirport(it)
@@ -70,5 +68,9 @@ class AirportDBServiceUseCase(
         return airportDBRepository.findAllByIdIn(ids).map {
             airportDBMapper.toAirport(it)
         }
+    }
+
+    override fun updateRoutes(airport: Airport, routes: List<Route>): Airport {
+        TODO("Not yet implemented")
     }
 }
