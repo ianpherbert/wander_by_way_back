@@ -2,6 +2,7 @@ package com.herbert.travelapp.api.core.route
 
 import com.herbert.travelapp.api.core.airport.useCase.FindAirportsByIATACodeUseCase
 import com.herbert.travelapp.api.core.airport.useCase.FindAllAirportsByIdInUseCase
+import com.herbert.travelapp.api.core.airport.useCase.UpdateAirportRoutesUseCase
 import com.herbert.travelapp.api.core.city.City
 import com.herbert.travelapp.api.core.city.useCase.FindByCityIdUseCase
 import com.herbert.travelapp.api.core.city.useCase.FindCitiesByAreaIdUseCase
@@ -23,7 +24,8 @@ class RouteService(
     val findStationsByApiIdUseCase: FindStationsByApiIdUseCase,
     val findAirportsByIATACodeUseCase: FindAirportsByIATACodeUseCase,
     val findRoutesFromAPIIdUseCase: GetAllRoutesFromAPIIdUseCase,
-    val findAllAirportsByIdInUseCase: FindAllAirportsByIdInUseCase
+    val findAllAirportsByIdInUseCase: FindAllAirportsByIdInUseCase,
+    val updateAirportRoutesUseCase: UpdateAirportRoutesUseCase
 ) : FindAllRoutesFromPoint {
     override fun findAllRoutes(routeSearchItem: RouteSearchItem): List<Route> {
         return if (routeSearchItem.type === PointType.CITY) {
@@ -63,15 +65,14 @@ class RouteService(
     }
 
     private fun getFlightRoutes(connectedCities: List<City>): List<Route> {
-        val airports = connectedCities.flatMap { it.getAirportIds() }.let{
+        val airports = connectedCities.flatMap { it.getAirportIds() }.let {
             findAllAirportsByIdInUseCase.findAllAirportsByIdIn(it)
         }
-        val searchedRoutes = airports.filter{ it.routes.isEmpty() }.map{
-            it.iata
-        }.distinct().map { airport ->
-            mapFlightsToAirports(flightProvider.findAllFlightsFromAirport(airport), airport)
+        val searchedRoutes = airports.filter { it.routes.isEmpty() }.distinct().map { airport ->
+            mapFlightsToAirports(flightProvider.findAllFlightsFromAirport(airport.iata), airport.iata)
         }.flatten()
-        val existingRoutes = airports.filter{it.routes.isNotEmpty()}.flatMap{it.routes}
+
+        val existingRoutes = airports.filter { it.routes.isNotEmpty() }.flatMap { it.routes }
         return listOf(searchedRoutes, existingRoutes).flatten()
     }
 
