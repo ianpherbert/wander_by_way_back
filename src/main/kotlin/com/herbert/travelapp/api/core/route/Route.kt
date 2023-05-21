@@ -20,7 +20,8 @@ class RouteStop(
     var id: String,
     var latitude: Double,
     var longitude: Double,
-    var country: String? = null
+    var country: String? = null,
+    var iata: String? = null
 ) {
     fun toPoint(): Point {
         return Point(

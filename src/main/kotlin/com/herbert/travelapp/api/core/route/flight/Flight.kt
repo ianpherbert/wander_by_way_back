@@ -24,14 +24,16 @@ class Flight {
             country = to?.countryName  ?: "",
             id = toStop.id,
             latitude = toStop.latitude,
-            longitude = toStop.longitude
+            longitude = toStop.longitude,
+            iata = toStop.iata
         )
         val from = RouteStop(
-            name = from?.name  ?: "",
+            name = from?.name ?: "",
             country = from?.countryName ?: "",
             id = fromStop.id,
             latitude = fromStop.latitude,
-            longitude = fromStop.longitude
+            longitude = fromStop.longitude,
+            iata = fromStop.iata
         )
         return Route(
             to = to,

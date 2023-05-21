@@ -85,10 +85,6 @@ class RouteService(
         }
     }
 
-    private fun getFlightsFromUnkownAirport(iataCode: String): List<Route> {
-        return searchFlights(iataCode)
-    }
-
     private fun searchFlights(airportIATACode: String): List<Route> {
         val flights = flightProvider.findAllFlightsFromAirport(airportIATACode)
         val destinationAirports = flights.map {
