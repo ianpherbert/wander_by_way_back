@@ -1,6 +1,7 @@
 package com.herbert.travelapp.api.core.route
 
 import com.herbert.travelapp.api.core.airport.useCase.FindAirportsByIATACodeUseCase
+import com.herbert.travelapp.api.core.airport.useCase.FindAllAirportsByIdInUseCase
 import com.herbert.travelapp.api.core.city.City
 import com.herbert.travelapp.api.core.city.useCase.FindByCityIdUseCase
 import com.herbert.travelapp.api.core.city.useCase.FindCitiesByAreaIdUseCase
@@ -21,7 +22,8 @@ class RouteService(
     val findAllStationsByIdUseCase: FindAllStationsByIdUseCase,
     val findStationsByApiIdUseCase: FindStationsByApiIdUseCase,
     val findAirportsByIATACodeUseCase: FindAirportsByIATACodeUseCase,
-    val findRoutesFromAPIIdUseCase: GetAllRoutesFromAPIIdUseCase
+    val findRoutesFromAPIIdUseCase: GetAllRoutesFromAPIIdUseCase,
+    val findAllAirportsByIdInUseCase: FindAllAirportsByIdInUseCase
 ) : FindAllRoutesFromPoint {
     override fun findAllRoutes(routeSearchItem: RouteSearchItem): List<Route> {
         return if (routeSearchItem.type === PointType.CITY) {
@@ -61,11 +63,16 @@ class RouteService(
     }
 
     private fun getFlightRoutes(connectedCities: List<City>): List<Route> {
-        return connectedCities.flatMap { it.getAirportIATACodes() }.distinct().map { airport ->
-            flightProvider.findAllFlightsFromAirport(airport).let { flights ->
-                mapFlightsToAirports(flights, airport)
-            }
+        val airports = connectedCities.flatMap { it.getAirportIds() }.let{
+            findAllAirportsByIdInUseCase.findAllAirportsByIdIn(it)
+        }
+        val searchedRoutes = airports.filter{ it.routes.isEmpty() }.map{
+            it.iata
+        }.distinct().map { airport ->
+            mapFlightsToAirports(flightProvider.findAllFlightsFromAirport(airport), airport)
         }.flatten()
+        val existingRoutes = airports.filter{it.routes.isNotEmpty()}.flatMap{it.routes}
+        return listOf(searchedRoutes, existingRoutes).flatten()
     }
 
     private fun mapFlightsToAirports(flights: List<Flight>, airport: String): List<Route> {
