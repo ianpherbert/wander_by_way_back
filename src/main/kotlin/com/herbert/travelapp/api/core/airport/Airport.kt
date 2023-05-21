@@ -1,6 +1,7 @@
 package com.herbert.travelapp.api.core.airport
 
-import com.herbert.travelapp.api.dataprovider.database.city.CityTypeDB
+import com.herbert.travelapp.api.core.route.Route
+import com.herbert.travelapp.api.core.route.RouteStop
 import com.herbert.travelapp.api.utils.Point
 
 class Airport(
@@ -18,6 +19,23 @@ class Airport(
 
     var icao: String
 ) {
+
+    var routes: List<Route> = listOf()
+        get() = field.map { route ->
+            route.apply {
+                this.from = toRouteStop()
+            }
+        }
+
+    private fun toRouteStop(): RouteStop {
+        return RouteStop(
+            name = this.name,
+            id = this.id,
+            latitude = this.latitude,
+            longitude = this.longitude,
+            country = this.location.country
+        )
+    }
     fun toPoint(): Point {
         return Point(
             latitude,

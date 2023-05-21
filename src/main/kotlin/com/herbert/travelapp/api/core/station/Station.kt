@@ -14,9 +14,9 @@ class Station(
 
     var slug: String,
 
-    var latitude: Double ? = null,
+    var latitude: Double,
 
-    var longitude: Double? = null,
+    var longitude: Double,
 
     var airport: Boolean = false,
 
@@ -40,8 +40,8 @@ class Station(
 
     fun toPoint(): Point {
         return Point(
-            latitude ?: 0.00,
-            longitude ?: 0.00
+            latitude,
+            longitude
         )
     }
 
@@ -49,8 +49,8 @@ class Station(
         return RouteStop(
             name = this.name,
             id = this.id ?: "",
-            latitude = this.latitude ?: 0.00,
-            longitude = this.longitude ?: 0.00,
+            latitude = this.latitude,
+            longitude = this.longitude,
             country = this.country
         )
     }
