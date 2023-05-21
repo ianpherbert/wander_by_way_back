@@ -6,7 +6,6 @@ import com.herbert.travelapp.api.core.airport.useCase.UpdateAirportRoutesUseCase
 import com.herbert.travelapp.api.core.city.City
 import com.herbert.travelapp.api.core.city.useCase.FindByCityIdUseCase
 import com.herbert.travelapp.api.core.city.useCase.FindCitiesByAreaIdUseCase
-import com.herbert.travelapp.api.core.route.flight.Flight
 import com.herbert.travelapp.api.core.route.flight.FlightProvider
 import com.herbert.travelapp.api.core.route.trainRoute.useCase.GetAllRoutesFromAPIIdUseCase
 import com.herbert.travelapp.api.core.route.trainRoute.useCase.GetAllRoutesFromStationUseCase
@@ -47,7 +46,7 @@ class RouteService(
                 getAllRoutesFromStationUseCase.getAllRoutesFromStation(station)
             } ?: findRoutesFromAPIIdUseCase.getAllRoutesFromAPIId(routeSearchItem.id)
         } else if (routeSearchItem.type == PointType.AIRPORT) {
-            mapFlightsToAirports(flightProvider.findAllFlightsFromAirport(routeSearchItem.id), routeSearchItem.id)
+            searchFlights(routeSearchItem.id)
         } else {
             listOf()
         }
@@ -69,28 +68,31 @@ class RouteService(
             findAllAirportsByIdInUseCase.findAllAirportsByIdIn(it)
         }
         val searchedRoutes = airports.filter { it.routes.isEmpty() }.distinct().map { airport ->
-            mapFlightsToAirports(flightProvider.findAllFlightsFromAirport(airport.iata), airport.iata)
+            searchFlights(airport.iata)
         }.flatten()
 
         val existingRoutes = airports.filter { it.routes.isNotEmpty() }.flatMap { it.routes }
         return listOf(searchedRoutes, existingRoutes).flatten()
     }
 
-    private fun mapFlightsToAirports(flights: List<Flight>, airport: String): List<Route> {
-        return flights.map {
+    private fun searchFlights(airportIATACode: String): List<Route> {
+        val flights = flightProvider.findAllFlightsFromAirport(airportIATACode)
+        val destinationAirports = flights.map {
             it.to!!.airportCode!!
         }.let {
-            findAirportsByIATACodeUseCase.findAirportsByIATACode(it.plus(airport))
-        }.let { destinationAirports ->
-            flights.mapNotNull { flight ->
-                val fromStop = destinationAirports.find { it.iata == flight.from!!.airportCode }
-                val toStop = destinationAirports.find { it.iata == flight.to!!.airportCode }
-                if (fromStop != null && toStop != null) {
-                    flight.toRoute(toStop, fromStop)
-                } else {
-                    null
-                }
+            findAirportsByIATACodeUseCase.findAirportsByIATACode(it.plus(airportIATACode))
+        }
+
+        val routes = flights.mapNotNull { flight ->
+            val fromStop = destinationAirports.find { it.iata == flight.from!!.airportCode }
+            val toStop = destinationAirports.find { it.iata == flight.to!!.airportCode }
+            if (fromStop != null && toStop != null) {
+                flight.toRoute(toStop, fromStop)
+            } else {
+                null
             }
         }
+        updateAirportRoutesUseCase.updateRoutes(airportIATACode, routes)
+        return routes
     }
 }

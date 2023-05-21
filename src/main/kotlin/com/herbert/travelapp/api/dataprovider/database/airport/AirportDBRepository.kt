@@ -7,6 +7,7 @@ import com.herbert.travelapp.api.extensions.toSearchableName
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
+import java.lang.Error
 
 @Transactional
 interface AirportDBRepository : MongoRepository<AirportDB, String> {
@@ -70,10 +71,10 @@ class AirportDBServiceUseCase(
         }
     }
 
-    override fun updateRoutes(airport: Airport, routes: List<Route>): Airport {
-        val updatedAirport = airportDBMapper.toAirportDB(airport).apply {
+    override fun updateRoutes(airportIATACode: String, routes: List<Route>): Airport {
+        val updatedAirport = airportDBRepository.findByIata(airportIATACode)?.apply {
             this.routes = airportDBMapper.toRouteDBs(routes)
-        }
+        } ?: throw Error("Airport $airportIATACode could not be found")
 
         return airportDBRepository.save(updatedAirport).let{
             airportDBMapper.toAirport(it)
