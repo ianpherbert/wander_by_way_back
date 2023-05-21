@@ -3,6 +3,7 @@ package com.herbert.travelapp.api.dataprovider.database.station
 import com.herbert.travelapp.api.dataprovider.database.common.routeDB.RouteDB
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
+import java.time.LocalDate
 
 @Document
 class StationDB {
@@ -35,6 +36,8 @@ class StationDB {
     var routes: List<RouteDB> = listOf()
 
     var matchCheck: Boolean = false
+
+    lateinit var updateDate: LocalDate
 }
 
 class DBCompanyId {

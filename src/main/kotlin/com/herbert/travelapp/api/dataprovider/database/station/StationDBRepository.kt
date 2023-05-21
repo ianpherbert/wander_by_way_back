@@ -11,6 +11,7 @@ import com.herbert.travelapp.api.core.station.connector.StationUpdate
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDate
 
 @Transactional
 interface StationDBRepository : MongoRepository<StationDB, String> {
@@ -38,7 +39,7 @@ class StationDBService(
     StationUpdate {
     override fun updateStation(station: Station): Station {
         return stationDBMapper.toStationDb(station).let {
-            stationDBRepository.save(it)
+            stationDBRepository.save(addNowDate(it))
         }.let {
             println("${station.name} updated")
             stationDBMapper.toStation(it)
@@ -77,6 +78,12 @@ class StationDBService(
     override fun findAllBySlugContaining(fragment: String): List<Station> {
         return stationDBRepository.findAllBySlugContaining(fragment).map {
             stationDBMapper.toStation(it)
+        }
+    }
+
+    private fun addNowDate(airport: StationDB): StationDB {
+        return airport.apply {
+            updateDate = LocalDate.now()
         }
     }
 }

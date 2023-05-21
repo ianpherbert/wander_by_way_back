@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import java.lang.Error
+import java.time.LocalDate
 
 @Transactional
 interface AirportDBRepository : MongoRepository<AirportDB, String> {
@@ -76,8 +77,15 @@ class AirportDBServiceUseCase(
             this.routes = airportDBMapper.toRouteDBs(routes)
         } ?: throw Error("Airport $airportIATACode could not be found")
 
-        return airportDBRepository.save(updatedAirport).let{
+        return airportDBRepository.save(addNowDate(updatedAirport)).let{
+            println("${it.name} updated")
             airportDBMapper.toAirport(it)
+        }
+    }
+
+    private fun addNowDate(airport: AirportDB) : AirportDB{
+        return airport.apply {
+            updateDate = LocalDate.now()
         }
     }
 }
