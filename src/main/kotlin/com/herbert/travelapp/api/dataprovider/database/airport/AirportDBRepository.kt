@@ -1,16 +1,14 @@
 package com.herbert.travelapp.api.dataprovider.database.airport
 
 import com.herbert.travelapp.api.core.airport.Airport
-import com.herbert.travelapp.api.core.airport.connector.AirportFindAllByIACOCode
-import com.herbert.travelapp.api.core.airport.connector.AirportFindAllById
-import com.herbert.travelapp.api.core.airport.connector.AirportFindAllByName
-import com.herbert.travelapp.api.core.airport.connector.AirportFindByIATACode
-import com.herbert.travelapp.api.core.airport.connector.AirportFindByICAOCode
-import com.herbert.travelapp.api.core.airport.connector.AirportFindByIdUseCase
+import com.herbert.travelapp.api.core.airport.connector.*
+import com.herbert.travelapp.api.core.route.Route
 import com.herbert.travelapp.api.extensions.toSearchableName
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
+import java.lang.Error
+import java.time.LocalDate
 
 @Transactional
 interface AirportDBRepository : MongoRepository<AirportDB, String> {
@@ -35,7 +33,9 @@ class AirportDBServiceUseCase(
     AirportFindAllByIACOCode,
     AirportFindByIATACode,
     AirportFindByICAOCode,
-    AirportFindByIdUseCase {
+    AirportFindByIdUseCase,
+    AirportUpdateRoutes
+{
     override fun findAirportById(id: String): Airport? {
         return airportDBRepository.findById(id).orElse(null)?.let {
             airportDBMapper.toAirport(it)
@@ -69,6 +69,23 @@ class AirportDBServiceUseCase(
     override fun findAllAirportsByIdIn(ids: List<String>): List<Airport> {
         return airportDBRepository.findAllByIdIn(ids).map {
             airportDBMapper.toAirport(it)
+        }
+    }
+
+    override fun updateRoutes(airportIATACode: String, routes: List<Route>): Airport {
+        val updatedAirport = airportDBRepository.findByIata(airportIATACode)?.apply {
+            this.routes = airportDBMapper.toRouteDBs(routes)
+        } ?: throw Error("Airport $airportIATACode could not be found")
+
+        return airportDBRepository.save(addNowDate(updatedAirport)).let{
+            println("${it.name} updated")
+            airportDBMapper.toAirport(it)
+        }
+    }
+
+    private fun addNowDate(airport: AirportDB) : AirportDB{
+        return airport.apply {
+            updateDate = LocalDate.now()
         }
     }
 }

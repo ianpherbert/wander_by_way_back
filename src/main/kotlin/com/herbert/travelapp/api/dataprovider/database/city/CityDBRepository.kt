@@ -1,15 +1,7 @@
 package com.herbert.travelapp.api.dataprovider.database.city
 
 import com.herbert.travelapp.api.core.city.City
-import com.herbert.travelapp.api.core.city.connector.CityGetAllByStationApiId
-import com.herbert.travelapp.api.core.city.connector.CityGetAllByStationName
-import com.herbert.travelapp.api.core.city.connector.CityGetByAirportId
-import com.herbert.travelapp.api.core.city.connector.CityGetByAreaId
-import com.herbert.travelapp.api.core.city.connector.CityGetById
-import com.herbert.travelapp.api.core.city.connector.CityGetByShareId
-import com.herbert.travelapp.api.core.city.connector.CityGetByStationId
-import com.herbert.travelapp.api.core.city.connector.CitySave
-import com.herbert.travelapp.api.core.city.connector.CitySearchByName
+import com.herbert.travelapp.api.core.city.connector.*
 import com.herbert.travelapp.api.extensions.toSearchableName
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
@@ -32,6 +24,8 @@ interface CityDBRepository : MongoRepository<CityDB, String> {
     fun findAllByTrainStationsName(name: String): List<CityDB>
 
     fun findAllByAirportsAirportId(stationId: String): List<CityDB>
+
+    fun findAllByAirportsIata(iataCode: String): List<CityDB>
 }
 
 @Repository
@@ -46,7 +40,8 @@ class CityDBService(
     CityGetAllByStationName,
     CityGetAllByStationApiId,
     CityGetByAirportId,
-    CitySave {
+    CitySave,
+    CityGetAllByIataCodeOrAirportId {
     override fun getCityById(id: String): City? {
         return cityDBRepository.findById(id).orElse(null)?.let { cityDB ->
             cityDBMapper.toCity(cityDB)
@@ -101,5 +96,14 @@ class CityDBService(
         return cityDBRepository.findAllByTrainStationsName(name).let {
             cityDBMapper.toCities(it)
         }
+    }
+
+    override fun getByAirportIdOrIata(identifier: String): List<City> {
+        val cities = if(identifier.length.equals(3)){
+            cityDBRepository.findAllByAirportsIata(identifier)
+        }else{
+            cityDBRepository.findAllByAirportsAirportId(identifier)
+        }
+        return cityDBMapper.toCities(cities)
     }
 }

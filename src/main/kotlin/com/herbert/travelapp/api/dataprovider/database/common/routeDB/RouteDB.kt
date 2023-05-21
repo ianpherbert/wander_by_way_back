@@ -14,6 +14,7 @@ class RouteDBStop {
     var latitude: String? = null
     var longitude: String? = null
     var country: String? = null
+    var iata: String? = null
 }
 
 enum class RouteDBType {

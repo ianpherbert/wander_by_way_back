@@ -1,17 +1,8 @@
 package com.herbert.travelapp.api.core.airport
 
-import com.herbert.travelapp.api.core.airport.connector.AirportFindAllByIACOCode
-import com.herbert.travelapp.api.core.airport.connector.AirportFindAllById
-import com.herbert.travelapp.api.core.airport.connector.AirportFindAllByName
-import com.herbert.travelapp.api.core.airport.connector.AirportFindByIATACode
-import com.herbert.travelapp.api.core.airport.connector.AirportFindByICAOCode
-import com.herbert.travelapp.api.core.airport.connector.AirportFindByIdUseCase
-import com.herbert.travelapp.api.core.airport.useCase.FindAirportByIATACodeUseCase
-import com.herbert.travelapp.api.core.airport.useCase.FindAirportByICAOCodeUseCase
-import com.herbert.travelapp.api.core.airport.useCase.FindAirportByIdUseCase
-import com.herbert.travelapp.api.core.airport.useCase.FindAirportsByIATACodeUseCase
-import com.herbert.travelapp.api.core.airport.useCase.FindAirportsByNameUseCase
-import com.herbert.travelapp.api.core.airport.useCase.FindAllAirportsByIdInUseCase
+import com.herbert.travelapp.api.core.airport.connector.*
+import com.herbert.travelapp.api.core.airport.useCase.*
+import com.herbert.travelapp.api.core.route.Route
 import org.springframework.stereotype.Component
 
 @Component
@@ -21,13 +12,15 @@ class AirportService(
     val airportFindAllByIACOCode: AirportFindAllByIACOCode,
     val airportFindByIATACode: AirportFindByIATACode,
     val airportFindByICAOCode: AirportFindByICAOCode,
-    val airportFindByIdUseCase: AirportFindByIdUseCase
+    val airportFindByIdUseCase: AirportFindByIdUseCase,
+    val airportUpdateRoutes: AirportUpdateRoutes
 ) : FindAirportByIATACodeUseCase,
     FindAirportsByNameUseCase,
     FindAirportByICAOCodeUseCase,
     FindAirportByIdUseCase,
     FindAllAirportsByIdInUseCase,
-    FindAirportsByIATACodeUseCase {
+    FindAirportsByIATACodeUseCase,
+    UpdateAirportRoutesUseCase {
     override fun findAirportById(id: String): Airport? {
         return airportFindByIdUseCase.findAirportById(id)
     }
@@ -50,5 +43,9 @@ class AirportService(
 
     override fun findAllAirportsByIdIn(ids: List<String>): List<Airport> {
         return airportFindAllById.findAllAirportsByIdIn(ids)
+    }
+
+    override fun updateRoutes(airport: String, routes: List<Route>): Airport {
+       return airportUpdateRoutes.updateRoutes(airport, routes)
     }
 }
