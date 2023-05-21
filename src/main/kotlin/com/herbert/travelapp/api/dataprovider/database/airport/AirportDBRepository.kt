@@ -71,6 +71,12 @@ class AirportDBServiceUseCase(
     }
 
     override fun updateRoutes(airport: Airport, routes: List<Route>): Airport {
-        TODO("Not yet implemented")
+        val updatedAirport = airportDBMapper.toAirportDB(airport).apply {
+            this.routes = airportDBMapper.toRouteDBs(routes)
+        }
+
+        return airportDBRepository.save(updatedAirport).let{
+            airportDBMapper.toAirport(it)
+        }
     }
 }

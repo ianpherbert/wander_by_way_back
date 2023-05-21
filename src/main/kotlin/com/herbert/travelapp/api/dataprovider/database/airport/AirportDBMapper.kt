@@ -12,5 +12,5 @@ interface AirportDBMapper {
 
     fun toAirportDB(airport: Airport): AirportDB
 
-    fun toRouteDB(route: Route): RouteDB
+    fun toRouteDBs(route: List<Route>): List<RouteDB>
 }
