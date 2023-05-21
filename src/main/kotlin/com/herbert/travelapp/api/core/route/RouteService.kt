@@ -3,6 +3,8 @@ package com.herbert.travelapp.api.core.route
 import com.herbert.travelapp.api.core.airport.Airport
 import com.herbert.travelapp.api.core.airport.useCase.*
 import com.herbert.travelapp.api.core.city.City
+import com.herbert.travelapp.api.core.city.connector.CityGetAllByIataCodeOrAirportId
+import com.herbert.travelapp.api.core.city.connector.CityGetAllByStationApiId
 import com.herbert.travelapp.api.core.city.useCase.FindByCityIdUseCase
 import com.herbert.travelapp.api.core.city.useCase.FindCitiesByAreaIdUseCase
 import com.herbert.travelapp.api.core.route.flight.FlightProvider
@@ -19,20 +21,25 @@ class RouteService(
     val findByCityIdUseCase: FindByCityIdUseCase,
     val findCitiesByAreaIdUseCase: FindCitiesByAreaIdUseCase,
     val findAllStationsByIdUseCase: FindAllStationsByIdUseCase,
-    val findStationsByApiIdUseCase: FindStationsByApiIdUseCase,
     val findAirportsByIATACodeUseCase: FindAirportsByIATACodeUseCase,
-    val findRoutesFromAPIIdUseCase: GetAllRoutesFromAPIIdUseCase,
     val findAllAirportsByIdInUseCase: FindAllAirportsByIdInUseCase,
     val updateAirportRoutesUseCase: UpdateAirportRoutesUseCase,
-    val findAirportByIdUseCase: FindAirportByIdUseCase,
-    val findAirportByIATACodeUseCase: FindAirportByIATACodeUseCase
+    val findCityGetAllByIataCodeOrAirportId: CityGetAllByIataCodeOrAirportId,
+    val cityGetAllByStationApiId: CityGetAllByStationApiId
 ) : FindAllRoutesFromPoint {
     override fun findAllRoutes(routeSearchItem: RouteSearchItem): List<Route> {
-        return if (routeSearchItem.type === PointType.CITY) {
-            val city = findByCityIdUseCase.findCityById(routeSearchItem.id) ?: return emptyList()
-            val connectedCities = findCitiesByAreaIdUseCase.findCitiesByAreaId(city.shareId)
+        val connectedCities = when(routeSearchItem.type){
+            PointType.CITY -> findByCityIdUseCase.findCityById(routeSearchItem.id)?.let {
+                findCitiesByAreaIdUseCase.findCitiesByAreaId(it.shareId).plus(it)
+            } ?: emptyList()
+            PointType.AIRPORT -> findCityGetAllByIataCodeOrAirportId.getByAirportIdOrIata(routeSearchItem.id)
+
+            PointType.STATION -> cityGetAllByStationApiId.findAllByStationApiId(routeSearchItem.id)
+            else -> listOf()
+        }
+
             val trainRoutes = if (routeSearchItem.filters.train) {
-                getTrainRoutes(city, connectedCities)
+                getTrainRoutes(connectedCities)
             } else {
                 emptyList()
             }
@@ -41,26 +48,11 @@ class RouteService(
             } else {
                 emptyList()
             }
-            listOf(trainRoutes, flightRoutes).flatten()
-        } else if (routeSearchItem.type == PointType.STATION) {
-            findStationsByApiIdUseCase.findStationByApiId(routeSearchItem.id)?.let { station ->
-                getAllRoutesFromStationUseCase.getAllRoutesFromStation(station)
-            } ?: findRoutesFromAPIIdUseCase.getAllRoutesFromAPIId(routeSearchItem.id)
-        } else if (routeSearchItem.type == PointType.AIRPORT) {
-            val airport = if (routeSearchItem.id.length == 3) {
-                findAirportByIATACodeUseCase.findAirportByIATACode(routeSearchItem.id)
-            } else {
-                findAirportByIdUseCase.findAirportById(routeSearchItem.id)
-            } ?: return listOf()
-
-            getFlightsFromAirport(airport)
-        } else {
-            listOf()
-        }
+            return listOf(trainRoutes, flightRoutes).flatten()
     }
     
-    private fun getTrainRoutes(city: City, connectedCities: List<City>): List<Route> {
-        val stations = (city.getStationIds() + connectedCities.flatMap { it.getStationIds() }).distinct().let {
+    private fun getTrainRoutes(connectedCities: List<City>): List<Route> {
+        val stations = connectedCities.flatMap { it.getStationIds() }.distinct().let {
             findAllStationsByIdUseCase.findAllStationsByIdIn(it)
         }
         return stations.flatMap { station ->
