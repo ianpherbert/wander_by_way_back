@@ -8,10 +8,9 @@ import com.herbert.travelapp.api.core.city.connector.CityGetAllByStationApiId
 import com.herbert.travelapp.api.core.city.useCase.FindByCityIdUseCase
 import com.herbert.travelapp.api.core.city.useCase.FindCitiesByAreaIdUseCase
 import com.herbert.travelapp.api.core.route.flight.FlightProvider
-import com.herbert.travelapp.api.core.route.trainRoute.useCase.GetAllRoutesFromAPIIdUseCase
 import com.herbert.travelapp.api.core.route.trainRoute.useCase.GetAllRoutesFromStationUseCase
 import com.herbert.travelapp.api.core.station.useCase.FindAllStationsByIdUseCase
-import com.herbert.travelapp.api.core.station.useCase.FindStationsByApiIdUseCase
+import com.herbert.travelapp.api.utils.AsyncExecutor
 import org.springframework.stereotype.Component
 
 @Component
@@ -94,7 +93,10 @@ class RouteService(
                 null
             }
         }
-        updateAirportRoutesUseCase.updateRoutes(airportIATACode, routes)
+        AsyncExecutor().let {
+            it.execute { updateAirportRoutesUseCase.updateRoutes(airportIATACode, routes) }
+        }
+
         return routes
     }
 }
