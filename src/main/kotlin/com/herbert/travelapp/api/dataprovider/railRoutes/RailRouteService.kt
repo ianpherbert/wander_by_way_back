@@ -10,6 +10,7 @@ import com.herbert.travelapp.api.core.station.connector.RouteFindStationInformat
 import com.herbert.travelapp.api.core.station.connector.RouteStationApiIdFind
 import com.herbert.travelapp.api.extensions.toSearchableName
 import com.herbert.travelapp.api.utils.DistanceCalculator
+import io.github.oshai.KLogger
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
@@ -25,7 +26,8 @@ class RailRouteService(
     @Value("\${direkt-bahn.RouteUrl}")
     val routeUrl: String,
     @Value("\${direkt-bahn.SearchUrl}")
-    val searchUrl: String
+    val searchUrl: String,
+    val logger: KLogger
 ) : TrainRouteRepository, RouteStationApiIdFind, RouteFindStationInformation {
     override fun findRoutesFromStation(fromStation: Station): List<TrainRoute> {
         val url = URI("$routeUrl/${fromStation.apiId}")
@@ -48,7 +50,7 @@ class RailRouteService(
                 }
             }
         } catch (ex: Exception) {
-            println(ex.message)
+            logger.error(ex.message)
             listOf()
         }
     }

@@ -9,6 +9,7 @@ import com.herbert.travelapp.api.core.station.Station
 import com.herbert.travelapp.api.core.station.connector.RouteFindStationInformation
 import com.herbert.travelapp.api.core.station.useCase.UpdateStationApiIdUseCase
 import com.herbert.travelapp.api.core.station.useCase.UpdateStationRoutesUseCase
+import com.herbert.travelapp.api.utils.AsyncExecutor
 import org.springframework.stereotype.Component
 
 @Component
@@ -19,13 +20,16 @@ class TrainRouteService(
     val routeFindStationInformation: RouteFindStationInformation
 ) : GetAllRoutesFromStationUseCase, GetAllRoutesFromAPIIdUseCase {
     override fun getAllRoutesFromStation(fromStation: Station): List<Route> {
+        val asyncExecutor = AsyncExecutor()
         val station = if (fromStation.apiId == "INVALID") {
             return listOf()
         } else if (!fromStation.apiId.isNullOrBlank()) {
             updateStationApiIdUseCase.updateStationApiId(fromStation)
         } else fromStation
         val trainRoutes = mapRoutes(station)
-        updateStationRoutesUseCase.updateStationRoutes(station, trainRoutes)
+        asyncExecutor.execute {
+            updateStationApiIdUseCase.updateStationApiId(fromStation)
+        }
         return trainRoutes
     }
 

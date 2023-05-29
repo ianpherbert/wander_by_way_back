@@ -2,6 +2,7 @@ package com.herbert.travelapp.api.changelogs
 
 import com.herbert.travelapp.api.dataprovider.database.city.CityDB
 import com.herbert.travelapp.api.dataprovider.database.station.StationDB
+import io.github.oshai.KLogger
 import io.mongock.api.annotations.ChangeUnit
 import io.mongock.api.annotations.Execution
 import io.mongock.api.annotations.RollbackExecution
@@ -11,7 +12,8 @@ import org.springframework.data.mongodb.core.query.Query
 
 @ChangeUnit(id = "removeInvalidStations_01", order = "001", runAlways = true, author = "Ian Patrick Herbert")
 class RemoveInvalidStations(
-    val mongoTemplate: MongoTemplate
+    val mongoTemplate: MongoTemplate,
+    val logger: KLogger
 ) {
 
     @Execution
@@ -31,7 +33,7 @@ class RemoveInvalidStations(
             }
             mongoTemplate.save(saveCity,"cityDB").let {
                 val changed = old - saveCity.trainStations?.size!!
-                println("${city.name} - $changed")
+                logger.info("${city.name} - $changed stations removed")
             }
         }
     }

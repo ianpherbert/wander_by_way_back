@@ -8,6 +8,7 @@ import com.herbert.travelapp.api.core.station.connector.StationFindAllBySlugCont
 import com.herbert.travelapp.api.core.station.connector.StationFindByApiId
 import com.herbert.travelapp.api.core.station.connector.StationFindById
 import com.herbert.travelapp.api.core.station.connector.StationUpdate
+import io.github.oshai.KLogger
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -29,7 +30,8 @@ interface StationDBRepository : MongoRepository<StationDB, String> {
 @Repository
 class StationDBService(
     val stationDBRepository: StationDBRepository,
-    val stationDBMapper: StationDBMapper
+    val stationDBMapper: StationDBMapper,
+    val logger: KLogger
 ) : StationFindAllByApiIdIn,
     StationFindAllByIdIn,
     StationFindAllByName,
@@ -41,7 +43,7 @@ class StationDBService(
         return stationDBMapper.toStationDb(station).let {
             stationDBRepository.save(addNowDate(it))
         }.let {
-            println("${station.name} updated")
+            logger.info("${station.name} updated")
             stationDBMapper.toStation(it)
         }
     }

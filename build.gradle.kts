@@ -39,9 +39,11 @@ dependencies {
     implementation("io.mongock:mongodb-springdata-v3-driver")
     implementation("io.mongock:mongock-springboot")
     implementation("javax.validation:validation-api:2.0.1.Final")
-    kapt("org.mapstruct:mapstruct-processor:1.5.0.Beta1")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
     implementation("com.byteowls:jopencage:1.4.0")
+    implementation ("io.github.oshai:kotlin-logging-jvm:4.0.0-beta-22")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    kapt("org.mapstruct:mapstruct-processor:1.5.0.Beta1")
 }
 
 tasks.withType<KotlinCompile> {
