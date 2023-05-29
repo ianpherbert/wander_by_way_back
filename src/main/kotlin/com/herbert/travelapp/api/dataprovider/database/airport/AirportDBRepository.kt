@@ -4,6 +4,7 @@ import com.herbert.travelapp.api.core.airport.Airport
 import com.herbert.travelapp.api.core.airport.connector.*
 import com.herbert.travelapp.api.core.route.Route
 import com.herbert.travelapp.api.extensions.toSearchableName
+import io.github.oshai.KLogger
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -27,7 +28,8 @@ interface AirportDBRepository : MongoRepository<AirportDB, String> {
 @Repository
 class AirportDBServiceUseCase(
     val airportDBRepository: AirportDBRepository,
-    val airportDBMapper: AirportDBMapper
+    val airportDBMapper: AirportDBMapper,
+    val logger: KLogger
 ) : AirportFindAllById,
     AirportFindAllByName,
     AirportFindAllByIACOCode,
@@ -78,7 +80,7 @@ class AirportDBServiceUseCase(
         } ?: throw Error("Airport $airportIATACode could not be found")
 
         return airportDBRepository.save(addNowDate(updatedAirport)).let{
-            println("${it.name} updated")
+            logger.info("${it.name} updated")
             airportDBMapper.toAirport(it)
         }
     }
