@@ -14,37 +14,44 @@ import org.springframework.stereotype.Component
 
 @Component
 class TrainRouteService(
-    val trainRouteRepository: TrainRouteRepository,
+    val trainRouteApi: TrainRouteApi,
     val updateStationRoutesUseCase: UpdateStationRoutesUseCase,
     val updateStationApiIdUseCase: UpdateStationApiIdUseCase,
     val routeFindStationInformation: RouteFindStationInformation
 ) : GetAllRoutesFromStationUseCase, GetAllRoutesFromAPIIdUseCase {
+    private val asyncExecutor = AsyncExecutor()
     override fun getAllRoutesFromStation(fromStation: Station): List<Route> {
-        val asyncExecutor = AsyncExecutor()
+        // If the station has no apiId, update it before returning. Otherwise use existing station
         val station = if (fromStation.apiId == "INVALID") {
             return listOf()
         } else if (!fromStation.apiId.isNullOrBlank()) {
             updateStationApiIdUseCase.updateStationApiId(fromStation)
         } else fromStation
-        val trainRoutes = mapRoutes(station)
-        asyncExecutor.execute {
-            updateStationApiIdUseCase.updateStationApiId(fromStation)
+
+
+        val trainRoutes = findRoutesFromStation(station)
+        if(fromStation.routes.isEmpty()){
+            asyncExecutor.execute {
+                updateStationRoutesUseCase.updateStationRoutes(station, trainRoutes)
+            }
         }
         return trainRoutes
     }
 
     override fun getAllRoutesFromAPIId(apiId: String): List<Route> {
         val station = routeFindStationInformation.findStationInformation(apiId) ?: Station.dummyStation(apiId)
-        val trainRoutes = mapRoutes(station)
+        val trainRoutes = findRoutesFromStation(station)
         // Add new station to database
         if (station.id !== "dummy") {
-            updateStationRoutesUseCase.updateStationRoutes(station, trainRoutes)
+            asyncExecutor.execute {
+                updateStationRoutesUseCase.updateStationRoutes(station, trainRoutes)
+            }
         }
         return trainRoutes
     }
     
-    private fun mapRoutes(station: Station): List<Route> {
-        val routes = trainRouteRepository.findRoutesFromStation(station)
+    private fun findRoutesFromStation(station: Station): List<Route> {
+        val routes = trainRouteApi.findRoutesFromStation(station)
         return routes.map { route ->
             val to = RouteStop(
                 name = route.toStationName ?: "",
@@ -55,8 +62,8 @@ class TrainRouteService(
             val from = RouteStop(
                 name = route.fromStationName ?: "",
                 id = route.fromStationId ?: "",
-                latitude = station.latitude ?: 0.00,
-                longitude = station.longitude ?: 0.00
+                latitude = station.latitude,
+                longitude = station.longitude
             )
             Route(
                 to = to,

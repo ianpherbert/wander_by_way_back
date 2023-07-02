@@ -26,7 +26,7 @@ interface AirportDBRepository : MongoRepository<AirportDB, String> {
 }
 
 @Repository
-class AirportDBServiceUseCase(
+class AirportDBService(
     val airportDBRepository: AirportDBRepository,
     val airportDBMapper: AirportDBMapper,
     val logger: KLogger
@@ -35,7 +35,7 @@ class AirportDBServiceUseCase(
     AirportFindAllByIACOCode,
     AirportFindByIATACode,
     AirportFindByICAOCode,
-    AirportFindByIdUseCase,
+    AirportFindById,
     AirportUpdateRoutes
 {
     override fun findAirportById(id: String): Airport? {

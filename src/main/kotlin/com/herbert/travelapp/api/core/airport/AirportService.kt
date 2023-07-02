@@ -12,7 +12,7 @@ class AirportService(
     val airportFindAllByIACOCode: AirportFindAllByIACOCode,
     val airportFindByIATACode: AirportFindByIATACode,
     val airportFindByICAOCode: AirportFindByICAOCode,
-    val airportFindByIdUseCase: AirportFindByIdUseCase,
+    val airportFindById: AirportFindById,
     val airportUpdateRoutes: AirportUpdateRoutes
 ) : FindAirportByIATACodeUseCase,
     FindAirportsByNameUseCase,
@@ -22,7 +22,7 @@ class AirportService(
     FindAirportsByIATACodeUseCase,
     UpdateAirportRoutesUseCase {
     override fun findAirportById(id: String): Airport? {
-        return airportFindByIdUseCase.findAirportById(id)
+        return airportFindById.findAirportById(id)
     }
 
     override fun findAirportsByName(name: String): List<Airport> {

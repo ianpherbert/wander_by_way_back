@@ -3,7 +3,7 @@ package com.herbert.travelapp.api.dataprovider.railRoutes
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.herbert.travelapp.api.core.route.trainRoute.TrainRoute
-import com.herbert.travelapp.api.core.route.trainRoute.TrainRouteRepository
+import com.herbert.travelapp.api.core.route.trainRoute.TrainRouteApi
 import com.herbert.travelapp.api.core.station.Station
 import com.herbert.travelapp.api.core.station.StationType
 import com.herbert.travelapp.api.core.station.connector.RouteFindStationInformation
@@ -28,7 +28,7 @@ class RailRouteService(
     @Value("\${direkt-bahn.SearchUrl}")
     val searchUrl: String,
     val logger: KLogger
-) : TrainRouteRepository, RouteStationApiIdFind, RouteFindStationInformation {
+) : TrainRouteApi, RouteStationApiIdFind, RouteFindStationInformation {
     override fun findRoutesFromStation(fromStation: Station): List<TrainRoute> {
         val url = URI("$routeUrl/${fromStation.apiId}")
         return try {
