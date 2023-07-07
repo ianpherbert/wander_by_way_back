@@ -70,10 +70,8 @@ class RouteService(
     }
 
     private fun getFlightsFromAirport(airport: Airport): List<Route> {
-        return if (airport.routes.isEmpty()) {
+        return airport.routes.ifEmpty {
             searchFlights(airport.iata)
-        } else {
-            airport.routes
         }
     }
 

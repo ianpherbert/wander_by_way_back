@@ -11,7 +11,6 @@ class DistanceCalculator(
     private val pointB: Point
 ) {
     fun distance(unit: Char): Double {
-        if (pointA == null || pointB == null) return -1.00
         val theta = pointA.longitude - pointB.longitude
         var dist =
             sin(deg2rad(pointA.latitude)) * sin(deg2rad(pointB.latitude)) + cos(deg2rad(pointA.latitude)) * cos(deg2rad(pointB.latitude)) * cos(
@@ -43,12 +42,16 @@ class Point(
 ) {
 
     fun calculateSquarePerimeter(distance: Double, unit: Char): Perimeter {
-        val distanceValue = if (unit == 'M') {
-            milesToKilometers(distance)
-        } else if (unit == 'K') {
-            distance
-        } else {
-            distance
+        val distanceValue = when (unit) {
+            'M' -> {
+                milesToKilometers(distance)
+            }
+            'K' -> {
+                distance
+            }
+            else -> {
+                distance
+            }
         }
         val latitudeValue = distanceValue.div(111)
         val longitudeValue = distanceValue.div(longitudeDistanceByLatitude(this.latitude, 'K'))

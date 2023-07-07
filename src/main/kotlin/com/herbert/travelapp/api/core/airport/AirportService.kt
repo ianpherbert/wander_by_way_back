@@ -45,7 +45,7 @@ class AirportService(
         return airportFindAllById.findAllAirportsByIdIn(ids)
     }
 
-    override fun updateRoutes(airport: String, routes: List<Route>): Airport {
-       return airportUpdateRoutes.updateRoutes(airport, routes)
+    override fun updateRoutes(airportIATACode: String, routes: List<Route>): Airport {
+       return airportUpdateRoutes.updateRoutes(airportIATACode, routes)
     }
 }

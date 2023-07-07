@@ -7,5 +7,5 @@ import org.mapstruct.ReportingPolicy
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 interface AirportMapper {
-    fun toAiportOutput(airport: Airport): AirportOutput
+    fun toAirportOutput(airport: Airport): AirportOutput
 }
