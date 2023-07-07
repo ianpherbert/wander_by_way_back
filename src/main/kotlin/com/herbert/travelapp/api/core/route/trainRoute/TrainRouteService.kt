@@ -3,10 +3,11 @@ package com.herbert.travelapp.api.core.route.trainRoute
 import com.herbert.travelapp.api.core.route.Route
 import com.herbert.travelapp.api.core.route.RouteStop
 import com.herbert.travelapp.api.core.route.RouteType
-import com.herbert.travelapp.api.core.route.trainRoute.useCase.GetAllRoutesFromAPIIdUseCase
+import com.herbert.travelapp.api.core.route.trainRoute.connector.TrainRouteFindFromStation
+import com.herbert.travelapp.api.core.route.trainRoute.useCase.GetAllRoutesWithApiIdUseCase
 import com.herbert.travelapp.api.core.route.trainRoute.useCase.GetAllRoutesFromStationUseCase
 import com.herbert.travelapp.api.core.station.Station
-import com.herbert.travelapp.api.core.station.connector.RouteFindStationInformation
+import com.herbert.travelapp.api.core.route.trainRoute.connector.TrainRouteFindStationInformation
 import com.herbert.travelapp.api.core.station.useCase.UpdateStationApiIdUseCase
 import com.herbert.travelapp.api.core.station.useCase.UpdateStationRoutesUseCase
 import com.herbert.travelapp.api.utils.AsyncExecutor
@@ -14,11 +15,11 @@ import org.springframework.stereotype.Component
 
 @Component
 class TrainRouteService(
-    val trainRouteApi: TrainRouteApi,
+    val trainRouteFindFromStation: TrainRouteFindFromStation,
     val updateStationRoutesUseCase: UpdateStationRoutesUseCase,
     val updateStationApiIdUseCase: UpdateStationApiIdUseCase,
-    val routeFindStationInformation: RouteFindStationInformation
-) : GetAllRoutesFromStationUseCase, GetAllRoutesFromAPIIdUseCase {
+    val trainRouteFindStationInformation: TrainRouteFindStationInformation
+) : GetAllRoutesFromStationUseCase, GetAllRoutesWithApiIdUseCase {
     private val asyncExecutor = AsyncExecutor()
     override fun getAllRoutesFromStation(fromStation: Station): List<Route> {
         // If the station has no apiId, update it before returning. Otherwise use existing station
@@ -38,8 +39,8 @@ class TrainRouteService(
         return trainRoutes
     }
 
-    override fun getAllRoutesFromAPIId(apiId: String): List<Route> {
-        val station = routeFindStationInformation.findStationInformation(apiId) ?: Station.dummyStation(apiId)
+    override fun getAllRoutesWithApiId(apiId: String): List<Route> {
+        val station = trainRouteFindStationInformation.findStationInformation(apiId) ?: Station.dummyStation(apiId)
         val trainRoutes = findRoutesFromStation(station)
         // Add new station to database
         if (station.id !== "dummy") {
@@ -51,7 +52,7 @@ class TrainRouteService(
     }
     
     private fun findRoutesFromStation(station: Station): List<Route> {
-        val routes = trainRouteApi.findRoutesFromStation(station)
+        val routes = trainRouteFindFromStation.findRoutes(station)
         return routes.map { route ->
             val to = RouteStop(
                 name = route.toStationName ?: "",

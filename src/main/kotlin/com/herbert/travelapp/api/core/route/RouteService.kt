@@ -7,9 +7,9 @@ import com.herbert.travelapp.api.core.city.connector.CityGetAllByIataCodeOrAirpo
 import com.herbert.travelapp.api.core.city.connector.CityGetAllByStationApiId
 import com.herbert.travelapp.api.core.city.useCase.FindByCityIdUseCase
 import com.herbert.travelapp.api.core.city.useCase.FindCitiesByAreaIdUseCase
-import com.herbert.travelapp.api.core.route.flight.FlightProvider
+import com.herbert.travelapp.api.core.route.flight.useCase.FindAllFlightsFromAirportUseCase
 import com.herbert.travelapp.api.core.route.trainRoute.useCase.GetAllRoutesFromStationUseCase
-import com.herbert.travelapp.api.core.station.connector.StationFindById
+import com.herbert.travelapp.api.core.route.useCase.FindAllRoutesFromPointUseCase
 import com.herbert.travelapp.api.core.station.useCase.FindAllStationsByIdUseCase
 import com.herbert.travelapp.api.utils.AsyncExecutor
 import org.springframework.stereotype.Component
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component
 @Component
 class RouteService(
     val getAllRoutesFromStationUseCase: GetAllRoutesFromStationUseCase,
-    val flightProvider: FlightProvider,
+    val flightProvider: FindAllFlightsFromAirportUseCase,
     val findByCityIdUseCase: FindByCityIdUseCase,
     val findCitiesByAreaIdUseCase: FindCitiesByAreaIdUseCase,
     val findAllStationsByIdUseCase: FindAllStationsByIdUseCase,
@@ -26,7 +26,7 @@ class RouteService(
     val updateAirportRoutesUseCase: UpdateAirportRoutesUseCase,
     val findCityGetAllByIataCodeOrAirportId: CityGetAllByIataCodeOrAirportId,
     val cityGetAllByStationApiId: CityGetAllByStationApiId
-) : FindAllRoutesFromPoint {
+) : FindAllRoutesFromPointUseCase {
     override fun findAllRoutes(routeSearchItem: RouteSearchItem): List<Route> {
         val connectedCities = when(routeSearchItem.type){
             PointType.CITY -> findByCityIdUseCase.findCityById(routeSearchItem.id)?.let {
@@ -78,7 +78,7 @@ class RouteService(
     }
 
     private fun searchFlights(airportIATACode: String): List<Route> {
-        val flights = flightProvider.findAllFlightsFromAirport(airportIATACode)
+        val flights = flightProvider.findFlights(airportIATACode)
         val destinationAirports = flights.map {
             it.to!!.airportCode!!
         }.let {
