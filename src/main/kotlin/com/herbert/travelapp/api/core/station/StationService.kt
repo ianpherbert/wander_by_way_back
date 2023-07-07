@@ -1,7 +1,7 @@
 package com.herbert.travelapp.api.core.station
 
 import com.herbert.travelapp.api.core.route.Route
-import com.herbert.travelapp.api.core.station.connector.RouteStationApiIdFind
+import com.herbert.travelapp.api.core.route.trainRoute.connector.TrainRouteFindStationApiId
 import com.herbert.travelapp.api.core.station.connector.StationFindAllByApiIdIn
 import com.herbert.travelapp.api.core.station.connector.StationFindAllByIdIn
 import com.herbert.travelapp.api.core.station.connector.StationFindAllByName
@@ -25,7 +25,7 @@ class StationService(
     val stationFindAllByIdIn: StationFindAllByIdIn,
     val stationFindAllByName: StationFindAllByName,
     val stationFindAllByApiIdIn: StationFindAllByApiIdIn,
-    val routeStationApiIdFind: RouteStationApiIdFind
+    val trainRouteFindStationApiId: TrainRouteFindStationApiId
 ) : FindAllByApiIdUseCase,
     FindAllStationsByIdUseCase,
     FindStationsByNameUseCase,
@@ -35,7 +35,7 @@ class StationService(
     UpdateStationRoutesUseCase {
 
     override fun updateStationApiId(station: Station): Station {
-        return routeStationApiIdFind.findStationId(station)?.let {
+        return trainRouteFindStationApiId.findStationId(station)?.let {
             station.apply {
                 this.apiId = it
             }.let {

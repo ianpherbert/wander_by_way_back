@@ -1,29 +1,31 @@
 package com.herbert.travelapp.api.core.route.flight
 
+import com.herbert.travelapp.api.core.route.flight.useCase.FindAllFlightsFromAirportUseCase
+import com.herbert.travelapp.api.core.route.flight.connector.FindEuropeanFlightsUseCase
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Component
 class FlightService(
-    val flightRepository: FlightRepository
-) : FlightProvider {
+    val findEuropeanFlightsUseCase: FindEuropeanFlightsUseCase
+) : FindAllFlightsFromAirportUseCase {
 
-    override fun findAllFlightsFromAirport(iataCode: String, fromDate: String, toDate: String): List<Flight> {
-        return flightRepository.findEuropeanFlights(iataCode, null, fromDate, toDate) ?: emptyList()
+    override fun findFlights(fromIataCode: String, fromDate: String, toDate: String): List<Flight> {
+        return findEuropeanFlightsUseCase.findEuropeanFlights(fromIataCode, null, fromDate, toDate) ?: emptyList()
     }
 
-    override fun findAllFlightsFromAirport(iataCode: String): List<Flight> {
-        return flightRepository.findEuropeanFlights(iataCode, null, today(), oneDayFrom()) ?: emptyList()
+    override fun findFlights(fromIataCode: String): List<Flight> {
+        return findEuropeanFlightsUseCase.findEuropeanFlights(fromIataCode, null, today(), oneDayFrom()) ?: emptyList()
     }
 
-    override fun findFlightsBetweenAirports(
-        fromAirportCode: String,
-        toAirportCode: String,
+    override fun findFlights(
+        fromIataCode: String,
+        toIataCode: String,
         fromDate: String,
         toDate: String
     ): List<Flight> {
-        return flightRepository.findEuropeanFlights(fromAirportCode, toAirportCode, fromDate, toDate) ?: emptyList()
+        return findEuropeanFlightsUseCase.findEuropeanFlights(fromIataCode, toIataCode, fromDate, toDate) ?: emptyList()
     }
 
     private fun today(): String {

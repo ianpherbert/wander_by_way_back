@@ -3,7 +3,7 @@ package com.herbert.travelapp.api.dataprovider.flight
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.herbert.travelapp.api.core.route.flight.Flight
 import com.herbert.travelapp.api.core.route.flight.FlightLocation
-import com.herbert.travelapp.api.core.route.flight.FlightRepository
+import com.herbert.travelapp.api.core.route.flight.connector.FindEuropeanFlightsUseCase
 import com.herbert.travelapp.api.core.route.flight.FlightStop
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpEntity
@@ -19,7 +19,7 @@ class FlightSearchService(
     val objectMapper: ObjectMapper,
     @Value("\${tequila.apiKey}")
     val tequilaApiKey: String
-) : FlightRepository {
+) : FindEuropeanFlightsUseCase {
     override fun findEuropeanFlights(from: String, to: String?, fromDate: String, toDate: String?): List<Flight>? {
         val paramMap = HashMap<String, String>().apply {
             set("fly_from", from)

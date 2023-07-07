@@ -19,14 +19,14 @@ class AirportQuery(
     @QueryMapping
     override fun findAirportById(@Argument airportId: String): AirportOutput? {
         return airportFindById.findAirportById(airportId)?.let {
-            airportMapper.toAiportOutput(it)
+            airportMapper.toAirportOutput(it)
         }
     }
 
     @QueryMapping
     override fun searchAirport(@Argument query: String): List<AirportOutput>? {
         return findAirportsByNameUseCase.findAirportsByName(query).map {
-            airportMapper.toAiportOutput(it)
+            airportMapper.toAirportOutput(it)
         }
     }
 }
